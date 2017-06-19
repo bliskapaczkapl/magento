@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<default>
+		<reference name="head">
+            <action method="addJs"><script>sendit/bliskapaczka.js</script></action>
+        </reference>
+	</default>
+    <checkout_onepage_shippingmethod>
+        <!-- Mage_Checkout -->
+        <remove name="right"/>
+        <remove name="left"/>
+        
+        <block type="checkout/onepage_shipping_method_available" name="root" output="toHtml" template="sendit/checkout/onepage/shipping_method/available.phtml"/>
+    </checkout_onepage_shippingmethod>
+</layout>

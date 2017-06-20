@@ -1,10 +1,24 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-	<default>
-		<reference name="head">
+    <default>
+        <reference name="head">
+            <block type="core/text" name="widget.bliskapaczka.pl">
+                <action method="setText">
+                    <text>
+                        <![CDATA[<script type="text/javascript" src="http://widget.bliskapaczka.pl/v1.1/main.js"></script>]]>
+                    </text>
+                </action>
+            </block>
+            <block type="core/text" name="styles_for_widget.bliskapaczka.pl">
+                <action method="setText">
+                    <text>
+                        <![CDATA[<link rel="stylesheet" href="http://widget.bliskapaczka.pl/v1.1/main.css" />]]>
+                    </text>
+                </action>
+            </block>
             <action method="addJs"><script>sendit/bliskapaczka.js</script></action>
         </reference>
-	</default>
+    </default>
     <checkout_onepage_shippingmethod>
         <!-- Mage_Checkout -->
         <remove name="right"/>

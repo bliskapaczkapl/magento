@@ -1,9 +1,11 @@
 <?php
 
 require $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Carrier/Bliskapaczka.php';
-require $GLOBALS['ROOT_DIR'] . '/vendor/sendit/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Logger.php';
-require $GLOBALS['ROOT_DIR'] . '/vendor/sendit/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/ApiCaller/ApiCaller.php';
-require $GLOBALS['ROOT_DIR'] . '/vendor/sendit/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Bliskapaczka.php';
+require $GLOBALS['ROOT_DIR'] . '/vendor/bliskapaczka/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Logger.php';
+require $GLOBALS['ROOT_DIR'] .
+    '/vendor/bliskapaczka/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/ApiCaller/ApiCaller.php';
+require $GLOBALS['ROOT_DIR'] .
+    '/vendor/bliskapaczka/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Bliskapaczka.php';
 
 
 use PHPUnit\Framework\TestCase;
@@ -62,12 +64,4 @@ class BliskapaczkaTest extends TestCase
         $this->assertTrue(is_array($allowedShippingMethods));
         $this->assertTrue(array_key_exists($this->shippingCode, $allowedShippingMethods));
     }
-
-    // public function testCollectRates()
-    // {
-    //     $bp = new Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka();
-    //     $result = $bp->collectRates($this->request);
-
-    //     $this->assertEquals('Mage_Shipping_Model_Rate_Result', get_class($result));
-    // }
 }

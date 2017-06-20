@@ -1,14 +1,15 @@
 <?php
-/* @var $installer Mage_Sales_Model_Resource_Setup */
-$installer = Mage::getResourceModel('sales/setup');
+/** @var  Mage_Sales_Model_Resource_Setup $installer */
+$installer = new Mage_Sales_Model_Resource_Setup('core_setup');
 
 $entities = array(
- 'quote_address',
-'order_address',
+    'quote_address',
+    'order_address',
 );
+
 $attributes = array(
- 'pos_code',
-'pos_operator',
+    'pos_code',
+    'pos_operator',
 );
 
 $options = array(

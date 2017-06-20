@@ -207,4 +207,18 @@ class DataTest extends TestCase
 
         $this->assertTrue(in_array("POCZTA", $disabledArray));
     }
+
+    public function testGetApiMode()
+    {
+        $hepler = new Sendit_Bliskapaczka_Helper_Data();
+
+        $mode = $hepler->getApiMode(1);
+        $this->assertEquals('test', $mode);
+
+        $mode = $hepler->getApiMode(0);
+        $this->assertEquals('prod', $mode);
+
+        $mode = $hepler->getApiMode();
+        $this->assertEquals('prod', $mode);
+    }
 }

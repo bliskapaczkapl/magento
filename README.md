@@ -10,19 +10,19 @@ W celu poprawnej instalacji modułu wymagane są:
 ### Instalacja modułu
 1. Pobierz repozytorium i skopiuj jego zawartość do katalogu domowego swojego Magento
   - Jeśli masz już plik composer.json musisz zmergować zawartość pliku modułu do własnego. Plik musi zawierać:
-    ```
-        "repositories": [
-            ...
-            {
-                "type": "vcs",
-                "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git"
-            }
-        ],
-        "require": {
-            ...
-            "bliskapaczka/bliskapaczka-api-client": "^1.0"
+
+    "repositories": [
+        ...
+        {
+            "type": "vcs",
+            "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git"
         }
-    ```
+    ],
+    "require": {
+        ...
+        "bliskapaczka/bliskapaczka-api-client": "^1.0"
+    }
+
 1. Zainstaluj zależności composerem. Uruchom poniższą komendę w katalogu domowym Magento
     ```
     composer install --no-dev

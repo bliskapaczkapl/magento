@@ -16,6 +16,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_weight';
     
     const API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/bliskapaczkaapikey';
+    const API_TEST_MODE_XML_PATH = 'carriers/sendit_bliskapaczka/test_mode';
 
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API

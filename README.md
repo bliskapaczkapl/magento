@@ -25,9 +25,11 @@ W celu poprawnej instalacji modułu wymagane są:
     }
 ```
 1. Zainstaluj zależności composerem. Uruchom poniższą komendę w katalogu domowym Magento
-`composer install --no-dev`
+```
+composer install --no-dev
+```
 1. Sprawdz czy moduł znajduje się na liście dostępnych modułów w Panelu Admina
-1. Włącz moduł z poziomu Panelu Admina bądz mieniając wartość parametru active w pliku app/etc/modules/Sendit_Bliskapaczka.xml
+1. Włącz moduł z poziomu Panelu Admina lub zmieniając wartość parametru `active` w pliku `app/etc/modules/Sendit_Bliskapaczka.xml`, tak jak poniżej:
 ```
 <config>
     <modules>
@@ -48,6 +50,11 @@ Tryb testowy, czli komunikacja z testową wersją znajdującą się pod adresem 
 
 ## Rozwój modułu
 
+### Instalacja zależności
+```
+composer install --dev
+```
+
 ### Jak uruchomić testy jednostkowe 
 ```
 php vendor/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
@@ -55,5 +62,5 @@ php vendor/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
 
 ### Jak uruchomić statyczną analizę kodu
 ```
-php vendor/bin/
+php vendor/bin/phpcs --standard=./vendor/magento-ecg/coding-standard/Ecg /app
 ```

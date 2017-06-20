@@ -79,10 +79,10 @@ class Sendit_Bliskapaczka_Model_Observer
         $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
         $data = $mapper->getData($order);
 
-        $apiKey = Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_KEY_XML_PATH);
-
-        /* @var Sendit_Bliskapaczka_Helper_Data $apiClient */
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka($apiKey);
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+        $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+        /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
+        $apiClient = $senditHelper->getApiClient();
         $apiClient->createOrder($data);
     }
 }

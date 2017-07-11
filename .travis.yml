@@ -1,0 +1,12 @@
+language: php
+php:
+  - '5.6'
+
+before_script: composer install
+script: 
+  - vendor/bin/phpcs -s --colors --standard=./vendor/magento-ecg/coding-standard/Ecg modules/
+  - vendor/bin/phpmd modules/ text codesize
+  - vendor/bin/phpcpd modules/
+  - vendor/bin/phpdoccheck --directory=modules --exclude=bliskapaczka/tests
+  - vendor/bin/phploc modules/
+  - vendor/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/

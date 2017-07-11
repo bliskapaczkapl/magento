@@ -39,7 +39,7 @@ class Sendit_Bliskapaczka_Model_Mapper_Order
      *
      * @return array
      */
-    private function _getParcelDimensions()
+    protected function _getParcelDimensions()
     {
         /* @var $helper Sendit_Bliskapaczka_Helper_Data */
         $helper = new Sendit_Bliskapaczka_Helper_Data();

@@ -49,6 +49,7 @@
             <sendit_bliskapaczka_setup>
                 <setup>
                     <module>Sendit_Bliskapaczka</module>
+                    <class>Mage_Sales_Model_Resource_Setup</class>
                 </setup>
                 <connection>
                     <use>core_setup</use>

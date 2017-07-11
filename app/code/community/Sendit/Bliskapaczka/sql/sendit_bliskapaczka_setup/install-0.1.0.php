@@ -1,6 +1,6 @@
 <?php
-/** @var  Mage_Sales_Model_Resource_Setup $installer */
-$installer = new Mage_Sales_Model_Resource_Setup('core_setup');
+/** @var Mage_Sales_Model_Resource_Setup $installer */
+$installer = $this;
 
 $entities = array(
     'quote_address',

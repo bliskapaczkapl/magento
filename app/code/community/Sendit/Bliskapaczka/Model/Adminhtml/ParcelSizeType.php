@@ -6,6 +6,11 @@
  */
 class Sendit_Bliskapaczka_Model_Adminhtml_ParcelSizeType
 {
+	/**
+	 * Array with options to select in admin page module configuration
+	 *
+	 * @return array
+	 */
     public function toOptionArray()
     {
         return array(

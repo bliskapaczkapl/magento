@@ -9,8 +9,8 @@ $GLOBALS['APP_DIR'] = $GLOBALS['ROOT_DIR'] . '/app';
 require_once $GLOBALS['ROOT_DIR'] . '/vendor/autoload.php';
 
 //Define include path for Magento and BliskaPaczka Module
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['ROOT_DIR'] . '/vendor/sendit/magento');
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['ROOT_DIR'] . '/vendor/sendit/magento/app');
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['ROOT_DIR'] . '/vendor/firegento/magento');
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['ROOT_DIR'] . '/vendor/firegento/magento/app');
 // ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['APP_DIR']);
 
 //Include Magento libraries

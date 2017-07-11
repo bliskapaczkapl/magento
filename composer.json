@@ -1,5 +1,6 @@
 {
     "name": "bliskapaczkapl/magento",
+    "description": "BliczkaPaczka Carrier Module for Magento 1.9.x",
     "require-dev": {
         "phpunit/phpunit": "^5.7",
         "firegento/magento": "1.9.3.2",
@@ -17,6 +18,6 @@
         }
     ],
     "require": {
-        "bliskapaczka/bliskapaczka-api-client": "^1.0"
+        "bliskapaczkapl/bliskapaczka-api-client": "^1.0"
     }
 }

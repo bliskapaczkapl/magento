@@ -1,4 +1,5 @@
 {
+    "name": "bliskapaczkapl/magento",
     "require-dev": {
         "phpunit/phpunit": "^5.7",
         "firegento/magento": "1.9.3.2",

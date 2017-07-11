@@ -4,9 +4,9 @@ php:
 
 before_script: composer install
 script: 
-  - vendor/bin/phpcs -s --colors --standard=./vendor/magento-ecg/coding-standard/Ecg modules/
-  - vendor/bin/phpmd modules/ text codesize
-  - vendor/bin/phpcpd modules/
-  - vendor/bin/phpdoccheck --directory=modules --exclude=bliskapaczka/tests
-  - vendor/bin/phploc modules/
+  - vendor/bin/phpcs -s --colors --standard=./vendor/magento-ecg/coding-standard/Ecg app/
+  - vendor/bin/phpmd app/ text codesize
+  - vendor/bin/phpcpd app/
+  - vendor/bin/phpdoccheck --directory=app
+  - vendor/bin/phploc app/
   - vendor/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/

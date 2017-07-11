@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bliskapaczkapl/magento.svg?branch=master)](https://travis-ci.org/bliskapaczkapl/magento)
+
 # Moduł Bliskapaczka dla Magento 1.9 
 
 ## Instalacja modułu

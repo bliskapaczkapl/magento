@@ -30,7 +30,7 @@ class Sendit_Bliskapaczka_Model_Observer
     public static function load($class)
     {
         if (preg_match('#^(Bliskapaczka\\\\ApiClient)\b#', $class)) {
-            $libDir = Mage::getBaseDir() . '/vendor/bliskapaczka/bliskapaczka-api-client/src/';
+            $libDir = Mage::getBaseDir() . '/vendor/bliskapaczkapl/bliskapaczka-api-client/src/';
             $phpFile = $libDir . str_replace('\\', '/', $class) . '.php';
 
             // @codingStandardsIgnoreStart

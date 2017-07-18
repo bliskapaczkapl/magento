@@ -94,6 +94,78 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </parcel_size_type_fixed_size_weight>
+                        <sender_email translate="label">
+                            <label>Sender email</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>154</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sender_email>
+                        <sender_first_name translate="label">
+                            <label>Sender first name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>155</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sender_first_name>
+                        <sender_last_name translate="label">
+                            <label>Sender last name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>156</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sender_last_name>
+                        <sender_phone_number translate="label">
+                            <label>Sender phone number</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>157</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sender_phone_number>
+                        <sender_street translate="label">
+                            <label>Sender street</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>158</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sender_street>
+                        <sender_building_number translate="label">
+                            <label>Sender building number</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>159</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sender_building_number>
+                        <sender_flat_number translate="label">
+                            <label>Sender flat number</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>160</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sender_flat_number>
+                        <sender_post_code translate="label">
+                            <label>Sender post code</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>161</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sender_post_code>
+                        <sender_city translate="label">
+                            <label>Sender city</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>162</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sender_city>
                         <sallowspecific translate="label">
                             <label>Ship to Applicable Countries</label>
                             <frontend_type>select</frontend_type>

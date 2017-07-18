@@ -24,6 +24,75 @@ class DataTest extends TestCase
         $this->assertTrue($hepler instanceof Mage_Core_Helper_Data);
     }
 
+    public function testConstants()
+    {
+        $hepler = new Sendit_Bliskapaczka_Helper_Data();
+
+        $this->assertEquals('carriers/sendit_bliskapaczka/parcel_size_type', $hepler::PARCEL_SIZE_TYPE_XML_PATH);
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_x',
+            $hepler::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_y',
+            $hepler::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_z',
+            $hepler::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_weight',
+            $hepler::PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH
+        );
+
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/bliskapaczkaapikey',
+            $hepler::API_KEY_XML_PATH
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/test_mode',
+            $hepler::API_TEST_MODE_XML_PATH
+        );
+
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/sender_email',
+            $hepler::SENDER_EMAIL
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/sender_first_name',
+            $hepler::SENDER_FIRST_NAME
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/sender_last_name',
+            $hepler::SENDER_LAST_NAME
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/sender_phone_number',
+            $hepler::SENDER_PHONE_NUMBER
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/sender_street',
+            $hepler::SENDER_STREET
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/sender_building_number',
+            $hepler::SENDER_BUILDING_NUMBER
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/sender_flat_number',
+            $hepler::SENDER_FLAT_NUMBER
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/sender_post_code',
+            $hepler::SENDER_POST_CODE
+        );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/sender_city',
+            $hepler::SENDER_CITY
+        );
+    }
+
     public function testGetLowestPrice()
     {
         $priceListEachOther = '[

@@ -63,5 +63,5 @@ php vendor/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
 
 ### Jak uruchomić statyczną analizę kodu
 ```
-php vendor/bin/phpcs --standard=./vendor/magento-ecg/coding-standard/Ecg /app
+php vendor/bin/phpcs -s --standard=./vendor/magento-ecg/coding-standard/Ecg app
 ```

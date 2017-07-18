@@ -62,7 +62,7 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
         $apiClient = $senditHelper->getApiClient();
         $priceList = $apiClient->getPricing(
-            array("parcels" => array(array('dimensions' => $senditHelper->getParcelDimensions())))
+            array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()))
         );
         
         // Get Quote

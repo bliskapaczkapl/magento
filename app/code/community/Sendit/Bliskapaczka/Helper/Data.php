@@ -15,6 +15,16 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_z';
     const PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_weight';
     
+    const SENDER_EMAIL = 'carriers/sendit_bliskapaczka/sender_email';
+    const SENDER_FIRST_NAME = 'carriers/sendit_bliskapaczka/sender_first_name';
+    const SENDER_LAST_NAME = 'carriers/sendit_bliskapaczka/sender_last_name';
+    const SENDER_PHONE_NUMBER = 'carriers/sendit_bliskapaczka/sender_phone_number';
+    const SENDER_STREET = 'carriers/sendit_bliskapaczka/sender_street';
+    const SENDER_BUILDING_NUMBER = 'carriers/sendit_bliskapaczka/sender_building_number';
+    const SENDER_FLAT_NUMBER = 'carriers/sendit_bliskapaczka/sender_flat_number';
+    const SENDER_POST_CODE = 'carriers/sendit_bliskapaczka/sender_post_code';
+    const SENDER_CITY = 'carriers/sendit_bliskapaczka/sender_city';
+
     const API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/bliskapaczkaapikey';
     const API_TEST_MODE_XML_PATH = 'carriers/sendit_bliskapaczka/test_mode';
 
@@ -130,7 +140,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     {
         $apiClient = $this->getApiClient();
         $priceList = $apiClient->getPricing(
-            array("parcels" => array(array('dimensions' => $this->getParcelDimensions())))
+            array("parcel" => array('dimensions' => $this->getParcelDimensions()))
         );
 
         $pricesJson = json_encode($this->getPrices(json_decode($priceList)));
@@ -147,7 +157,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     {
         $apiClient = $this->getApiClient();
         $priceList = $apiClient->getPricing(
-            array("parcels" => array(array('dimensions' => $this->getParcelDimensions())))
+            array("parcel" => array('dimensions' => $this->getParcelDimensions()))
         );
 
         $disabledArray = $this->getDisabledOperators(json_decode($priceList));

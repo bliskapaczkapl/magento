@@ -117,4 +117,12 @@ class OrderTest extends TestCase
         $this->assertEquals($this->destinationCode, $data['destinationCode']);
     }
 
+    public function testMapperForParcel()
+    {
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
+        $data = $mapper->getData($this->orderMock);
+
+        $this->assertTrue(is_array($data['parcel']));
+    }
+
 }

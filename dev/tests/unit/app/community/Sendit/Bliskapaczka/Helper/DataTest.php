@@ -277,6 +277,28 @@ class DataTest extends TestCase
         $this->assertTrue(in_array("POCZTA", $disabledArray));
     }
 
+    /**
+     * @dataProvider phpneNumbers
+     */
+    public function testCleaningPhoneNumber($phoneNumber)
+    {
+        $hepler = new Sendit_Bliskapaczka_Helper_Data();
+     
+        $this->assertEquals('606606606', $hepler->telephoneNumberCeaning($phoneNumber));
+    }
+
+    public function phpneNumbers()
+    {
+        return [
+            ['606-606-606'],
+            ['606 606 606'],
+            ['+48 606 606 606'],
+            ['+48606606606'],
+            ['+48 606-606-606'],
+            ['+48-606-606-606']
+        ];
+    }
+
     public function testGetApiMode()
     {
         $hepler = new Sendit_Bliskapaczka_Helper_Data();

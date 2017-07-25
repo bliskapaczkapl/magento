@@ -181,6 +181,23 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
+     * Remove all non numeric chars from phone number
+     *
+     * @param string $phoneNumber
+     * @return string
+     */
+    public function telephoneNumberCeaning($phoneNumber)
+    {
+        $phoneNumber = preg_replace("/[^0-9]/", "", $phoneNumber);
+
+        if (strlen($phoneNumber) > 9) {
+            $phoneNumber = preg_replace("/^48/", "", $phoneNumber);
+        }
+        
+        return $phoneNumber;
+    }
+
+    /**
      * Get API mode
      *
      * @param string $configValue 

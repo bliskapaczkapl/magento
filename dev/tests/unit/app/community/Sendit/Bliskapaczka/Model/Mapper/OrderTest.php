@@ -49,6 +49,31 @@ class OrderTest extends TestCase
                                      ->getMock();
 
         $this->orderMock->method('getShippingAddress')->will($this->returnValue($this->addressMock));
+
+        $this->helperMock = $this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
+                                     ->disableOriginalConstructor()
+                                     ->disableOriginalClone()
+                                     ->disableArgumentCloning()
+                                     ->disallowMockingUnknownTypes()
+                                     ->setMethods(
+                                         array(
+                                             'getParcelDimensions',
+                                             'telephoneNumberCeaning'
+                                         )
+                                     )
+                                     ->getMock();
+
+        $dimensions = array(
+            "height" => 12,
+            "length" => 12,
+            "width" => 12,
+            "weight" => 1
+        );
+
+        $this->helperMock->method('getParcelDimensions')->will($this->returnValue($dimensions));
+        $this->helperMock->method('telephoneNumberCeaning')
+            ->with($this->equalTo('504 445 665'))
+            ->will($this->returnValue('504445665'));
     }
 
     public function testClassExists()
@@ -64,7 +89,7 @@ class OrderTest extends TestCase
     public function testTypeOfReturnedData()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertTrue(is_array($data));
     }
@@ -72,7 +97,7 @@ class OrderTest extends TestCase
     public function testMapperForReceiverFirstName()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertEquals($this->receiverFirstName, $data['receiverFirstName']);
     }
@@ -80,7 +105,7 @@ class OrderTest extends TestCase
     public function testMapperForReceiverLastName()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertEquals($this->receiverLastName, $data['receiverLastName']);
     }
@@ -88,15 +113,15 @@ class OrderTest extends TestCase
     public function testMapperForReceiverPhoneNumber()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock);
 
-        $this->assertEquals($this->receiverPhoneNumber, $data['receiverPhoneNumber']);
+        $this->assertEquals('504445665', $data['receiverPhoneNumber']);
     }
 
     public function testMapperForReceiverEmail()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertEquals($this->receiverEmail, $data['receiverEmail']);
     }
@@ -104,7 +129,7 @@ class OrderTest extends TestCase
     public function testMapperForOperatorName()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertEquals($this->operatorName, $data['operatorName']);
     }
@@ -112,7 +137,7 @@ class OrderTest extends TestCase
     public function testMapperForDestinationCode()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertEquals($this->destinationCode, $data['destinationCode']);
     }
@@ -120,9 +145,8 @@ class OrderTest extends TestCase
     public function testMapperForParcel()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock);
+        $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertTrue(is_array($data['parcel']));
     }
-
 }

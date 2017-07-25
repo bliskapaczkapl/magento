@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {
-	public function testClassExists()
+    public function testClassExists()
     {
         $this->assertTrue(class_exists('Sendit_Bliskapaczka_Helper_Data'));
     }
@@ -20,7 +20,7 @@ class DataTest extends TestCase
 
     public function testClassExtendMageCoreHelperData()
     {
-    	$hepler = new Sendit_Bliskapaczka_Helper_Data();
+        $hepler = new Sendit_Bliskapaczka_Helper_Data();
         $this->assertTrue($hepler instanceof Mage_Core_Helper_Data);
     }
 

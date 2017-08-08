@@ -139,7 +139,8 @@ $operatorsJson = $senditHelper->getOperatorsForWidget();
         ShippingMethod.prototype.validate = function () {
             var methods = document.getElementsByName('shipping_method');
             for (var i = 0; i < methods.length; i++) {
-                if (methods[i].value == '<?php echo Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE; ?>') {
+                if (methods[i].checked
+                    && methods[i].value == '<?php echo Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE; ?>') {
 
                     posCode = document.getElementById('bpWidget_aboutPoint_posCode').innerHTML;
                     posOperator = document.getElementById('bpWidget_aboutPoint_posOperator').innerHTML;

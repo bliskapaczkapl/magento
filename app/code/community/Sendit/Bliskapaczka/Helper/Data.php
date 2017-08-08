@@ -9,6 +9,8 @@ use Bliskapaczka\ApiClient;
  */
 class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 {
+    const DEFAULT_GOOGLE_API_KEY = 'AIzaSyCUyydNCGhxGi5GIt5z5I-X6hofzptsRjE';
+
     const PARCEL_SIZE_TYPE_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type';
     const PARCEL_TYPE_FIXED_SIZE_X_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_x';
     const PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_y';
@@ -27,6 +29,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
     const API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/bliskapaczkaapikey';
     const API_TEST_MODE_XML_PATH = 'carriers/sendit_bliskapaczka/test_mode';
+
+    const GOOGLE_MAP_API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/google_map_api_key';
 
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
@@ -49,6 +53,22 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         );
 
         return $dimensions;
+    }
+
+    /**
+     * Get Google API key. If key is not defined return default.
+     *
+     * @return string
+     */
+    public function getGoogleMapApiKey()
+    {
+        $googleApiKey = self::DEFAULT_GOOGLE_API_KEY;
+
+        if (Mage::getStoreConfig(self::GOOGLE_MAP_API_KEY_XML_PATH)){
+            $googleApiKey = Mage::getStoreConfig(self::GOOGLE_MAP_API_KEY_XML_PATH);
+        }
+
+        return $googleApiKey;
     }
 
     /**
@@ -92,77 +112,43 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
-     * Get prices from pricing list
-     *
-     * @param array $priceList
-     * @return array
-     */
-    public function getPrices($priceList)
-    {
-        $prices = array();
-
-        foreach ($priceList as $carrier) {
-            if ($carrier->price == null) {
-                continue;
-            }
-
-            $prices[$carrier->operatorName] = $carrier->price->gross;
-        }
-
-        return $prices;
-    }
-
-    /**
-     * Get disabled operators from pricing list
-     *
-     * @param array $priceList
-     * @return array
-     */
-    public function getDisabledOperators($priceList)
-    {
-        $disabled = array();
-
-        foreach ($priceList as $carrier) {
-            if ($carrier->availabilityStatus == false) {
-                $disabled[] = $carrier->operatorName;
-            }
-        }
-
-        return $disabled;
-    }
-
-    /**
-     * Get prices in format accptable by Bliskapaczka Widget
+     * Get operators and prices from Bliskapaczka API
      *
      * @return string
      */
-    public function getPricesForWidget()
+    public function getPriceList()
     {
         $apiClient = $this->getApiClient();
         $priceList = $apiClient->getPricing(
             array("parcel" => array('dimensions' => $this->getParcelDimensions()))
         );
 
-        $pricesJson = json_encode($this->getPrices(json_decode($priceList)));
-
-        return $pricesJson;
+        return json_decode($priceList);
     }
 
     /**
-     * Get disabled operators in format accptable by Bliskapaczka Widget
+     * Get widget configuration
      *
+     * @param array $priceList
      * @return array
      */
-    public function getDisabledOperatorsForWidget()
+    public function getOperatorsForWidget($priceList = null)
     {
-        $apiClient = $this->getApiClient();
-        $priceList = $apiClient->getPricing(
-            array("parcel" => array('dimensions' => $this->getParcelDimensions()))
-        );
+        if (!$priceList) {
+            $priceList = $this->getPriceList();
+        }
+        $operators = array();
 
-        $disabledArray = $this->getDisabledOperators(json_decode($priceList));
+        foreach ($priceList as $operator) {
+            if ($operator->availabilityStatus != false) {
+                $operators[] = array(
+                    "operator" => $operator->operatorName,
+                    "price" => $operator->price->gross
+                );
+            }
+        }
 
-        return $disabledArray;
+        return json_encode($operators);
     }
 
     /**

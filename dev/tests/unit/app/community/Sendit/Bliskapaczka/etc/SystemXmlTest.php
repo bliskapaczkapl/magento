@@ -18,6 +18,13 @@ class SystemXmlTest extends TestCase
         $this->assertTrue(file_exists($this->filePath));
     }
 
+    public function testGoogleApiKey()
+    {
+        $fields = $this->config->sections->carriers->groups->sendit_bliskapaczka->fields;
+
+        $this->assertEquals('Google Map API Key', $fields->google_map_api_key->label);
+    }
+
     public function testParcelConfiguration()
     {
         $fields = $this->config->sections->carriers->groups->sendit_bliskapaczka->fields;

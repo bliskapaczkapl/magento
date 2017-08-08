@@ -91,6 +91,10 @@ class DataTest extends TestCase
             'carriers/sendit_bliskapaczka/sender_city',
             $hepler::SENDER_CITY
         );
+        $this->assertEquals(
+            'carriers/sendit_bliskapaczka/google_map_api_key',
+            $hepler::GOOGLE_MAP_API_KEY_XML_PATH
+        );
     }
 
     public function testGetLowestPrice()
@@ -205,8 +209,10 @@ class DataTest extends TestCase
         $this->assertEquals(8.99, $price);
     }
 
-    public function testGetPrices()
+    public function testGetOperatorsForWidget()
     {
+        // $hepler = new Sendit_Bliskapaczka_Helper_Data();
+
         $priceList = '[
             {
                 "operatorName":"INPOST",
@@ -233,48 +239,13 @@ class DataTest extends TestCase
                     }
                 }
             }]';
-        $hepler = new Sendit_Bliskapaczka_Helper_Data();
 
-        $prices = $hepler->getPrices(json_decode($priceList));
+        $helper = new Sendit_Bliskapaczka_Helper_Data();
 
-        $this->assertEquals(10.27, $prices['INPOST']);
-        $this->assertEquals(5.99, $prices['RUCH']);
-        $this->assertTrue(!isset($prices['POCZTA']));
-    }
-
-    public function testGetDisabledOperators()
-    {
-        $priceList = '[
-            {
-                "operatorName":"INPOST",
-                "availabilityStatus":true,
-                "price":{"net":8.35,"vat":1.92,"gross":10.27},
-                "unavailabilityReason":null
-            },
-            {
-                "operatorName":"RUCH",
-                "availabilityStatus":true,
-                "price":{"net":4.87,"vat":1.12,"gross":5.99},
-                "unavailabilityReason":null
-            },
-            {
-                "operatorName":"POCZTA",
-                "availabilityStatus":false,
-                "price":null,
-                "unavailabilityReason": {
-                    "errors": {
-                        "messageCode": "ppo.api.error.pricing.algorithm.constraints.dimensionsTooSmall",
-                        "message": "Allowed parcel dimensions too small. Min dimensions: 16x10x1 cm",
-                        "field": null,
-                        "value": null
-                    }
-                }
-            }]';
-        $hepler = new Sendit_Bliskapaczka_Helper_Data();
-
-        $disabledArray = $hepler->getDisabledOperators(json_decode($priceList));
-
-        $this->assertTrue(in_array("POCZTA", $disabledArray));
+        $this->assertEquals(
+            '[{"operator":"INPOST","price":10.27},{"operator":"RUCH","price":5.99}]',
+            $helper->getOperatorsForWidget(json_decode($priceList))
+        );
     }
 
     /**

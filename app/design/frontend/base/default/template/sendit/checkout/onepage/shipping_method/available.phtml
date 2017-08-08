@@ -28,8 +28,7 @@
 
 <?php
 $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
-$pricesJson = $senditHelper->getPricesForWidget();
-$disabledArray = $senditHelper->getDisabledOperatorsForWidget();
+$operatorsJson = $senditHelper->getOperatorsForWidget();
 ?>
 
 <?php $_shippingRateGroups = $this->getShippingRates(); ?>
@@ -68,6 +67,7 @@ $disabledArray = $senditHelper->getDisabledOperatorsForWidget();
                             <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
                             
                             <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>
+                                <span class="bliskapaczka_price_box">
                                 <?php echo $this->__('From '); ?>
                             <?php endif; ?>
 
@@ -75,12 +75,17 @@ $disabledArray = $senditHelper->getDisabledOperatorsForWidget();
                             <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
                                 (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
                             <?php endif; ?>
+
+                            <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>
+                                </span>
+                            <?php endif; ?>
+
                             <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>
                                 <a 
                                     onclick='Bliskapaczka.showMap(
-                                        <?php echo $pricesJson; ?>,
-                                        [<?php echo "\"" . implode("\",\"", $disabledArray) . "\""; ?>]
-                                    )''>
+                                        <?php echo $senditHelper->getOperatorsForWidget(); ?>,
+                                        "<?php echo $senditHelper->getGoogleMapApiKey(); ?>"
+                                    )'>
                                     <?php echo $this->__('Select'); ?>
                                 </a>
                             <?php endif; ?>
@@ -128,6 +133,28 @@ $disabledArray = $senditHelper->getDisabledOperatorsForWidget();
             }
        });
     });
+
+    // Improving magneto standard shipping validation
+    (function(validate) {
+        ShippingMethod.prototype.validate = function () {
+            var methods = document.getElementsByName('shipping_method');
+            for (var i = 0; i < methods.length; i++) {
+                if (methods[i].value == '<?php echo Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE; ?>') {
+
+                    posCode = document.getElementById('bpWidget_aboutPoint_posCode').innerHTML;
+                    posOperator = document.getElementById('bpWidget_aboutPoint_posOperator').innerHTML;
+
+                    // Check if poperator and point code are selected
+                    if (!posCode || !posOperator) {
+                        alert(Translator.translate('Please select delivery point.').stripTags());
+                        return false;
+                    }
+                }
+            }
+
+            return validate.call(this);
+        };
+    }(ShippingMethod.prototype.validate));
 //]]>
 </script>
 <?php endif; ?>

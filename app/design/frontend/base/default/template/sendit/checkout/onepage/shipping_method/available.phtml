@@ -85,8 +85,10 @@ $operatorsJson = $senditHelper->getOperatorsForWidget();
                                     onclick='Bliskapaczka.showMap(
                                         <?php echo $senditHelper->getOperatorsForWidget(); ?>,
                                         "<?php echo $senditHelper->getGoogleMapApiKey(); ?>"
-                                    )'>
-                                    <?php echo $this->__('Select'); ?>
+                                    )'
+                                    href="#bpWidget_wrapper"
+                                >
+                                    <?php echo $this->__('Select delivery point'); ?>
                                 </a>
                             <?php endif; ?>
                         </label>
@@ -94,9 +96,10 @@ $operatorsJson = $senditHelper->getOperatorsForWidget();
                         <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>
                             <input name="bliskapaczka[posCode]" type="hidden" id="s_method_<?php echo $_rate->getCode() ?>_posCode" />
                             <input name="bliskapaczka[posOperator]" type="hidden" id="s_method_<?php echo $_rate->getCode() ?>_posOperator" />
+                            <a name="bpWidget_wrapper"></a>
                             <div id="bpWidget" style="height: 600px; width: 100%; display: none;"></div>
                             <div id="bpWidget_aboutPoint" style="width: 100%; display: none;">
-                                <p><?php echo $this->__('Selected Point'); ?>: <span id="bpWidget_aboutPoint_posOperator"></span> <span id="bpWidget_aboutPoint_posCode"></span></p>
+                                <p><?php echo $this->__('Selected Point'); ?>: <span id="bpWidget_aboutPoint_posData"></span></p>
                             </div>
                         <?php endif; ?>                      
                     <?php endif ?>
@@ -142,8 +145,8 @@ $operatorsJson = $senditHelper->getOperatorsForWidget();
                 if (methods[i].checked
                     && methods[i].value == '<?php echo Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE; ?>') {
 
-                    posCode = document.getElementById('bpWidget_aboutPoint_posCode').innerHTML;
-                    posOperator = document.getElementById('bpWidget_aboutPoint_posOperator').innerHTML;
+                    posCode = document.getElementById('s_method_<?php echo $_rate->getCode() ?>_posCode').value;
+                    posOperator = document.getElementById('s_method_<?php echo $_rate->getCode() ?>_posOperator').value;
 
                     // Check if poperator and point code are selected
                     if (!posCode || !posOperator) {

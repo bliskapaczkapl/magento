@@ -55,7 +55,12 @@ class Sendit_Bliskapaczka_Model_Observer
 
         $shippingAddress->setShippingDescription($shippingAddress->getShippingDescription() . ' ' . $data['posCode']);
 
+        $shippingAddress->setCollectShippingRates(true)->collectShippingRates();
         $shippingAddress->save();
+
+        $quote->setTotalsCollectedFlag(false);
+        $quote->collectTotals();
+        $quote->save();
     }
 
     /**

@@ -15,16 +15,13 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey)
         {
             googleMapApiKey: googleMapApiKey,
             callback: function(data) {
-                console.log(data)
-                console.log('BPWidget callback:', data.code, data.operator)
-
                 posCodeForm = document.getElementsByName('bliskapaczka[posCode]')[0]
                 posOperatorForm = document.getElementsByName('bliskapaczka[posOperator]')[0]
 
                 posCodeForm.value = data.code;
                 posOperatorForm.value = data.operator;
 
-                Bliskapaczka.pointSelected(data.code, data.operator, operators);
+                Bliskapaczka.pointSelected(data, operators);
             },
             operators: operators,
             posType: 'DELIVERY'
@@ -32,9 +29,9 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey)
     );
 }
 
-Bliskapaczka.pointSelected = function(posCode, posOperator, operators)
+Bliskapaczka.pointSelected = function(data, operators)
 {
-    Bliskapaczka.updatePrice(posOperator, operators);
+    Bliskapaczka.updatePrice(data.operator, operators);
 
     bpWidget = document.getElementById('bpWidget');
     bpWidget.style.display = 'none';
@@ -42,11 +39,12 @@ Bliskapaczka.pointSelected = function(posCode, posOperator, operators)
     aboutPoint = document.getElementById('bpWidget_aboutPoint');
     aboutPoint.style.display = 'block';
 
-    posCodeBlock = document.getElementById('bpWidget_aboutPoint_posCode');
-    posOperatorBlock = document.getElementById('bpWidget_aboutPoint_posOperator');
+    posDataBlock = document.getElementById('bpWidget_aboutPoint_posData');
 
-    posCodeBlock.innerHTML = posCode
-    posOperatorBlock.innerHTML = posOperator
+    posDataBlock.innerHTML =  data.operator + '</br>'
+        + ((data.description) ? data.description + '</br>': '')
+        + data.street + '</br>'
+        + ((data.postalCode) ? data.postalCode + ' ': '') + data.city
 }
 
 Bliskapaczka.updatePrice = function (posOperator, operators) {
@@ -60,4 +58,7 @@ Bliskapaczka.updatePrice = function (posOperator, operators) {
     }
 
     priceSpan.innerHTML = priceSpan.innerHTML.replace(/([\d\.,]{2,})/, price);
+    // Remove word "From"
+    boxSpan.innerHTML = '';
+    boxSpan.appendChild(priceSpan)
 }

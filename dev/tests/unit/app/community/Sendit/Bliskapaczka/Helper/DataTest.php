@@ -211,8 +211,6 @@ class DataTest extends TestCase
 
     public function testGetOperatorsForWidget()
     {
-        // $hepler = new Sendit_Bliskapaczka_Helper_Data();
-
         $priceList = '[
             {
                 "operatorName":"INPOST",

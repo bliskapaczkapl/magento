@@ -2,7 +2,12 @@ language: php
 php:
   - '5.6'
 
-before_script: composer install
+services:
+  - docker
+
+before_script:
+  - composer install
+
 script: 
   - vendor/bin/phpcs -s --colors --standard=./vendor/magento-ecg/coding-standard/Ecg app/
   - vendor/bin/phpmd app/ text codesize
@@ -10,3 +15,10 @@ script:
   - vendor/bin/phpdoccheck --directory=app
   - vendor/bin/phploc app/
   - vendor/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
+  - docker build -t bliskapaczkapl/magento .
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push bliskapaczkapl/magento;
+    fi

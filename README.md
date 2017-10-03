@@ -49,6 +49,14 @@ W celu poprawnej instalacji modułu wymagane są:
 
 Tryb testowy, czli komunikacja z testową wersją znajdującą się pod adresem [sandbox-bliskapaczka.pl](https://sandbox-bliskapaczka.pl/) można uruchomić przełączają w ustwieniach modułu opcję `Test mode enabled` na `Yes`.
 
+## Docker demo
+
+`docker pull bliskapaczkapl/magento && docker run -d -p 8080:80 bliskapaczkapl/magento`
+
+Front Magento jest dostępny po wpisaniu w przeglądarcę adresu `http://127.0.0.1:8080`.
+
+Panel admina jest dostępny pod adresem  `http://127.0.0.1:8080/admin`, dane dostępowe to `admin/password123`. Moduł należy skonfigurować według instrukcji powyżej.
+
 ## Rozwój modułu
 
 ### Instalacja zależności

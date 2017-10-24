@@ -9,8 +9,10 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     git \
     apt-utils \
+    rsync \
     sudo \
     nginx \
+    mysql-client \
     php5 \
     php5-fpm \
     php5-cli \
@@ -27,6 +29,7 @@ RUN  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 	&& php -r "unlink('composer-setup.php');"
 
 # Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY magento.conf /etc/nginx/sites-available/magento.conf
 RUN (cd /etc/nginx/sites-enabled && ln -s ../sites-available/magento.conf magento.conf && rm -rf default)
 

@@ -4,10 +4,14 @@ service php5-fpm start
 
 service nginx start
 
-sed -i -e "s/DB_HOST/$DB_HOST/g" /var/www/magento/app/etc/local.xml
-sed -i -e "s/DB_USER/$MYSQL_USER/g" /var/www/magento/app/etc/local.xml
-sed -i -e "s/DB_PASS/$MYSQL_PASSWORD/g" /var/www/magento/app/etc/local.xml
-sed -i -e "s/DB_NAME/$MYSQL_DATABASE/g" /var/www/magento/app/etc/local.xml
+MAGENTO_PATH=/var/www/magento
+
+sed -i -e "s/DB_HOST/$DB_HOST/g" $MAGENTO_PATH/app/etc/local.xml
+sed -i -e "s/DB_USER/$MYSQL_USER/g" $MAGENTO_PATH/app/etc/local.xml
+sed -i -e "s/DB_PASS/$MYSQL_PASSWORD/g" $MAGENTO_PATH/app/etc/local.xml
+sed -i -e "s/DB_NAME/$MYSQL_DATABASE/g" $MAGENTO_PATH/app/etc/local.xml
+
+mysql -h $DB_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e 'INSERT INTO `admin_user` (firstname, lastname, email, username, password, created, lognum, reload_acl_flag, is_active, rp_token_created_at) VALUES ("Admin", "Admin", "admin@example.com", "admin", "482c811da5d5b4bc6d497ffa98491e38", NOW(), 0, 0, 1, NOW());'
 
 while true; do
 echo "Everything fine"

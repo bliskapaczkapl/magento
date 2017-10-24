@@ -55,6 +55,11 @@ RUN (cd ${magento_path} && rm -rf var/cache/)
 # Copy Magento config file
 COPY local.xml ${magento_path}/app/etc/local.xml
 
+# Download Sample Data
+wget https://sourceforge.net/projects/mageloads/files/assets/1.9.2.4/magento-sample-data-1.9.2.4-fix.tar.gz/download -O ${magento_path}/magento-sample-data-1.9.2.4-fix.tar.gz \
+    && tar xvf ${magento_path}/magento-sample-data-1.9.2.4-fix.tar.gz -C ${magento_path} \
+    && rsync -avzhq ${magento_path}/magento-sample-data-1.9.2.4/ ${magento_path}
+
 # Fix privileges
 RUN find ${magento_path} -type d -exec chmod 770 {} \; && find ${magento_path} -type f -exec chmod 660 {} \; \
     && chown -R :www-data ${magento_path}

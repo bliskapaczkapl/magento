@@ -4,7 +4,10 @@ service php5-fpm start
 
 service nginx start
 
-service mysql start
+sed -i -e "s/DB_HOST/$DB_HOST/g" /var/www/magento/app/etc/local.xml
+sed -i -e "s/DB_USER/$MYSQL_USER/g" /var/www/magento/app/etc/local.xml
+sed -i -e "s/DB_PASS/$MYSQL_PASSWORD/g" /var/www/magento/app/etc/local.xml
+sed -i -e "s/DB_NAME/$MYSQL_DATABASE/g" /var/www/magento/app/etc/local.xml
 
 while true; do
 echo "Everything fine"

@@ -5,7 +5,6 @@ ENV magento_path /var/www/magento
 ENV MAGENTO_VERSION 1.9.3.3
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    wget \
     curl \
     git \
     apt-utils \
@@ -56,7 +55,7 @@ RUN (cd ${magento_path} && rm -rf var/cache/)
 COPY local.xml ${magento_path}/app/etc/local.xml
 
 # Download Sample Data
-RUN wget https://sourceforge.net/projects/mageloads/files/assets/1.9.2.4/magento-sample-data-1.9.2.4-fix.tar.gz/download -O ${magento_path}/magento-sample-data-1.9.2.4-fix.tar.gz \
+RUN curl -L https://sourceforge.net/projects/mageloads/files/assets/1.9.2.4/magento-sample-data-1.9.2.4-fix.tar.gz/download -o ${magento_path}/magento-sample-data-1.9.2.4-fix.tar.gz \
     && tar xf ${magento_path}/magento-sample-data-1.9.2.4-fix.tar.gz -C ${magento_path} \
     && rsync -avzhq ${magento_path}/magento-sample-data-1.9.2.4/ ${magento_path}
 

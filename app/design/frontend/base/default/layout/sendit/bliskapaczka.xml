@@ -5,14 +5,14 @@
             <block type="core/text" name="widget.bliskapaczka.pl">
                 <action method="setText">
                     <text>
-                        <![CDATA[<script type="text/javascript" src="https://widget.bliskapaczka.pl/v3.2/main.js"></script>]]>
+                        <![CDATA[<script type="text/javascript" src="https://widget.bliskapaczka.pl/v4/main.js"></script>]]>
                     </text>
                 </action>
             </block>
             <block type="core/text" name="styles_for_widget.bliskapaczka.pl">
                 <action method="setText">
                     <text>
-                        <![CDATA[<link rel="stylesheet" href="https://widget.bliskapaczka.pl/v3.2/main.css" />]]>
+                        <![CDATA[<link rel="stylesheet" href="https://widget.bliskapaczka.pl/v4/main.css" />]]>
                     </text>
                 </action>
             </block>

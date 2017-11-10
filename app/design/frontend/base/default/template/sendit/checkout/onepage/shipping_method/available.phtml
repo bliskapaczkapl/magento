@@ -84,7 +84,8 @@ $operatorsJson = $senditHelper->getOperatorsForWidget();
                                 <a 
                                     onclick='Bliskapaczka.showMap(
                                         <?php echo $senditHelper->getOperatorsForWidget(); ?>,
-                                        "<?php echo $senditHelper->getGoogleMapApiKey(); ?>"
+                                        "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
+                                        <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>
                                     )'
                                     href="#bpWidget_wrapper"
                                 >

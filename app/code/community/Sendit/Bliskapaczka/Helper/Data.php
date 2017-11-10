@@ -189,7 +189,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * @param string $configValue 
      * @return string
      */
-    public function getApiMode($configValue)
+    public function getApiMode($configValue = null)
     {
         $mode = '';
 

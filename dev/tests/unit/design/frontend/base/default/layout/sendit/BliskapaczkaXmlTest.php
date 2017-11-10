@@ -36,7 +36,7 @@ class BliskapaczkaXmlTest extends TestCase
                     $cssHttps = true;
                 }
 
-                if (strpos((string)$block->action->text, 'v3.2') !== false) {
+                if (strpos((string)$block->action->text, 'v4') !== false) {
                     $cssV2 = true;
                 }
             }
@@ -47,7 +47,7 @@ class BliskapaczkaXmlTest extends TestCase
                     $jsHttps = true;
                 }
 
-                if (strpos((string)$block->action->text, 'v3.2') !== false) {
+                if (strpos((string)$block->action->text, 'v4') !== false) {
                     $jsV2 = true;
                 }
             }

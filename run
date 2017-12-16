@@ -18,6 +18,10 @@ mysql -h $DB_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e 'UPDATE `c
 mysql -h $DB_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e 'INSERT INTO `admin_user` (firstname, lastname, email, username, password, created, lognum, reload_acl_flag, is_active, rp_token_created_at) VALUES ("Admin", "Admin", "admin@example.com", "admin", "482c811da5d5b4bc6d497ffa98491e38", NOW(), 0, 0, 1, NOW());'
 mysql -h $DB_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e 'INSERT INTO `admin_role` (parent_id,tree_level,sort_order,role_type,user_id,role_name) VALUES (1,2,0,"U",(SELECT user_id FROM admin_user WHERE username = "admin"),"Admin");'
 
+mysql -h $DB_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e 'UPDATE `core_config_data` SET value = "pl_PL" WHERE path = "general/locale/code" AND scope = "default";'
+mysql -h $DB_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e 'UPDATE `core_config_data` SET value = "PL" WHERE path = "general/country/default" AND scope = "default";'
+mysql -h $DB_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e 'UPDATE `core_store` SET name = "Polski" WHERE code = "default";'
+
 while true; do
 echo "Everything fine"
 sleep 3600

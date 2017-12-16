@@ -7,6 +7,7 @@ ENV MAGENTO_VERSION 1.9.3.3
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     git \
+    unzip \
     apt-utils \
     rsync \
     sudo \
@@ -58,6 +59,11 @@ COPY local.xml ${magento_path}/app/etc/local.xml
 RUN curl -L https://sourceforge.net/projects/mageloads/files/assets/1.9.2.4/magento-sample-data-1.9.2.4-fix.tar.gz/download -o ${magento_path}/magento-sample-data-1.9.2.4-fix.tar.gz \
     && tar xf ${magento_path}/magento-sample-data-1.9.2.4-fix.tar.gz -C ${magento_path} \
     && rsync -avzhq ${magento_path}/magento-sample-data-1.9.2.4/ ${magento_path}
+
+# Download Magento Translations for Polish
+RUN curl -L https://github.com/SnowdogApps/Magento-Translation-pl_PL/archive/master.zip -o /tmp/magento-translation-pl_pl.zip \
+    && unzip -o /tmp/magento-translation-pl_pl.zip -d /tmp/ \
+    && rsync -avzhq /tmp/Magento-Translation-pl_PL-master/ ${magento_path}/app/locale/
 
 # Fix privileges
 RUN find ${magento_path} -type d -exec chmod 770 {} \; && find ${magento_path} -type f -exec chmod 660 {} \; \

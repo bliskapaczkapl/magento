@@ -47,6 +47,27 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
      */
     public function collectRates(Mage_Shipping_Model_Rate_Request $request)
     {
+        $freeBoxes = 0;
+        if ($request->getAllItems()) {
+            foreach ($request->getAllItems() as $item) {
+
+                if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
+                    continue;
+                }
+
+                if ($item->getHasChildren() && $item->isShipSeparately()) {
+                    foreach ($item->getChildren() as $child) {
+                        if ($child->getFreeShipping() && !$child->getProduct()->isVirtual()) {
+                            $freeBoxes += $item->getQty() * $child->getQty();
+                        }
+                    }
+                } elseif ($item->getFreeShipping()) {
+                    $freeBoxes += $item->getQty();
+                }
+            }
+        }
+        $this->setFreeBoxes($freeBoxes);
+
         $result = Mage::getModel('shipping/rate_result');
 
         $method = Mage::getModel('shipping/rate_result_method');
@@ -72,13 +93,17 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
             break;
         }
 
-        // Get shipping price by Bliskapaczka API
-        if ($quote && $quote->getShippingAddress()->getPosOperator()) {
-            $posOperator = $quote->getShippingAddress()->getPosOperator();
-            $shippingPrice = round($senditHelper->getPriceForCarrier(json_decode($priceList), $posOperator), 2);
+        if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
+            $shippingPrice = '0.00';
         } else {
-            // Get lowest price by Bliskapaczka API because we don't know which carrier will be chosen
-            $shippingPrice = round($senditHelper->getLowestPrice(json_decode($priceList)), 2);
+            // Get shipping price by Bliskapaczka API
+            if ($quote && $quote->getShippingAddress()->getPosOperator()) {
+                $posOperator = $quote->getShippingAddress()->getPosOperator();
+                $shippingPrice = round($senditHelper->getPriceForCarrier(json_decode($priceList), $posOperator), 2);
+            } else {
+                // Get lowest price by Bliskapaczka API because we don't know which carrier will be chosen
+                $shippingPrice = round($senditHelper->getLowestPrice(json_decode($priceList)), 2);
+            }
         }
 
         $method->setPrice($shippingPrice);

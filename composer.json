@@ -1,4 +1,7 @@
 {
+    "config": {
+        "vendor-dir": "app/code/community/Sendit/Bliskapaczka/vendor"
+    },
     "name": "bliskapaczkapl/magento",
     "description": "BliczkaPaczka Carrier Module for Magento 1.9.x",
     "require-dev": {

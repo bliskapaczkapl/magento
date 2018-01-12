@@ -5,6 +5,11 @@ group: deprecated-2017Q4
 php:
   - '5.6'
 
+env:
+  global:
+    - VENDOR_DIR=app/code/Sendit/Bliskapaczka/vendor
+    - COMMIT=${TRAVIS_COMMIT::8}
+
 services:
   - docker
 
@@ -12,16 +17,17 @@ before_script:
   - composer install
 
 script: 
-  - vendor/bin/phpcs -s --colors --standard=./vendor/magento-ecg/coding-standard/Ecg app/
-  - vendor/bin/phpmd app/ text codesize
-  - vendor/bin/phpcpd app/
-  - vendor/bin/phpdoccheck --directory=app
-  - vendor/bin/phploc app/
-  - vendor/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
-  - docker build -t bliskapaczkapl/magento .
+  - $VENDOR_DIR/bin/phpcs -s --colors --standard=./$VENDOR_DIR/magento-ecg/coding-standard/Ecg app/
+  - $VENDOR_DIR/bin/phpmd app/ text codesize
+  - $VENDOR_DIR/bin/phpcpd app/
+  - $VENDOR_DIR/bin/phpdoccheck --directory=app
+  - $VENDOR_DIR/bin/phploc app/
+  - $VENDOR_DIR/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
+  - docker build -t bliskapaczkapl/magento:$COMMIT -t bliskapaczkapl/magento:latest .
 
 after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  - docker push bliskapaczkapl/magento:$COMMIT
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push bliskapaczkapl/magento;
+    docker push bliskapaczkapl/magento:latest;
     fi

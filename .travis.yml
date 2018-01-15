@@ -21,7 +21,7 @@ script:
   - $VENDOR_DIR/bin/phpmd app/ text codesize --exclude app/code/community/Sendit/Bliskapaczka/vendor
   - $VENDOR_DIR/bin/phpcpd --exclude vendor app/
   - $VENDOR_DIR/bin/phpdoccheck --directory=app
-  - $VENDOR_DIR/bin/phploc app/
+  - $VENDOR_DIR/bin/phploc app/ --exclude=code/community/Sendit/Bliskapaczka/vendor
   - $VENDOR_DIR/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
   - docker build -t bliskapaczkapl/magento:$COMMIT -t bliskapaczkapl/magento:latest .
 

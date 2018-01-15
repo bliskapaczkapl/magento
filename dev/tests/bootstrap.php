@@ -5,12 +5,13 @@ ini_set('error_reporting', E_ALL);
 
 $GLOBALS['ROOT_DIR'] = dirname(__FILE__) . '/../..';
 $GLOBALS['APP_DIR'] = $GLOBALS['ROOT_DIR'] . '/app';
+$GLOBALS['VENDOR_DIR'] = $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/vendor';
 
-require_once $GLOBALS['ROOT_DIR'] . '/vendor/autoload.php';
+require_once $GLOBALS['VENDOR_DIR'] . '/autoload.php';
 
 //Define include path for Magento and BliskaPaczka Module
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['ROOT_DIR'] . '/vendor/firegento/magento');
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['ROOT_DIR'] . '/vendor/firegento/magento/app');
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['VENDOR_DIR'] . '/firegento/magento');
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['VENDOR_DIR'] . '/firegento/magento/app');
 // ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['APP_DIR']);
 
 //Include Magento libraries

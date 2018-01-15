@@ -49,6 +49,9 @@ W celu poprawnej instalacji modułu wymagane są:
 
 Tryb testowy, czli komunikacja z testową wersją znajdującą się pod adresem [sandbox-bliskapaczka.pl](https://sandbox-bliskapaczka.pl/) można uruchomić przełączają w ustwieniach modułu opcję `Test mode enabled` na `Yes`.
 
+## Możliwości modułu
+- darmowa dostawa - wsparcie dla regół koszykowych definiujących darmową dostawę. Więcej w dokumentacji [Magento](http://docs.magento.com/m1/ce/user_guide/marketing/price-rule-shopping-cart-free-shipping.html)
+
 ## Docker demo
 
 `docker pull bliskapaczkapl/magento && docker run -d -p 8080:80 bliskapaczkapl/magento`

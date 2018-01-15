@@ -44,7 +44,6 @@ RUN curl https://codeload.github.com/OpenMage/magento-mirror/tar.gz/$MAGENTO_VER
 COPY app ${magento_path}/app
 COPY dev ${magento_path}/dev
 COPY js ${magento_path}/js
-COPY vendor ${magento_path}/vendor
 
 # Install Bliskapaczka
 COPY magento_composer.json ${magento_path}/composer.json

@@ -23,9 +23,9 @@ script:
   - $VENDOR_DIR/bin/phpdoccheck --exclude=app/code/community/Sendit/Bliskapaczka/vendor --directory=app
   - $VENDOR_DIR/bin/phploc app/
   - $VENDOR_DIR/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
-  - docker build -t bliskapaczkapl/magento:$COMMIT -t bliskapaczkapl/magento:latest .
 
 after_success:
+  - docker build -t bliskapaczkapl/magento:$COMMIT -t bliskapaczkapl/magento:latest .
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   - docker push bliskapaczkapl/magento:$COMMIT
   - if [ "$TRAVIS_BRANCH" == "master" ]; then

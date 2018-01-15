@@ -1,11 +1,10 @@
 <?php
 
 require $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Carrier/Bliskapaczka.php';
-require $GLOBALS['ROOT_DIR'] . '/vendor/bliskapaczkapl/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Logger.php';
-require $GLOBALS['ROOT_DIR'] .
-    '/vendor/bliskapaczkapl/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/ApiCaller/ApiCaller.php';
-require $GLOBALS['ROOT_DIR'] .
-    '/vendor/bliskapaczkapl/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Bliskapaczka.php';
+require $GLOBALS['VENDOR_DIR'] . '/bliskapaczkapl/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Logger.php';
+require $GLOBALS['VENDOR_DIR'] .
+    '/bliskapaczkapl/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/ApiCaller/ApiCaller.php';
+require $GLOBALS['VENDOR_DIR']  . '/bliskapaczkapl/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Bliskapaczka.php';
 
 
 use PHPUnit\Framework\TestCase;

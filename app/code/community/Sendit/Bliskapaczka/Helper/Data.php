@@ -130,10 +130,10 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * Get widget configuration
      *
      * @param array $priceList
-     * @param float $priceExclTax
+     * @param float $priceFromCarrier
      * @return array
      */
-    public function getOperatorsForWidget($priceList = null, $priceExclTax = null)
+    public function getOperatorsForWidget($priceList = null, $priceFromCarrier = null)
     {
         if (!$priceList) {
             $priceList = $this->getPriceList();
@@ -143,7 +143,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         foreach ($priceList as $operator) {
             $price = $operator->price->gross;
             if ($operator->availabilityStatus != false) {
-                if ($priceExclTax <= 0.0001) {
+                if ($priceFromCarrier <= 0.0001) {
                     $price = 0;
                 }
 

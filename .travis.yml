@@ -7,7 +7,7 @@ php:
 
 env:
   global:
-    - VENDOR_DIR=app/code/Sendit/Bliskapaczka/vendor
+    - VENDOR_DIR=app/code/community/Sendit/Bliskapaczka/vendor
     - COMMIT=${TRAVIS_COMMIT::8}
 
 services:

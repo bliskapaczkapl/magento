@@ -47,26 +47,7 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
      */
     public function collectRates(Mage_Shipping_Model_Rate_Request $request)
     {
-        $freeBoxes = 0;
-        if ($request->getAllItems()) {
-            foreach ($request->getAllItems() as $item) {
-
-                if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
-                    continue;
-                }
-
-                if ($item->getHasChildren() && $item->isShipSeparately()) {
-                    foreach ($item->getChildren() as $child) {
-                        if ($child->getFreeShipping() && !$child->getProduct()->isVirtual()) {
-                            $freeBoxes += $item->getQty() * $child->getQty();
-                        }
-                    }
-                } elseif ($item->getFreeShipping()) {
-                    $freeBoxes += $item->getQty();
-                }
-            }
-        }
-        $this->setFreeBoxes($freeBoxes);
+        $this->setFreeBoxes($this->_calculateFreeBoxes($request));
 
         $result = Mage::getModel('shipping/rate_result');
 
@@ -112,5 +93,38 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
         $result->append($method);
 
         return $result;
+    }
+
+    /**
+     * Method for calculating items for free shipping.
+     * Whole logic copied from Mage_Shipping_Model_Carrier_Flatrate::collectRates
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     * @return int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function _calculateFreeBoxes(Mage_Shipping_Model_Rate_Request $request)
+    {
+        $freeBoxes = 0;
+        if ($request->getAllItems()) {
+            foreach ($request->getAllItems() as $item) {
+
+                if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
+                    continue;
+                }
+
+                if ($item->getHasChildren() && $item->isShipSeparately()) {
+                    foreach ($item->getChildren() as $child) {
+                        if ($child->getFreeShipping() && !$child->getProduct()->isVirtual()) {
+                            $freeBoxes += $item->getQty() * $child->getQty();
+                        }
+                    }
+                } elseif ($item->getFreeShipping()) {
+                    $freeBoxes += $item->getQty();
+                }
+            }
+        }
+
+        return $freeBoxes;
     }
 }

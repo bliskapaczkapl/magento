@@ -28,7 +28,6 @@
 
 <?php
 $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
-$operatorsJson = $senditHelper->getOperatorsForWidget();
 ?>
 
 <?php $_shippingRateGroups = $this->getShippingRates(); ?>
@@ -83,7 +82,7 @@ $operatorsJson = $senditHelper->getOperatorsForWidget();
                             <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>
                                 <a 
                                     onclick='Bliskapaczka.showMap(
-                                        <?php echo $senditHelper->getOperatorsForWidget(); ?>,
+                                        <?php echo $senditHelper->getOperatorsForWidget(null, $_excl); ?>,
                                         "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
                                         <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>
                                     )'

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bliskapaczka\ApiClient;
+namespace Bliskapaczka\ApiClient\Mappers\Order;
 
 use Bliskapaczka\ApiClient\Mappers\Order;
 use PHPUnit\Framework\TestCase;

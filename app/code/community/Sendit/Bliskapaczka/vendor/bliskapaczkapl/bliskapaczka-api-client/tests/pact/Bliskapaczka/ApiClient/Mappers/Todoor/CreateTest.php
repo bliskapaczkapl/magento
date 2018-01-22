@@ -1,6 +1,6 @@
 <?php
 
-namespace Bliskapaczka;
+namespace Pact\Bliskapaczka;
 
 use PHPUnit\Framework\TestCase;
 
@@ -28,18 +28,19 @@ class CreateTest extends TestCase
             "receiverLastName" => "string",
             "receiverPhoneNumber" => "600555432",
             "receiverEmail" => "eva@example.com",
-            "operatorName" => "INPOST",
-            "destinationCode" => "KRA010",
-            "postingCode" => "KRA011",
-            "codValue" => 0,
-            "insuranceValue" => 0,
+            "receiverStreet" => "Testowa",
+            "receiverBuildingNumber" => "1",
+            "receiverFlatNumber" => '11',
+            "receiverPostCode" => "12-345",
+            "receiverCity" => "Testowe",
+            "operatorName" => "DPD",
             "additionalInformation" => "string",
             "parcel" => [
                 "dimensions" => [
                     "height" => 20,
                     "length" => 20,
                     "width" => 20,
-                    "weight" => 20
+                    "weight" => 2
                 ]
             ]
         ];
@@ -48,9 +49,9 @@ class CreateTest extends TestCase
         $this->setInteraction();
     }
 
-    public function testCreateOrder()
+    public function testCreateTodoor()
     {
-        $apiClient = new ApiClient\Bliskapaczka\Order('test-test-test-test');
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor('test-test-test-test');
         $apiClient->setApiUrl($this->host);
 
         $response = json_decode($apiClient->create($this->orderData));
@@ -60,13 +61,18 @@ class CreateTest extends TestCase
         $this->assertEquals($this->orderData['senderPostCode'], $response->senderPostCode);
         $this->assertEquals($this->orderData['receiverPhoneNumber'], $response->receiverPhoneNumber);
         $this->assertEquals($this->orderData['receiverEmail'], $response->receiverEmail);
+        $this->assertEquals($this->orderData['receiverStreet'], $response->receiverStreet);
+        $this->assertEquals($this->orderData['receiverBuildingNumber'], $response->receiverBuildingNumber);
+        $this->assertEquals($this->orderData['receiverFlatNumber'], $response->receiverFlatNumber);
+        $this->assertEquals($this->orderData['receiverPostCode'], $response->receiverPostCode);
+        $this->assertEquals($this->orderData['receiverCity'], $response->receiverCity);
 
         $this->assertTrue(isset($response->parcel));
         $this->assertTrue(isset($response->parcel->dimensions));
         $this->assertEquals('20', $response->parcel->dimensions->height);
         $this->assertEquals('20', $response->parcel->dimensions->length);
         $this->assertEquals('20', $response->parcel->dimensions->width);
-        $this->assertEquals('20', $response->parcel->dimensions->weight);
+        $this->assertEquals('2', $response->parcel->dimensions->weight);
 
         $this->expectOutputString('Deleted interactionsSet interactionsInteractions matched', $this->verification());
     }
@@ -109,11 +115,11 @@ class CreateTest extends TestCase
 
         $options[CURLOPT_POST] = true;
         $options[CURLOPT_POSTFIELDS] = '{
-  "description": "Create new order",
-  "provider_state": "Order created correctly",
+  "description": "Create new todoor order",
+  "provider_state": "Todoor order created correctly",
   "request": {
     "method": "post",
-    "path": "/v1/order"
+    "path": "/v1/order/todoor"
   },
   "response": {
     "status": 200,
@@ -135,10 +141,12 @@ class CreateTest extends TestCase
       "receiverLastName": "string",
       "receiverPhoneNumber": "' . $this->orderData['receiverPhoneNumber'] . '",
       "receiverEmail": "' . $this->orderData['receiverEmail'] . '",
-      "operatorName": "INPOST",
-      "destinationCode": "KRA010",
-      "postingCode": "KRA011",
-      "codValue": 0,
+      "receiverStreet":"Testowa",
+      "receiverBuildingNumber":"1",
+      "receiverFlatNumber":"11",
+      "receiverPostCode":"12-345",
+      "receiverCity":"Testowe",
+      "operatorName": "DPD",
       "insuranceValue": 0,
       "additionalInformation": "string",
       "parcel":{
@@ -146,7 +154,7 @@ class CreateTest extends TestCase
           "height": 20,
           "length": 20,
           "width": 20,
-          "weight": 20
+          "weight": 2
         }
       },
       "orderItems": [

@@ -3,12 +3,12 @@
 namespace Bliskapaczka\ApiClient\Mappers;
 
 /**
- * Order Mapper class
+ * Todoor Mapper class
  *
  * @author  Mateusz Koszutowski (mkoszutowski@divante.pl)
  * @version 0.1.0
  */
-class Order
+class Todoor
 {
     private $allowedProperties = [
         'senderEmail',
@@ -24,10 +24,12 @@ class Order
         'senderCit',
         'receiverFirstName',
         'receiverLastName',
+        'receiverStreet',
+        'receiverBuildingNumber',
+        'receiverFlatNumber',
+        'receiverPostCode',
+        'receiverCity',
         'operatorName',
-        'destinationCode',
-        'postingCode',
-        'codValue',
         'insuranceValue',
         'additionalInformation',
         'parcel'
@@ -67,13 +69,13 @@ class Order
      */
     public static function createFromArray(array $data)
     {
-        $order = new self();
+        $todoor = new self();
 
         foreach ($data as $key => $value) {
-            $order->$key = $value;
+            $todoor->$key = $value;
         }
 
-        return $order;
+        return $todoor;
     }
 
     /**
@@ -157,8 +159,12 @@ class Order
         $properties = [
             'receiverFirstName',
             'receiverLastName',
-            'operatorName',
-            'destinationCode'
+            'receiverStreet',
+            'receiverBuildingNumber',
+            'receiverFlatNumber',
+            'receiverPostCode',
+            'receiverCity',
+            'operatorName'
         ];
 
         foreach ($properties as $property) {

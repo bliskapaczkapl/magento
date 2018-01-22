@@ -30,10 +30,10 @@ class GetTest extends TestCase
 
     public function testCreateOrder()
     {
-        $apiClient = new ApiClient\Bliskapaczka('test-test-test-test');
+        $apiClient = new ApiClient\Bliskapaczka\Pricing('test-test-test-test');
         $apiClient->setApiUrl($this->host);
 
-        $response = json_decode($apiClient->getPricing($this->pricingData));
+        $response = json_decode($apiClient->get($this->pricingData));
 
         $this->assertEquals('INPOST', $response[0]->operatorName);
         $this->assertTrue($response[0]->availabilityStatus);

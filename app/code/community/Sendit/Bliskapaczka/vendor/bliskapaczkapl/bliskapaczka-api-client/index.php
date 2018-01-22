@@ -2,8 +2,8 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-$apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
-$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka($apiKey);
+$apiKey = 'e5814ba2-2dc6-4f31-bfa9-2afd4bc171a9';
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka($apiKey, 'test');
 
 $orderData = [
     "senderFirstName" => "string",
@@ -21,7 +21,7 @@ $orderData = [
     "receiverEmail" => "eva@example.com",
     "operatorName" => "INPOST",
     "destinationCode" => "KRA010",
-    "postingCode" => "KRA011",
+    "postingCode" => "KOS01L",
     "codValue" => 0,
     "insuranceValue" => 0,
     "additionalInformation" => "string",

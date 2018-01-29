@@ -1,5 +1,6 @@
 <?php
 
+require $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Carrier/Abstract.php';
 require $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Carrier/Bliskapaczka.php';
 require $GLOBALS['VENDOR_DIR'] . '/bliskapaczkapl/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Logger.php';
 require $GLOBALS['VENDOR_DIR'] .

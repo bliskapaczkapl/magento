@@ -22,7 +22,7 @@
 <config>
     <modules>
         <Sendit_Bliskapaczka>
-            <active>false</active>
+            <active>true</active>
             <codePool>community</codePool>
         </Sendit_Bliskapaczka>
     </modules>

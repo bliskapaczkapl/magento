@@ -94,6 +94,13 @@
                 <sort_order>10</sort_order>
                 <sallowspecific>0</sallowspecific>
             </sendit_bliskapaczka>
+            <sendit_bliskapaczka_courier>
+                <active>1</active>
+                <model>sendit_bliskapaczka/carrier_courier</model>
+                <title>Bliska Paczka Kurier</title>
+                <sort_order>10</sort_order>
+                <sallowspecific>0</sallowspecific>
+            </sendit_bliskapaczka_courier>
         </carriers>
     </default>
 </config>

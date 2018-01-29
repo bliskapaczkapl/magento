@@ -77,21 +77,37 @@ class Sendit_Bliskapaczka_Model_Observer
             return $this;
         }
 
-        if ($order->getShippingMethod(true)->getMethod() != 'bliskapaczka_sendit_bliskapaczka') {
+        if (
+            $order->getShippingMethod(true)->getMethod() != 'bliskapaczka_sendit_bliskapaczka'
+            && $order->getShippingMethod(true)->getMethod() != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
+        ) {
             return $this;
         }
 
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
 
-        /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
-        $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
-        $data = $mapper->getData($order, $senditHelper);
+        if ($order->getShippingMethod(true)->getMethod() == 'bliskapaczka_sendit_bliskapaczka') {
+            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
+            $data = $mapper->getData($order, $senditHelper);
+
+            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
+            $apiClient = $senditHelper->getApiClientOrder();
+        }
+        
+        if ($order->getShippingMethod(true)->getMethod() == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {
+            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_todoor');
+            $data = $mapper->getData($order, $senditHelper);
+
+            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
+            $apiClient = $senditHelper->getApiClientTodoor();
+        }
 
         try {
-            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
-            $apiClient = $senditHelper->getApiClient();
-            $apiClient->createOrder($data);
+            
+            $apiClient->create($data);
         } catch (Exception $e) {
             Mage::throwException($senditHelper->__($e->getMessage()), 1);
         }

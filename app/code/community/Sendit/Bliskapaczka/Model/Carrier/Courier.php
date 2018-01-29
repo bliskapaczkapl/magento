@@ -3,15 +3,15 @@
 use Bliskapaczka\ApiClient;
 
 /**
- * Bliskapaczka shipping method
+ * Bliskapaczka Courier shipping method
  *
  * @author Mateusz Koszutowski (mkoszutowski@divante.pl)
  */
-class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
+class Sendit_Bliskapaczka_Model_Carrier_Courier
     extends Sendit_Bliskapaczka_Model_Carrier_Abstract
     implements Mage_Shipping_Model_Carrier_Interface
 {
-    const SHIPPING_CODE = 'sendit_bliskapaczka';
+    const SHIPPING_CODE = 'sendit_bliskapaczka_courier';
 
     /**
      * Carrier's code

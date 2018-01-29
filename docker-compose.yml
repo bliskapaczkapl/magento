@@ -9,6 +9,16 @@ services:
       - "8080:80"
     env_file:
      - ./env
+    # volumes:
+    #   - "./app/code/community/Sendit:/var/www/magento/app/code/community/Sendit"
+    #   - "./app/design/frontend/base/default/layout/sendit:/var/www/magento/app/design/frontend/base/default/layout/sendit"
+    #   - "./app/design/frontend/base/default/template/sendit:/var/www/magento/app/design/frontend/base/default/template/sendit"
+    #   - "./app/etc/modules/Sendit_Bliskapaczka.xml:/var/www/magento/app/etc/modules/Sendit_Bliskapaczka.xml"
+    #   - "./app/locale/pl_PL/Sendit_Bliskapaczka.csv:/var/www/magento/app/locale/pl_PL/Sendit_Bliskapaczka.csv"
+    #   - "./dev:/var/www/magento/dev"
+    #   - "./js/sendit:/var/www/magento/js/sendit"
+    #   - "./skin/frontend/base/default/css/bliskapaczka.css:/var/www/magento/skin/frontend/base/default/css/bliskapaczka.css"
+    #   - "./composer.json:/var/www/magento/composer.json"
     environment:
       DB_HOST: db
   db:

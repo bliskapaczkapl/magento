@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class to map order data to data acceptable by Sendit Bliskapaczka API
+ * Class to map order data to data acceptable by endpoint todoor (courier) Sendit Bliskapaczka API
  */
-class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_Mapper_Abstract
+class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_Mapper_Abstract
 {
 
     /**
@@ -19,13 +19,20 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
 
         $shippingAddress = $order->getShippingAddress();
 
+        $fullStreet = $shippingAddress->getStreet()[0];
+        $street = preg_split("/\s+(?=\S*+$)/" , $fullStreet);
+
         $data['receiverFirstName'] = $shippingAddress->getFirstname();
         $data['receiverLastName'] = $shippingAddress->getLastname();
         $data['receiverPhoneNumber'] = $helper->telephoneNumberCeaning($shippingAddress->getTelephone());
         $data['receiverEmail'] = $shippingAddress->getEmail();
+        $data['receiverStreet'] = $street[0];
+        $data['receiverBuildingNumber'] = $street[1];
+        $data['receiverFlatNumber'] = '';
+        $data['receiverPostCode'] = $shippingAddress->getPostcode();
+        $data['receiverCity'] = $shippingAddress->getCity();
 
-        $data['operatorName'] = $shippingAddress->getPosOperator();
-        $data['destinationCode'] = $shippingAddress->getPosCode();
+        $data['operatorName'] = "DPD";
 
         $data['parcel'] = [
             'dimensions' => $this->_getParcelDimensions($helper)

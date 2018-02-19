@@ -40,7 +40,7 @@ Tryb testowy, czli komunikacja z testową wersją znajdującą się pod adresem 
 Widget bliskapaczka.pl przewiduje możliwość wyświetlenia tylko punktów z obsługą płatności przy pobraniu (więcej informacji w [dokumentacji](https://widget.bliskapaczka.pl)). W magento można wyświetlić widget tylk oz punktami obsługującymi płatność przy odbiorze przez wywołanie metody `Bliskapaczka.showMap` z ustawionym parametrem `codOnly` na `true`. Przykład wywołania:
 
 ```
-onclick="Bliskapaczka.showMap(
+Bliskapaczka.showMap(
     [{"operator":"POCZTA","price":9.69},{"operator":"INPOST","price":9.25},{"operator":"RUCH","price":8},{"operator":"DPD","price":9.99}],
     "AIzaSyCUyydNCGhxGi5GIt5z5I-X6hofzptsRjE",
     true,

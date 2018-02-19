@@ -11,24 +11,6 @@ W celu poprawnej instalacji modułu wymagane są:
 
 ### Instalacja modułu
 1. Pobierz repozytorium i skopiuj jego zawartość do katalogu domowego swojego Magento
-    - Jeśli masz już plik composer.json musisz zmergować zawartość pliku modułu do własnego. Plik musi zawierać:
-        ```
-        "repositories": [
-            ...
-            {
-                "type": "vcs",
-                "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git"
-            }
-        ],
-        "require": {
-            ...
-            "bliskapaczkapl/bliskapaczka-api-client": "^1.0"
-        }
-        ```
-1. Zainstaluj zależności composerem. Uruchom poniższą komendę w katalogu domowym Magento
-    ```
-    composer install --no-dev
-    ```
 1. Sprawdz czy moduł znajduje się na liście dostępnych modułów w Panelu Admina
 1. Włącz moduł z poziomu Panelu Admina lub zmieniając wartość parametru `active` w pliku `app/etc/modules/Sendit_Bliskapaczka.xml`, tak jak poniżej:
     ```
@@ -51,6 +33,21 @@ Tryb testowy, czli komunikacja z testową wersją znajdującą się pod adresem 
 
 ## Możliwości modułu
 - darmowa dostawa - wsparcie dla regół koszykowych definiujących darmową dostawę. Więcej w dokumentacji [Magento](http://docs.magento.com/m1/ce/user_guide/marketing/price-rule-shopping-cart-free-shipping.html)
+
+## Dodatkowe możliwości
+### Punkty z płatnością przy dobiorze
+
+Widget bliskapaczka.pl przewiduje możliwość wyświetlenia tylko punktów z obsługą płatności przy pobraniu (więcej informacji w [dokumentacji](https://widget.bliskapaczka.pl)). W magento można wyświetlić widget tylk oz punktami obsługującymi płatność przy odbiorze przez wywołanie metody `Bliskapaczka.showMap` z ustawionym parametrem `codOnly` na `true`. Przykład wywołania:
+
+```
+onclick="Bliskapaczka.showMap(
+    [{"operator":"POCZTA","price":9.69},{"operator":"INPOST","price":9.25},{"operator":"RUCH","price":8},{"operator":"DPD","price":9.99}],
+    "AIzaSyCUyydNCGhxGi5GIt5z5I-X6hofzptsRjE",
+    true,
+    true
+)
+```
+
 
 ## Docker demo
 

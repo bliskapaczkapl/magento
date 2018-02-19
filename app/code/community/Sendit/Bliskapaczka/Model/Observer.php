@@ -106,7 +106,6 @@ class Sendit_Bliskapaczka_Model_Observer
         }
 
         try {
-            
             $apiClient->create($data);
         } catch (Exception $e) {
             Mage::throwException($senditHelper->__($e->getMessage()), 1);

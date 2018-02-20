@@ -3,7 +3,7 @@
 namespace Bliskapaczka\ApiClient\Bliskapaczka;
 
 use Bliskapaczka\ApiClient\Bliskapaczka\Todoor;
-use Bliskapaczka\ApiClient\Mappers\Order as MappersOrder;
+// use Bliskapaczka\ApiClient\Mappers\Order as MappersOrder;
 use PHPUnit\Framework\TestCase;
 
 class TodoorTest extends TestCase
@@ -53,7 +53,7 @@ class TodoorTest extends TestCase
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';
         
-        $apiClientTodoor = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor($apiKey);
+        $apiClientTodoor = new Todoor($apiKey);
         $apiClientTodoor->setApiUrl($apiUrl);
 
         $this->assertEquals('order/todoor', $apiClientTodoor->getUrl());
@@ -64,9 +64,20 @@ class TodoorTest extends TestCase
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';
         
-        $apiClientTodoor = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor($apiKey);
+        $apiClientTodoor = new Todoor($apiKey);
         $apiClientTodoor->setApiUrl($apiUrl);
 
         $apiClientTodoor->create($this->todoorData);
+    }
+
+    public function testGetValidator()
+    {
+        $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
+        $apiUrl = 'http://localhost:1234';
+        
+        $apiClientTodoor = new Todoor($apiKey);
+        $apiClientTodoor->setApiUrl($apiUrl);
+
+        $this->assertTrue(is_a($apiClientTodoor->getValidator(), 'Bliskapaczka\ApiClient\Validator\Todoor'));
     }
 }

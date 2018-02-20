@@ -3,7 +3,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 $apiKey = 'e5814ba2-2dc6-4f31-bfa9-2afd4bc171a9';
-$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka($apiKey, 'test');
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Order($apiKey, 'test');
 
 $orderData = [
     "senderFirstName" => "string",
@@ -34,7 +34,7 @@ $orderData = [
         ]
     ]
 ];
-var_dump($apiClient->createOrder($orderData));
+var_dump($apiClient->create($orderData));
 
 $pricingData = [
     "parcel" => [

@@ -29,10 +29,10 @@ class PricingTest extends TestCase
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';
         
-        $apiClientOrder = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey);
-        $apiClientOrder->setApiUrl($apiUrl);
+        $apiClientPricing = new Pricing($apiKey);
+        $apiClientPricing->setApiUrl($apiUrl);
 
-        $this->assertEquals('pricing', $apiClientOrder->getUrl());
+        $this->assertEquals('pricing', $apiClientPricing->getUrl());
     }
 
     public function testGet()
@@ -40,9 +40,9 @@ class PricingTest extends TestCase
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';
         
-        $apiClientOrder = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey);
-        $apiClientOrder->setApiUrl($apiUrl);
+        $apiClientPricing = new Pricing($apiKey);
+        $apiClientPricing->setApiUrl($apiUrl);
 
-        $apiClientOrder->get($this->pricingData);
+        $apiClientPricing->get($this->pricingData);
     }
 }

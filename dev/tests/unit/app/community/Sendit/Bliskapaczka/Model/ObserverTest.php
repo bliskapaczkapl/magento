@@ -37,18 +37,18 @@ class ObserverTest extends TestCase
         $this->assertTrue(method_exists('Sendit_Bliskapaczka_Model_Observer', 'createOrderViaApi'));
     }
 
-    // public function testCreateOrderViaApi()
-    // {
-    //     spl_autoload_register(array(Sendit_Bliskapaczka_Model_Observer::class, 'load'), true, true);
+     public function testCreateOrderViaApi()
+     {
+         spl_autoload_register(array(Sendit_Bliskapaczka_Model_Observer::class, 'load'), true, true);
 
-    //     $event = new Varien_Event(array('order' => $this->orderMock));
-    //     $shippingMethod = new Varien_Object(array('method' => 'bliskapaczka_sendit_bliskapaczka', 'carrier_code', 'sendit'));
+         $event = new Varien_Event(array('order' => $this->orderMock));
+         $shippingMethod = new Varien_Object(array('method' => 'bliskapaczka_sendit_bliskapaczka', 'carrier_code', 'sendit'));
 
-    //     $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
+         $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
 
-    //     $this->orderMock->expects($this->once())->method('getShippingMethod')->will($this->returnValue($shippingMethod));
+         $this->orderMock->expects($this->once())->method('getShippingMethod')->will($this->returnValue($shippingMethod));
 
-    //     $observer = new Sendit_Bliskapaczka_Model_Observer();
-    //     $observer->createOrderViaApi($this->observerMock);
-    // }
+         $observer = new Sendit_Bliskapaczka_Model_Observer();
+         $observer->createOrderViaApi($this->observerMock);
+     }
 }

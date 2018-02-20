@@ -53,7 +53,7 @@ abstract class  Sendit_Bliskapaczka_Model_Mapper_Abstract
         }
 
         if (Mage::getStoreConfig($helper::SENDER_PHONE_NUMBER)) {
-            $data['senderPhoneNumber'] = $helper->telephoneNumberCeaning(
+            $data['senderPhoneNumber'] = $helper->telephoneNumberCleaning(
                 Mage::getStoreConfig($helper::SENDER_PHONE_NUMBER)
             );
         }

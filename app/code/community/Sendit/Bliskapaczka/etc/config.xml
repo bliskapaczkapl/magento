@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Sendit_Bliskapaczka>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Sendit_Bliskapaczka>
     </modules>
     <global>
@@ -14,7 +14,17 @@
         <models>
             <sendit_bliskapaczka>
                 <class>Sendit_Bliskapaczka_Model</class>
+                <model>Sendit_Bliskapaczka_Model</model>
+                <resourceModel>sendit_bliskapaczka_resource</resourceModel>
             </sendit_bliskapaczka>
+            <sendit_bliskapaczka_resource>
+                <class>Sendit_Bliskapaczka_Model_Resource</class>
+                <entities>
+                    <order>
+                        <table>sendit_bliskapaczka_order</table>
+                    </order>
+                </entities>
+            </sendit_bliskapaczka_resource>
         </models>
         <events>
             <checkout_controller_onepage_save_shipping_method>

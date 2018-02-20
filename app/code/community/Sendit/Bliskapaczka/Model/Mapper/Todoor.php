@@ -24,10 +24,10 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
 
         $data['receiverFirstName'] = $shippingAddress->getFirstname();
         $data['receiverLastName'] = $shippingAddress->getLastname();
-        $data['receiverPhoneNumber'] = $helper->telephoneNumberCeaning($shippingAddress->getTelephone());
+        $data['receiverPhoneNumber'] = $helper->telephoneNumberCleaning($shippingAddress->getTelephone());
         $data['receiverEmail'] = $shippingAddress->getEmail();
         $data['receiverStreet'] = $street[0];
-        $data['receiverBuildingNumber'] = $street[1];
+        $data['receiverBuildingNumber'] = isset($street[1]) ?: '';
         $data['receiverFlatNumber'] = '';
         $data['receiverPostCode'] = $shippingAddress->getPostcode();
         $data['receiverCity'] = $shippingAddress->getCity();

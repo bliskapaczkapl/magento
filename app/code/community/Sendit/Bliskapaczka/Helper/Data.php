@@ -208,7 +208,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * @param string $phoneNumber
      * @return string
      */
-    public function telephoneNumberCeaning($phoneNumber)
+    public function telephoneNumberCleaning($phoneNumber)
     {
         $phoneNumber = preg_replace("/[^0-9]/", "", $phoneNumber);
 

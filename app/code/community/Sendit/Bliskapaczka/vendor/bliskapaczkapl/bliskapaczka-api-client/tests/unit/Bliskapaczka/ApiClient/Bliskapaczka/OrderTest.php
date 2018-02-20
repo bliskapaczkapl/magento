@@ -51,7 +51,7 @@ class OrderTest extends TestCase
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';
         
-        $apiClientOrder = new \Bliskapaczka\ApiClient\Bliskapaczka\Order($apiKey);
+        $apiClientOrder = new Order($apiKey);
         $apiClientOrder->setApiUrl($apiUrl);
 
         $this->assertEquals('order', $apiClientOrder->getUrl());
@@ -62,9 +62,20 @@ class OrderTest extends TestCase
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';
         
-        $apiClientOrder = new \Bliskapaczka\ApiClient\Bliskapaczka\Order($apiKey);
+        $apiClientOrder = new Order($apiKey);
         $apiClientOrder->setApiUrl($apiUrl);
 
         $apiClientOrder->create($this->orderData);
+    }
+
+    public function testGetValidator()
+    {
+        $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
+        $apiUrl = 'http://localhost:1234';
+        
+        $apiClientOrder = new Order($apiKey);
+        $apiClientOrder->setApiUrl($apiUrl);
+
+        $this->assertTrue(is_a($apiClientOrder->getValidator(), 'Bliskapaczka\ApiClient\Validator\Order'));
     }
 }

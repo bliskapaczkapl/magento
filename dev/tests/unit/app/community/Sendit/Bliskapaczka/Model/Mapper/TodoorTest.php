@@ -69,7 +69,7 @@ class TodoorTest extends TestCase
                                      ->setMethods(
                                          array(
                                              'getParcelDimensions',
-                                             'telephoneNumberCeaning'
+                                             'telephoneNumberCleaning'
                                          )
                                      )
                                      ->getMock();
@@ -82,7 +82,7 @@ class TodoorTest extends TestCase
         );
 
         $this->helperMock->method('getParcelDimensions')->will($this->returnValue($dimensions));
-        $this->helperMock->method('telephoneNumberCeaning')
+        $this->helperMock->method('telephoneNumberCleaning')
             ->with($this->equalTo('504 445 665'))
             ->will($this->returnValue('504445665'));
     }

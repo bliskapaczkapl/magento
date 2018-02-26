@@ -19,6 +19,7 @@ class Pricing extends AbstractBliskapaczka implements BliskapaczkaInterface
      * Call API method create order
      *
      * @param array $data
+     * @return json $response
      */
     public function get(array $data)
     {

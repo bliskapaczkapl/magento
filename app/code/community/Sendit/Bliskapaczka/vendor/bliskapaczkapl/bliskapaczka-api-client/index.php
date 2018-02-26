@@ -22,8 +22,8 @@ $orderData = [
     "operatorName" => "INPOST",
     "destinationCode" => "KRA010",
     "postingCode" => "KOS01L",
-    "codValue" => 0,
-    "insuranceValue" => 0,
+    "codValue" => null,
+    "insuranceValue" => null,
     "additionalInformation" => "string",
     "parcel" => [
         "dimensions" => [
@@ -36,6 +36,8 @@ $orderData = [
 ];
 var_dump($apiClient->create($orderData));
 
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey, 'test');
+
 $pricingData = [
     "parcel" => [
         "dimensions" => [
@@ -46,4 +48,12 @@ $pricingData = [
         ]
     ]
 ];
-var_dump($apiClient->getPricing($pricingData));
+var_dump($apiClient->get($pricingData));
+
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Report($apiKey, 'test');
+$apiClient->setOperator('ruch');
+
+file_put_contents('zupa.pdf', $apiClient->get());
+
+var_dump($apiClient->get($pricingData));

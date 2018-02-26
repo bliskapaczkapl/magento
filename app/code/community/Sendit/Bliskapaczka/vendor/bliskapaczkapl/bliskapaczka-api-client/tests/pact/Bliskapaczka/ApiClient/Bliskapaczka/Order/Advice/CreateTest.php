@@ -1,6 +1,6 @@
 <?php
 
-namespace Bliskapaczka\ApiClient\Bliskapaczka\Order;
+namespace Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice;
 
 use PHPUnit\Framework\TestCase;
 
@@ -50,7 +50,7 @@ class CreateTest extends TestCase
 
     public function testCreateOrder()
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order('test-test-test-test');
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice('test-test-test-test');
         $apiClient->setApiUrl($this->host);
 
         $response = json_decode($apiClient->create($this->orderData));
@@ -63,7 +63,7 @@ class CreateTest extends TestCase
 
         $this->assertEquals($this->orderData['codValue'], $response->codValue);
 
-        $this->assertEquals("PROCESSING", $response->status);
+        $this->assertEquals("WAITING_FOR_PAYMENT", $response->status);
 
         $this->assertTrue(isset($response->parcel));
         $this->assertTrue(isset($response->parcel->dimensions));
@@ -84,7 +84,7 @@ class CreateTest extends TestCase
 
         // build Authorization header
         $headers[] = 'X-Pact-Mock-Service: true';
-        
+
         // set options
         $options[CURLOPT_URL] = $this->host . '/interactions';
         $options[CURLOPT_TIMEOUT] = 60;
@@ -104,7 +104,7 @@ class CreateTest extends TestCase
         // build Authorization header
         $headers[] = 'X-Pact-Mock-Service: true';
         $headers[] = 'Content-Type: application/json';
-        
+
         // set options
         $options[CURLOPT_URL] = $this->host . '/interactions';
         $options[CURLOPT_TIMEOUT] = 60;
@@ -113,11 +113,11 @@ class CreateTest extends TestCase
 
         $options[CURLOPT_POST] = true;
         $options[CURLOPT_POSTFIELDS] = '{
-  "description": "Create new order",
-  "provider_state": "Order created correctly",
+  "description": "Advice order",
+  "provider_state": "Order created correctly and ready to send",
   "request": {
     "method": "post",
-    "path": "/v1/order"
+    "path": "/v1/order/advice"
   },
   "response": {
     "status": 200,
@@ -145,7 +145,7 @@ class CreateTest extends TestCase
       "codValue": "' . $this->orderData['codValue'] . '",
       "insuranceValue": 0,
       "additionalInformation": "string",
-      "status": "PROCESSING",
+      "status": "WAITING_FOR_PAYMENT",
       "parcel":{
         "dimensions": {
           "height": 20,
@@ -186,7 +186,7 @@ class CreateTest extends TestCase
 
         // build Authorization header
         $headers[] = 'X-Pact-Mock-Service: true';
-        
+
         // set options
         $options[CURLOPT_URL] = $this->host . '/interactions/verification';
         $options[CURLOPT_TIMEOUT] = 60;

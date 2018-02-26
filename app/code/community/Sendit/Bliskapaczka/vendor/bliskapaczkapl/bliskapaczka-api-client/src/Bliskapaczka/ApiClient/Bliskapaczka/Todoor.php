@@ -19,6 +19,7 @@ class Todoor extends AbstractBliskapaczka implements BliskapaczkaInterface
      * Call API method create todoor (courier)
      *
      * @param array $data
+     * @reteurn json $responce
      */
     public function create(array $data)
     {

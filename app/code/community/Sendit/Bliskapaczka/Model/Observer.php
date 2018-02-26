@@ -93,7 +93,7 @@ class Sendit_Bliskapaczka_Model_Observer
             $data = $mapper->getData($order, $senditHelper);
 
             /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Order */
-            $apiClient = $senditHelper->getApiClientOrder();
+            $apiClient = $senditHelper->getApiClientOrderAdvice();
         }
         
         if ($order->getShippingMethod(true)->getMethod() == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {

@@ -70,6 +70,8 @@ class CreateTest extends TestCase
 
         $this->assertEquals($this->orderData['codValue'], $response->codValue);
 
+        $this->assertEquals("PROCESSING", $response->status);
+
         $this->assertTrue(isset($response->parcel));
         $this->assertTrue(isset($response->parcel->dimensions));
         $this->assertEquals('20', $response->parcel->dimensions->height);
@@ -153,6 +155,7 @@ class CreateTest extends TestCase
       "insuranceValue": 0,
       "codValue": "' . $this->orderData['codValue'] . '",
       "additionalInformation": "string",
+      "status": "PROCESSING",
       "parcel":{
         "dimensions": {
           "height": 20,

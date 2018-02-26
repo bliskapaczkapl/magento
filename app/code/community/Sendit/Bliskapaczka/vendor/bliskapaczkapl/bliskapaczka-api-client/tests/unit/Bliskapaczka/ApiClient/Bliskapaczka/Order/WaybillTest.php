@@ -22,7 +22,7 @@ class WaybillTest extends TestCase
         $apiUrl = 'http://localhost:1234';
         $id = '000000001P-000000002';
         
-        $apiClientOrder = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill($apiKey);
+        $apiClientOrder = new Waybill($apiKey);
         $apiClientOrder->setApiUrl($apiUrl);
         $apiClientOrder->setOrderId($id);
 
@@ -39,7 +39,7 @@ class WaybillTest extends TestCase
         $apiUrl = 'http://localhost:1234';
         $id = '';
         
-        $apiClientOrder = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill($apiKey);
+        $apiClientOrder = new Waybill($apiKey);
         $apiClientOrder->setApiUrl($apiUrl);
         $apiClientOrder->setOrderId($id);
 
@@ -55,19 +55,19 @@ class WaybillTest extends TestCase
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';
         
-        $apiClientOrder = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill($apiKey);
+        $apiClientOrder = new Waybill($apiKey);
         $apiClientOrder->setApiUrl($apiUrl);
 
         $apiClientOrder->getUrl();
     }
 
-    public function testCreate()
+    public function testGet()
     {
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';
         $id = '000000001P-000000002';
         
-        $apiClientOrder = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill($apiKey);
+        $apiClientOrder = new Waybill($apiKey);
         $apiClientOrder->setApiUrl($apiUrl);
         $apiClientOrder->setOrderId($id);
 

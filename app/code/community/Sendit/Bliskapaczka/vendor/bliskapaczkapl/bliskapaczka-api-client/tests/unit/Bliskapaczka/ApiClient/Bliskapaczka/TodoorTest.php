@@ -3,7 +3,6 @@
 namespace Bliskapaczka\ApiClient\Bliskapaczka;
 
 use Bliskapaczka\ApiClient\Bliskapaczka\Todoor;
-// use Bliskapaczka\ApiClient\Mappers\Order as MappersOrder;
 use PHPUnit\Framework\TestCase;
 
 class TodoorTest extends TestCase

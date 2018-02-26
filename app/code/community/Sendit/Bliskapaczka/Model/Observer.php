@@ -109,7 +109,7 @@ class Sendit_Bliskapaczka_Model_Observer
             
             $response = $apiClient->create($data);
 
-            $this->saveReponse($order, $response);
+            $this->_saveResponse($order, $response);
 
         } catch (Exception $e) {
             Mage::throwException($senditHelper->__($e->getMessage()));
@@ -117,11 +117,11 @@ class Sendit_Bliskapaczka_Model_Observer
     }
 
     /**
-     * @param $order
-     * @param $response
+     * @param Mage_Sales_Model_Order $order
+     * @param json string $response
      * @throws Exception
      */
-    protected function saveReponse($order, $response)
+    protected function _saveResponse($order, $response)
     {
         /** @var $coreHelper Mage_Core_Helper_Data */
         $coreHelper = Mage::helper('core');

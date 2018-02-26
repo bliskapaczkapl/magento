@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid
+ */
 class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     /**

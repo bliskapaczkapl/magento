@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <sales>
+            <children>
+                <sendit_bliskapaczka translate="title" module="sendit_bliskapaczka">
+                    <sort_order>10</sort_order>
+                    <title>Bliskapaczka</title>
+                    <children>
+                        <order translate="title" module="sendit_bliskapaczka">
+                            <title>Order</title>
+                            <action>adminhtml/order/</action>
+                        </order>
+                    </children>
+                </sendit_bliskapaczka>
+            </children>
+        </sales>
+    </menu>
+</config>

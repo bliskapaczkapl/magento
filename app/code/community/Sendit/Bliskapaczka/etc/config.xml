@@ -11,6 +11,11 @@
                 <class>Sendit_Bliskapaczka_Helper</class>
             </sendit_bliskapaczka>
         </helpers>
+        <blocks>
+            <sendit_bliskapaczka>
+                <model>Sendit_Bliskapaczka_Block</model>
+            </sendit_bliskapaczka>
+        </blocks>
         <models>
             <sendit_bliskapaczka>
                 <class>Sendit_Bliskapaczka_Model</class>
@@ -95,6 +100,26 @@
             </modules>
         </translate>
     </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <sendit_bliskapaczka before="Mage_Adminhtml">Sendit_Bliskapaczka_Adminhtml</sendit_bliskapaczka>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <sendit_bliskapaczka>
+                    <file>sendit_bliskapaczka.xml</file>
+                </sendit_bliskapaczka>
+            </updates>
+        </layout>
+    </adminhtml>
     <default>
         <carriers>
             <sendit_bliskapaczka>

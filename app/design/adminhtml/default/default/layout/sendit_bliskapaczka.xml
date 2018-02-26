@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_order_index>
+        <reference name="content">
+            <block type="sendit_bliskapaczka/adminhtml_order" name="order_index" />
+        </reference>
+    </adminhtml_order_index>
+
+    <adminhtml_order_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="sendit_bliskapaczka/adminhtml_order_grid" name="order_grid"/>
+        </block>
+    </adminhtml_order_grid>
+</layout>

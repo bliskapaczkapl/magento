@@ -1,6 +1,6 @@
 <?php
 
-class Divante_Complaint_Model_Resource_Ticket_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
+class Sendit_Bliskapaczka_Model_Resource_Order_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
 {
     public function _construct()
     {

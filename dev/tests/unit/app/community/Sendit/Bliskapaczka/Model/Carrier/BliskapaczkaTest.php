@@ -2,11 +2,6 @@
 
 require $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Carrier/Abstract.php';
 require $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Carrier/Bliskapaczka.php';
-require $GLOBALS['VENDOR_DIR'] . '/bliskapaczkapl/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Logger.php';
-require $GLOBALS['VENDOR_DIR'] .
-    '/bliskapaczkapl/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/ApiCaller/ApiCaller.php';
-require $GLOBALS['VENDOR_DIR']  . '/bliskapaczkapl/bliskapaczka-api-client/src/Bliskapaczka/ApiClient/Bliskapaczka.php';
-
 
 use PHPUnit\Framework\TestCase;
 use Bliskapaczka\ApiClient;
@@ -34,14 +29,14 @@ class BliskapaczkaTest extends TestCase
                                      ->getMock();
         $this->helper->method('getParcelDimensions')->will($this->returnValue(''));
 
-        $this->apiClient = $this->getMockBuilder(\Bliskapaczka\ApiClient\Bliskapaczka::class)
+        $this->apiClientOrder = $this->getMockBuilder(\Bliskapaczka\ApiClient\Bliskapaczka\Pricing::class)
                                      ->disableOriginalConstructor()
                                      ->disableOriginalClone()
                                      ->disableArgumentCloning()
                                      ->disallowMockingUnknownTypes()
-                                     ->setMethods(array('getPricing'))
+                                     ->setMethods(array('get'))
                                      ->getMock();
-        $this->apiClient->method('getPricing')->will($this->returnValue(''));
+        $this->apiClientOrder->method('get')->will($this->returnValue(''));
 
     }
 

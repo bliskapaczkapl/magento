@@ -95,7 +95,7 @@ class Sendit_Bliskapaczka_Model_Observer
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
             $data = $mapper->getData($order, $senditHelper);
 
-            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
+            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Order */
             $apiClient = $senditHelper->getApiClientOrder();
         }
         

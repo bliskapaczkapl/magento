@@ -31,7 +31,7 @@ class Sendit_Bliskapaczka_Model_Observer
     {
         if (preg_match('#^(Bliskapaczka\\\\ApiClient)\b#', $class)) {
             $libDir = Mage::getModuleDir('', 'Sendit_Bliskapaczka')
-                . '/vendor/bliskapaczkapl/bliskapaczka-api-client/src/';
+                      . '/vendor/bliskapaczkapl/bliskapaczka-api-client/src/';
             $phpFile = $libDir . str_replace('\\', '/', $class) . '.php';
 
             // @codingStandardsIgnoreStart
@@ -93,9 +93,9 @@ class Sendit_Bliskapaczka_Model_Observer
             $data = $mapper->getData($order, $senditHelper);
 
             /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Order */
-            $apiClient = $senditHelper->getApiClientOrderAdvice();
+            $apiClient = $senditHelper->getApiClientOrder();
         }
-        
+
         if ($order->getShippingMethod(true)->getMethod() == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_todoor');
@@ -106,7 +106,7 @@ class Sendit_Bliskapaczka_Model_Observer
         }
 
         try {
-            
+
             $response = $apiClient->create($data);
 
             $this->_saveResponse($order, $response);
@@ -126,24 +126,24 @@ class Sendit_Bliskapaczka_Model_Observer
         /** @var $coreHelper Mage_Core_Helper_Data */
         $coreHelper = Mage::helper('core');
 
-        $decodedReposnse = json_decode($response);
+        $decodedResponse = json_decode($response);
 
         //checking reposponce
-        if ($response && $decodedReposnse instanceof stdClass && empty($decodedReposnse->errors)) {
+        if ($response && $decodedResponse instanceof stdClass && empty($decodedResponse->errors)) {
 
             $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order');
             $bliskaOrder->setOrderId($order->getId());
-            $bliskaOrder->setNumber($coreHelper->stripTags($decodedReposnse->number));
-            $bliskaOrder->setStatus($coreHelper->stripTags($decodedReposnse->status));
-            $bliskaOrder->setDeliveryType($coreHelper->stripTags($decodedReposnse->deliveryType));
-            $bliskaOrder->setCreationDate($coreHelper->stripTags($decodedReposnse->creationDate));
-            $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedReposnse->adviceDate));
-            $bliskaOrder->setTrackingNumber($coreHelper->stripTags($decodedReposnse->trackingNumber));
+            $bliskaOrder->setNumber($coreHelper->stripTags($decodedResponse->number));
+            $bliskaOrder->setStatus($coreHelper->stripTags($decodedResponse->status));
+            $bliskaOrder->setDeliveryType($coreHelper->stripTags($decodedResponse->deliveryType));
+            $bliskaOrder->setCreationDate($coreHelper->stripTags($decodedResponse->creationDate));
+            $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));
+            $bliskaOrder->setTrackingNumber($coreHelper->stripTags($decodedResponse->trackingNumber));
 
             $bliskaOrder->save();
         } else {
             //wyrzucamy wyjatek
-            throw new Exception('Bliskapaczka: Error or empty API response');
+            throw new Exception(Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response'));
         }
     }
 }

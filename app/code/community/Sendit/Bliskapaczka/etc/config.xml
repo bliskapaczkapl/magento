@@ -119,6 +119,15 @@
                 </sendit_bliskapaczka>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <sendit_bliskapaczka>
+                    <files>
+                        <default>Sendit_Bliskapaczka.csv</default>
+                    </files>
+                </sendit_bliskapaczka>
+            </modules>
+        </translate>
     </adminhtml>
     <default>
         <carriers>

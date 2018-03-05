@@ -1,0 +1,39 @@
+<?php
+
+$_order = $this->getBliskaOrder();
+
+?>
+
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4><?php echo $this->__('Bliskapaczka order info') ?></h4>
+    </div>
+    <fieldset>
+        <table cellspacing="0" class="form-list">
+            <tr>
+                <td class="label"><label><?php echo Mage::helper('sales')->__('Number') ?></label></td>
+                <td class="value"><strong><?php echo ($_order->getNumber() ?: '-') ?></strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label><?php echo Mage::helper('sales')->__('Status') ?></label></td>
+                <td class="value"><strong><?php echo ($_order->getStatus() ?: '-') ?></strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label><?php echo Mage::helper('sales')->__('Delivery type') ?></label></td>
+                <td class="value"><strong><?php echo ($_order->getDeliveryType() ?: '-') ?></strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label><?php echo Mage::helper('sales')->__('Creation date') ?></label></td>
+                <td class="value"><strong><?php echo ($_order->getCreationDate() ?: '-') ?></strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label><?php echo Mage::helper('sales')->__('Advice date') ?></label></td>
+                <td class="value"><strong><?php echo ($_order->getDeviceDate() ?: '-') ?></strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label><?php echo Mage::helper('sales')->__('Tracking number') ?></label></td>
+                <td class="value"><strong><?php echo ($_order->getTrackingNumber() ?: '-') ?></strong></td>
+            </tr>
+        </table>
+    </fieldset>
+</div>

@@ -53,18 +53,19 @@ try {
 
     $response = $apiClient->create($data);
 
-    $decodedReposnse = json_decode($response);
 
-    if($response && $decodedReposnse instanceof stdClass && empty($decodedReposnse->errors)) {
+    $decodedResponse = json_decode($response);
+
+    if($response && $decodedResponse instanceof stdClass && empty($decodedResponse->errors)) {
 
         $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order');
         $bliskaOrder->setOrderId($order->getId());
-        $bliskaOrder->setNumber($coreHelper->stripTags($decodedReposnse->number));
-        $bliskaOrder->setStatus($coreHelper->stripTags($decodedReposnse->status));
-        $bliskaOrder->setDeliveryType($coreHelper->stripTags($decodedReposnse->deliveryType));
-        $bliskaOrder->setCreationDate($coreHelper->stripTags($decodedReposnse->creationDate));
-        $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedReposnse->adviceDate));
-        $bliskaOrder->setTrackingNumber($coreHelper->stripTags($decodedReposnse->trackingNumber));
+        $bliskaOrder->setNumber($coreHelper->stripTags($decodedResponse->number));
+        $bliskaOrder->setStatus($coreHelper->stripTags($decodedResponse->status));
+        $bliskaOrder->setDeliveryType($coreHelper->stripTags($decodedResponse->deliveryType));
+        $bliskaOrder->setCreationDate($coreHelper->stripTags($decodedResponse->creationDate));
+        $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));
+        $bliskaOrder->setTrackingNumber($coreHelper->stripTags($decodedResponse->trackingNumber));
 
         $bliskaOrder->save();
     } else {

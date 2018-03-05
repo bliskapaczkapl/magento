@@ -44,9 +44,105 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     /**
      * List action
      */
-    public function listAction()
+    public function viewAction()
     {
-        $this->loadLayout()->renderLayout();
+        $this->_title($this->__('Bliskapaczka'))->_title($this->__('Orders'));
+
+        $order = $this->_initOrder();
+        if ($order) {
+
+            $isActionsNotPermitted = $order->getActionFlag(
+                Mage_Sales_Model_Order::ACTION_FLAG_PRODUCTS_PERMISSION_DENIED
+            );
+            if ($isActionsNotPermitted) {
+                $this->_getSession()->addError($this->__('You don\'t have permissions to manage this order because of one or more products are not permitted for your website.'));
+            }
+
+            $this->_initAction();
+
+            $this->_title(sprintf("#%s", $order->getRealOrderId()));
+
+            $this->renderLayout();
+        }
+    }
+
+    /**
+     * Cancel action
+     */
+    public function cancelAction()
+    {
+        if ($bliskaOrder = $this->_initBliskaOrder()) {
+            try {
+                $bliskaOrder->cancel()->save();
+
+                $this->_getSession()->addSuccess(
+                    $this->__('The order has been cancelled.')
+                );
+            }
+            catch (Mage_Core_Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            }
+            catch (Exception $e) {
+                $this->_getSession()->addError($this->__('The order has not been cancelled.') . ' ' . $e->getMessage());
+                Mage::logException($e);
+            }
+            $this->_redirect('*/*/view', array('bliska_order_id' => $bliskaOrder->getId()));
+        }
+    }
+
+    /**
+     * Initialize order model instance
+     *
+     * @return Mage_Sales_Model_Order || false
+     */
+    protected function _initOrder()
+    {
+        $id = $this->getRequest()->getParam('bliska_order_id');
+
+        $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($id);
+
+        if(!$bliskaOrder || !$bliskaOrder->getId()) {
+            $this->_getSession()->addError($this->__('This order no longer exists.'));
+            $this->_redirect('*/*/');
+            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            return false;
+        }
+
+        $order = Mage::getModel('sales/order')->load($bliskaOrder->getOrderId());
+
+        if (!$order->getId()) {
+            $this->_getSession()->addError($this->__('This order no longer exists.'));
+            $this->_redirect('*/*/');
+            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            return false;
+        }
+
+        Mage::register('bliska_order', $bliskaOrder);
+        Mage::register('sales_order', $order);
+        Mage::register('current_order', $order);
+
+        return $order;
+    }
+
+    /**
+     * Initialize order model instance
+     *
+     * @return Sendit_Bliskapaczka_Model_Order || false
+     */
+    protected function _initBliskaOrder()
+    {
+        $id = $this->getRequest()->getParam('bliska_order_id');
+
+        $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($id);
+
+        if(!$bliskaOrder || !$bliskaOrder->getId()) {
+            $this->_getSession()->addError($this->__('This order no longer exists.'));
+            $this->_redirect('*/*/');
+            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            return false;
+        }
+
+        return $bliskaOrder;
     }
 
     /**

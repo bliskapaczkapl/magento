@@ -57,7 +57,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
 
         $this->addColumn('number', [
             'header'    => $this->__('number'),
-            'type'      => 'number',
+            'type'      => 'text',
             'align'     => 'right',
             'index'     => 'number',
         ]);
@@ -115,7 +115,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/list', array('order_id' => $row->getId()));
+        return $this->getUrl('*/*/view', array('bliska_order_id' => $row->getId()));
     }
 
     /**

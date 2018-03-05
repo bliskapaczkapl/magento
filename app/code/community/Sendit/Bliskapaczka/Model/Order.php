@@ -15,6 +15,12 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         $this->_init('sendit_bliskapaczka/order');
     }
 
+    /**
+     * Cancel Bliska order
+     *
+     * @return $this
+     * @throws Exception
+     */
     public function cancel() {
 
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */

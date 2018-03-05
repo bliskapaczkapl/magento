@@ -118,7 +118,7 @@ class Sendit_Bliskapaczka_Model_Observer
 
     /**
      * @param Mage_Sales_Model_Order $order
-     * @param json string $response
+     * @param json $response
      * @throws Exception
      */
     protected function _saveResponse($order, $response)

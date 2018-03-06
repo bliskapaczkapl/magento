@@ -33,6 +33,14 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
                 'onclick'   => 'deleteConfirm(\'' . $confirmationMessage . '\', \'' . $this->getCancelUrl() . '\')',
             ));
         }
+
+        if ($this->_isAllowedAction('waybill') && $bliskaOrder->canWaybill()) {
+            $this->_addButton('order_waybill', array(
+                'label'      => Mage::helper('sales')->__('Waybill'),
+                'formtarget' => '_blank',
+                'onclick'    => 'window.open(\'' . $this->getWaybillUrl() . '\', \'_blank\')',
+            ));
+        }
     }
 
     /**
@@ -64,5 +72,13 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
     public function getCancelUrl()
     {
         return $this->getUrl('*/*/cancel', array('bliska_order_id' => $this->getRequest()->getParam('bliska_order_id')));
+    }
+
+    /**
+     * @return string
+     */
+    public function getWaybillUrl()
+    {
+        return $this->getUrl('*/*/waybill', array('bliska_order_id' => $this->getRequest()->getParam('bliska_order_id')));
     }
 }

@@ -117,6 +117,44 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
         $apiClient->setStartPeriod($date);
         var_dump($date);
         var_dump($apiClient->get());
+
+    /**
+     * Waybill action
+     */
+    public function waybillAction()
+    {
+        $url = '';
+
+        if ($bliskaOrder = $this->_initBliskaOrder()) {
+            try {
+                $url = $bliskaOrder->waybill();
+
+                $this->_getSession()->addSuccess(
+                    $this->__('The waybill has been downloaded.')
+                );
+            }
+            catch (Mage_Core_Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            }
+            catch (Exception $e) {
+                $this->_getSession()->addError($this->__('The order has not been cancelled.') . ' ' . $e->getMessage());
+                Mage::logException($e);
+            }
+
+            if($url) {
+
+                $http = new Varien_Http_Adapter_Curl();
+                $http->write('GET', $url);
+                $content = $http->read();
+                $http->close();
+
+                $this->getResponse()->setHeader('Content-type', 'application/pdf');
+                $this->getResponse()->setBody($content);
+            } else {
+                $this->_redirect('*/*/view', array('bliska_order_id' => $bliskaOrder->getId()));
+            }
+        }
+>>>>>>> 72e7bc645bb10cbede582ae1134f9712e7375d24
     }
 
     /**

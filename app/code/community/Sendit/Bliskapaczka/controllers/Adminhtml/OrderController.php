@@ -120,6 +120,48 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     }
 
     /**
+     * Report action
+     */
+    public function reportAction()
+    {
+        $date = time();
+        $entityIds = $this->getRequest()->getParam('entity_id');
+
+        foreach ($entityIds as $id) {
+            $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($id);
+            if (date($bliskaOrder->getCreationDate()) < $date) {
+                $date = $bliskaOrder->getCreationDate();
+            }
+        }
+
+        $senditHelper = Mage::helper('sendit_bliskapaczka');
+        /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
+        $apiClient = $senditHelper->getApiClientReport();
+        $apiClient->setOperator('ruch');
+        $apiClient->setStartPeriod($date);
+
+        try {
+            $content = $apiClient->get();
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Exception $e) {
+            $this->_getSession()->addError($this->__('The report file has not been downloaded.') . ' ' . $e->getMessage());
+            Mage::logException($e);
+        }
+        if($content) {
+            $this->_getSession()->addSuccess(
+                $this->__('The report file has been downloaded.')
+            );
+
+            $this->getResponse()->setHeader('Content-type', 'application/pdf');
+            $this->getResponse()->setBody($content);
+        } else {
+            $this->_getSession()->addError($this->__('The report file has not been downloaded.'));
+            $this->_redirect('*/*/index');
+        }
+    }
+
+    /**
      * Waybill action
      */
     public function waybillAction()

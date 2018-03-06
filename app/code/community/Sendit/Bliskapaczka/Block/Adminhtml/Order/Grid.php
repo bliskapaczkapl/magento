@@ -113,8 +113,8 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
         $this->getMassactionBlock()->setFormFieldName('entity_id');
          
         $this->getMassactionBlock()->addItem('get raport', array(
-            'label'=> Mage::helper('sendit_bliskapaczka')->__('Get Raport'),
-            'url'  => $this->getUrl('*/*/raport', array('' => ''))
+            'label'=> Mage::helper('sendit_bliskapaczka')->__('Get Report'),
+            'url'  => $this->getUrl('*/*/report', array('' => ''))
         ));
          
         return $this;

@@ -114,8 +114,14 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             }
 
             if($url) {
+
+                $http = new Varien_Http_Adapter_Curl();
+                $http->write('GET', $url);
+                $content = $http->read();
+                $http->close();
+
                 $this->getResponse()->setHeader('Content-type', 'application/pdf');
-                $this->getResponse()->setBody(file_get_contents($url));
+                $this->getResponse()->setBody($content);
             } else {
                 $this->_redirect('*/*/view', array('bliska_order_id' => $bliskaOrder->getId()));
             }

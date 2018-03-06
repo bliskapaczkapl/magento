@@ -107,6 +107,19 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
         $this->addExportType('*/*/exportXml', Mage::helper('core')->__('XML'));
     }
 
+    protected function _prepareMassaction()
+    {
+        $this->setMassactionIdField('entity_id');
+        $this->getMassactionBlock()->setFormFieldName('entity_id');
+         
+        $this->getMassactionBlock()->addItem('get raport', array(
+            'label'=> Mage::helper('sendit_bliskapaczka')->__('Get Raport'),
+            'url'  => $this->getUrl('*/*/raport', array('' => ''))
+        ));
+         
+        return $this;
+    }
+
     /**
      * Return row url for js event handlers
      *

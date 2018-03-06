@@ -91,6 +91,35 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     }
 
     /**
+     */
+    public function raportAction()
+    {
+        header('Content-type: application/pdf');
+        header('Content-Disposition: inline; filename="report.pdf"');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Length: ' . filesize($file));
+        header('Accept-Ranges: bytes');
+
+        $date = time();
+        $entityIds = $this->getRequest()->getParam('entity_id');
+
+        foreach ($entityIds as $id) {
+            $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($id);
+            if (date($bliskaOrder->getCreationDate()) < $date) {
+                $date = $bliskaOrder->getCreationDate();
+            }
+        }
+
+        $senditHelper = Mage::helper('sendit_bliskapaczka');
+        /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
+        $apiClient = $senditHelper->getApiClientReport();
+        $apiClient->setOperator('ruch');
+        $apiClient->setStartPeriod($date);
+        var_dump($date);
+        var_dump($apiClient->get());
+    }
+
+    /**
      * Initialize order model instance
      *
      * @return Mage_Sales_Model_Order || false

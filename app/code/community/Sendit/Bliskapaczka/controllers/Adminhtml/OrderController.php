@@ -117,6 +117,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
         $apiClient->setStartPeriod($date);
         var_dump($date);
         var_dump($apiClient->get());
+    }
 
     /**
      * Waybill action
@@ -154,7 +155,6 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
                 $this->_redirect('*/*/view', array('bliska_order_id' => $bliskaOrder->getId()));
             }
         }
->>>>>>> 72e7bc645bb10cbede582ae1134f9712e7375d24
     }
 
     /**

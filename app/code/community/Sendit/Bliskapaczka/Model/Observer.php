@@ -93,7 +93,7 @@ class Sendit_Bliskapaczka_Model_Observer
             $data = $mapper->getData($order, $senditHelper);
 
             /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Order */
-            $apiClient = $senditHelper->getApiClientOrder();
+            $apiClient = $senditHelper->getApiClientOrderAdvice();
         }
 
         if ($order->getShippingMethod(true)->getMethod() == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {
@@ -102,15 +102,12 @@ class Sendit_Bliskapaczka_Model_Observer
             $data = $mapper->getData($order, $senditHelper);
 
             /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
-            $apiClient = $senditHelper->getApiClientTodoor();
+            $apiClient = $senditHelper->getApiClientTodoorAdvice();
         }
 
         try {
-
             $response = $apiClient->create($data);
-
             $this->_saveResponse($order, $response);
-
         } catch (Exception $e) {
             Mage::throwException($senditHelper->__($e->getMessage()));
         }

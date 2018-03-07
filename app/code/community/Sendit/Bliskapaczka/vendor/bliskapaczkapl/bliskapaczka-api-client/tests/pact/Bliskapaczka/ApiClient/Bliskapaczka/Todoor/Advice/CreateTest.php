@@ -1,6 +1,6 @@
 <?php
 
-namespace Bliskapaczka\ApiClient\Bliskapaczka\Todoor;
+namespace Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice;
 
 use PHPUnit\Framework\TestCase;
 
@@ -52,7 +52,7 @@ class CreateTest extends TestCase
 
     public function testCreateTodoor()
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor('test-test-test-test');
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice('test-test-test-test');
         $apiClient->setApiUrl($this->host);
 
         $response = json_decode($apiClient->create($this->orderData));
@@ -120,11 +120,11 @@ class CreateTest extends TestCase
 
         $options[CURLOPT_POST] = true;
         $options[CURLOPT_POSTFIELDS] = '{
-  "description": "Create new todoor order",
+  "description": "Advice new todoor order",
   "provider_state": "Todoor order created correctly",
   "request": {
     "method": "post",
-    "path": "/v1/order/todoor"
+    "path": "/v1/order/todoor/advice"
   },
   "response": {
     "status": 200,

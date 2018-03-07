@@ -27,6 +27,16 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const SENDER_POST_CODE = 'carriers/sendit_bliskapaczka/sender_post_code';
     const SENDER_CITY = 'carriers/sendit_bliskapaczka/sender_city';
 
+    const TODOOR_SENDER_EMAIL = 'carriers/sendit_bliskapaczka_courier/sender_email';
+    const TODOOR_SENDER_FIRST_NAME = 'carriers/sendit_bliskapaczka_courier/sender_first_name';
+    const TODOOR_SENDER_LAST_NAME = 'carriers/sendit_bliskapaczka_courier/sender_last_name';
+    const TODOOR_SENDER_PHONE_NUMBER = 'carriers/sendit_bliskapaczka_courier/sender_phone_number';
+    const TODOOR_SENDER_STREET = 'carriers/sendit_bliskapaczka_courier/sender_street';
+    const TODOOR_SENDER_BUILDING_NUMBER = 'carriers/sendit_bliskapaczka_courier/sender_building_number';
+    const TODOOR_SENDER_FLAT_NUMBER = 'carriers/sendit_bliskapaczka_courier/sender_flat_number';
+    const TODOOR_SENDER_POST_CODE = 'carriers/sendit_bliskapaczka_courier/sender_post_code';
+    const TODOOR_SENDER_CITY = 'carriers/sendit_bliskapaczka_courier/sender_city';
+
     const API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/bliskapaczkaapikey';
     const API_TEST_MODE_XML_PATH = 'carriers/sendit_bliskapaczka/test_mode';
 

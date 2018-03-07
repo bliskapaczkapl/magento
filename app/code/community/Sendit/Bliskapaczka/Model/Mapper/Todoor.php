@@ -42,4 +42,56 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
 
         return $data;
     }
+
+    /**
+     * Prepare sender data in fomrat accptable by Bliskapaczka API
+     *
+     * @param array $data
+     * @param Sendit_Bliskapaczka_Helper_Data $helper
+     * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function _prepareSenderData($data, Sendit_Bliskapaczka_Helper_Data $helper)
+    {
+        if (Mage::getStoreConfig($helper::TODOOR_SENDER_EMAIL)) {
+            $data['senderEmail'] = Mage::getStoreConfig($helper::TODOOR_SENDER_EMAIL);
+        }
+
+        if (Mage::getStoreConfig($helper::TODOOR_SENDER_FIRST_NAME)) {
+            $data['senderFirstName'] = Mage::getStoreConfig($helper::TODOOR_SENDER_FIRST_NAME);
+        }
+
+        if (Mage::getStoreConfig($helper::TODOOR_SENDER_LAST_NAME)) {
+            $data['senderLastName'] = Mage::getStoreConfig($helper::TODOOR_SENDER_LAST_NAME);
+        }
+
+        if (Mage::getStoreConfig($helper::TODOOR_SENDER_PHONE_NUMBER)) {
+            $data['senderPhoneNumber'] = $helper->telephoneNumberCleaning(
+                Mage::getStoreConfig($helper::TODOOR_SENDER_PHONE_NUMBER)
+            );
+        }
+
+        if (Mage::getStoreConfig($helper::TODOOR_SENDER_STREET)) {
+            $data['senderStreet'] = Mage::getStoreConfig($helper::TODOOR_SENDER_STREET);
+        }
+
+        if (Mage::getStoreConfig($helper::TODOOR_SENDER_BUILDING_NUMBER)) {
+            $data['senderBuildingNumber'] = Mage::getStoreConfig($helper::TODOOR_SENDER_BUILDING_NUMBER);
+        }
+
+        if (Mage::getStoreConfig($helper::TODOOR_SENDER_FLAT_NUMBER)) {
+            $data['senderFlatNumber'] = Mage::getStoreConfig($helper::TODOOR_SENDER_FLAT_NUMBER);
+        }
+
+        if (Mage::getStoreConfig($helper::TODOOR_SENDER_POST_CODE)) {
+            $data['senderPostCode'] = Mage::getStoreConfig($helper::TODOOR_SENDER_POST_CODE);
+        }
+
+        if (Mage::getStoreConfig($helper::TODOOR_SENDER_CITY)) {
+            $data['senderCity'] = Mage::getStoreConfig($helper::TODOOR_SENDER_CITY);
+        }
+
+        return $data;
+    }
 }

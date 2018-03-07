@@ -41,6 +41,18 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
                 'onclick'    => 'window.open(\'' . $this->getWaybillUrl() . '\', \'_blank\')',
             ));
         }
+
+        if ($this->_isAllowedAction('get')) {
+            $confirmationMessage = $coreHelper->jsQuoteEscape(
+                Mage::helper('sales')->__('Are you sure you want to update this order?')
+            );
+
+            $this->_addButton('order_get', array(
+                'label'      => Mage::helper('sales')->__('Get'),
+                'formtarget' => '_blank',
+                'onclick'   => 'deleteConfirm(\'' . $confirmationMessage . '\', \'' . $this->getGetUrl() . '\')',
+            ));
+        }
     }
 
     /**
@@ -72,6 +84,14 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
     public function getCancelUrl()
     {
         return $this->getUrl('*/*/cancel', array('bliska_order_id' => $this->getRequest()->getParam('bliska_order_id')));
+    }
+
+    /**
+     * @return string
+     */
+    public function getGetUrl()
+    {
+        return $this->getUrl('*/*/get', array('bliska_order_id' => $this->getRequest()->getParam('bliska_order_id')));
     }
 
     /**

@@ -32,7 +32,16 @@ W celu poprawnej instalacji modułu wymagane są:
 Tryb testowy, czli komunikacja z testową wersją znajdującą się pod adresem [sandbox-bliskapaczka.pl](https://sandbox-bliskapaczka.pl/) można uruchomić przełączają w ustwieniach modułu opcję `Test mode enabled` na `Yes`.
 
 ## Możliwości modułu
+- przesyłki do punktów - moduł daje możliwośc użycia jednej z metod dostawy jaką jest możliwość wybrania puktu doręczenia zamówienia (np. InPost, Paczka w Ruch, Poczta Polska,...)
+- przesylki kurierskie - moduł daje możliwośc użycia jednej z metod dostawy jaką jest przesyłka kurierska przez wybrenego przewoźnika
 - darmowa dostawa - wsparcie dla regół koszykowych definiujących darmową dostawę. Więcej w dokumentacji [Magento](http://docs.magento.com/m1/ce/user_guide/marketing/price-rule-shopping-cart-free-shipping.html)
+- zarządzanie przesyłkami - z poziomu modułu istnieje możliwość zarządzania przesyłkami po stronie bliskapaczka.pl
+  - pobranie listu przewozowego
+  - aktualizacja statusu przesyłki
+  - anulowanie zlecenia
+
+## Zarządzanie przesyłkami
+Zarządanie przesyłkami odbywa się przez menu Sprzedaż -> Bliskapaczka. Tam dostępna jest lista wszystkich przesyłek.
 
 ## Dodatkowe możliwości
 ### Punkty z płatnością przy dobiorze

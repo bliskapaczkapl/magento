@@ -48,6 +48,24 @@ Bliskapaczka.showMap(
 )
 ```
 
+### Zmian przewoźnika przy metodzie dostawy Bliska Paczka Kurier
+Na razie zmana przewoźnika jest możliwa tylko przez edycję kodu wtyczki. Aby przewoźnik został zmieniony trzeba wyedytować klase Sendit_Bliskapaczka_Model_Mapper_Todoor zmieniając w lini 35 parametr operatorName, jak w przykładzie 
+
+```
+<?php
+
+class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_Mapper_Abstract
+{
+    ...
+    public function getData(Mage_Sales_Model_Order $order, Sendit_Bliskapaczka_Helper_Data $helper)
+    {
+        ...
+        $data['operatorName'] = "FEDEX";
+        ...
+    }
+    ...
+}
+```
 
 ## Docker demo
 

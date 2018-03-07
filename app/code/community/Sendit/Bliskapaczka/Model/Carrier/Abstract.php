@@ -59,13 +59,7 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
         $method->setMethod($this->_code);
         $method->setMethodTitle($this->getConfigData('name'));
 
-        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
-        $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
-        /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
-        $apiClient = $senditHelper->getApiClientPricing();
-        $priceList = $apiClient->get(
-            array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()))
-        );
+        $priceList = $this->_getPricing();
         
         // Get Quote
         $quote = false;
@@ -77,6 +71,9 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
         if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
             $shippingPrice = '0.00';
         } else {
+            /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+            $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+
             // Get shipping price by Bliskapaczka API
             if ($quote && $quote->getShippingAddress()->getPosOperator()) {
                 $posOperator = $quote->getShippingAddress()->getPosOperator();
@@ -126,5 +123,14 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
         }
 
         return $freeBoxes;
+    }
+
+    /**
+     * Get price list for carrier
+     *
+     * @return json
+     */
+    protected function _getPricing() {
+
     }
 }

@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "bliskapaczkapl/bliskapaczka-api-client",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
-                "reference": "d6ba5a00f52a6bd9e884b09258346b85857ff5eb"
+                "reference": "f254a696fc6448860f55ad229f83812095215ba6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/d6ba5a00f52a6bd9e884b09258346b85857ff5eb",
-                "reference": "d6ba5a00f52a6bd9e884b09258346b85857ff5eb",
+                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/f254a696fc6448860f55ad229f83812095215ba6",
+                "reference": "f254a696fc6448860f55ad229f83812095215ba6",
                 "shasum": ""
             },
             "require": {
@@ -43,10 +43,10 @@
             },
             "description": "BliczkaPaczka API Client",
             "support": {
-                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/2.5.0",
+                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/2.6.0",
                 "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
             },
-            "time": "2018-03-05 10:28:41"
+            "time": "2018-03-07 10:59:49"
         },
         {
             "name": "psr/log",

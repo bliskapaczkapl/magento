@@ -154,4 +154,49 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
 
         return true;
     }
+
+    /**
+     * Get order data
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function get()
+    {
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+        $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+
+        /** @var $coreHelper Mage_Core_Helper_Data */
+        $coreHelper = Mage::helper('core');
+
+        /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Order */
+        $apiClient = $senditHelper->getApiClientOrder();
+
+        $apiClient->setOrderId($this->getNumber());
+
+        $response = $apiClient->get();
+
+        $decodedResponse = json_decode($response);
+
+        $properResponse = $decodedResponse instanceof stdClass && empty($decodedResponse->errors);
+
+        //checking reposponce
+        if ($response && $properResponse) {
+            $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($this->getId());
+            $bliskaOrder->setNumber($coreHelper->stripTags($decodedResponse->number));
+            $bliskaOrder->setStatus($coreHelper->stripTags($decodedResponse->status));
+            $bliskaOrder->setDeliveryType($coreHelper->stripTags($decodedResponse->deliveryType));
+            $bliskaOrder->setCreationDate($coreHelper->stripTags($decodedResponse->creationDate));
+            $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));
+            $bliskaOrder->setTrackingNumber($coreHelper->stripTags($decodedResponse->trackingNumber));
+            $bliskaOrder->save();
+        } else {
+            $message = ($decodedResponse ? current($decodedResponse->errors)->message : '');
+
+            //throwing exception
+            throw new Exception(
+                Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response' . ' ' . $message)
+            );
+        }
+    }
 }

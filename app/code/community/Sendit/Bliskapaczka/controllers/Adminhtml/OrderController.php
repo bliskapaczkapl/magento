@@ -179,6 +179,31 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     }
 
     /**
+     * Get action
+     */
+    public function getAction()
+    {
+        if ($bliskaOrder = $this->_initBliskaOrder()) {
+            try {
+                $bliskaOrder->get();
+
+                $this->_getSession()->addSuccess(
+                    $this->__('The order has been updated.')
+                );
+            }
+            catch (Mage_Core_Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            }
+            catch (Exception $e) {
+                $this->_getSession()->addError($this->__('The order has not been updated.') . ' ' . $e->getMessage());
+                Mage::logException($e);
+            }
+
+            $this->_redirect('*/*/view', array('bliska_order_id' => $bliskaOrder->getId()));
+        }
+    }
+
+    /**
      * Initialize order model instance
      *
      * @return Mage_Sales_Model_Order || false

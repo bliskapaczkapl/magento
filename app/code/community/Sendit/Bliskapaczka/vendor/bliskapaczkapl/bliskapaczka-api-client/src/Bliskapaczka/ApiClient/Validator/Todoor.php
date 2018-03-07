@@ -34,11 +34,11 @@ class Todoor extends AbstractValidator implements ValidatorInterface
         'receiverPostCode' => ['notblank' => true],
         'receiverCity' => ['maxlength' => 30, 'notblank' => true],
         'operatorName' => ['notblank' => true],
-        'postingCode',
-        'codValue',
-        'insuranceValue',
-        'additionalInformation',
-        'parcel'
+        'postingCode' => [],
+        'codValue' => [],
+        'insuranceValue' => [],
+        'additionalInformation' => [],
+        'parcel' => []
     ];
 
     /**
@@ -97,9 +97,6 @@ class Todoor extends AbstractValidator implements ValidatorInterface
         */
 
         # Basic validation for all propoerties
-        $this->basicValidation();
-
-        # Order specific validation
-        $this->orderValidation();
+        $this->validationByProperty();
     }
 }

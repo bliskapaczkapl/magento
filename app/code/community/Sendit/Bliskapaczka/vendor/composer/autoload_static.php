@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6d5e9651f96c5d0d077921ca4de63472
+class ComposerStaticInit9c5ed64f6d4348d312b253f60c708be2
 {
     public static $files = array (
         '7d5e26177ec0c967a595fc634f0744a3' => __DIR__ . '/..' . '/bliskapaczkapl/bliskapaczka-api-client/src/helpers.php',
@@ -35,8 +35,8 @@ class ComposerStaticInit6d5e9651f96c5d0d077921ca4de63472
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6d5e9651f96c5d0d077921ca4de63472::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6d5e9651f96c5d0d077921ca4de63472::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9c5ed64f6d4348d312b253f60c708be2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9c5ed64f6d4348d312b253f60c708be2::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

@@ -28,55 +28,75 @@ abstract class AbstractValidator
     /**
      * Basic validation for data
      */
-    public function basicValidation()
+    protected function validationByProperty()
     {
         foreach ($this->properties as $property => $settings) {
-            if (isset($settings['notblank'])
-                && isset($settings['notblank']) === true
-                && (is_null($this->data[$property]) || strlen($this->data[$property]) == 0)
-            ) {
-                throw new Exception('Invalid ' . $property, 1);
+            if (!isset($this->data[$property])) {
+                continue;
             }
-            
-            if (isset($settings['maxlength'])
-                && $settings['maxlength'] > 0
-                && strlen($this->data[$property]) > $settings['maxlength']
-            ) {
-                throw new Exception('Invalid ' . $property, 1);
-            }
+
+            $this->notBlank($property, $settings);
+            $this->maxLength($property, $settings);
+            $this->specificValidation($property);
         }
     }
 
     /**
      * Set of specific method for order validation
+     *
+     * @param string $property
      */
-    public function orderValidation()
+    protected function specificValidation($property)
     {
-        # Email validation
-        if ($this->data['senderEmail']) {
-            self::email($this->data['senderEmail']);
+        switch ($property) {
+            case 'senderEmail':
+            case 'receiverEmail':
+                self::email($this->data[$property]);
+                break;
+            case 'senderPhoneNumber':
+            case 'receiverPhoneNumber':
+                self::phone($this->data[$property]);
+                break;
+            case 'senderPostCode':
+            case 'receiverPostCode':
+                self::postCode($this->data[$property]);
+                break;
+            case 'parcel':
+                self::parcel($this->data[$property]);
+                break;
         }
-        if ($this->data['receiverEmail']) {
-            self::email($this->data['receiverEmail']);
-        }
+    }
 
-        # Phone number validation
-        if ($this->data['senderPhoneNumber']) {
-            self::phone($this->data['senderPhoneNumber']);
+    /**
+     * Validation for not blank properties
+     *
+     * @param string $property
+     * @param array $settings
+     */
+    protected function notBlank($property, $settings)
+    {
+        if (isset($settings['notblank'])
+            && isset($settings['notblank']) === true
+            && (is_null($this->data[$property]) || strlen($this->data[$property]) == 0)
+        ) {
+            throw new Exception('Invalid ' . $property, 1);
         }
-        if ($this->data['receiverPhoneNumber']) {
-            self::phone($this->data['receiverPhoneNumber']);
-        }
+    }
 
-        # Post code validation
-        if ($this->data['senderPostCode']) {
-            self::postCode($this->data['senderPostCode']);
+    /**
+     * Validation of lenght
+     *
+     * @param string $property
+     * @param array $settings
+     */
+    protected function maxLength($property, $settings)
+    {
+        if (isset($settings['maxlength'])
+            && $settings['maxlength'] > 0
+            && strlen($this->data[$property]) > $settings['maxlength']
+        ) {
+            throw new Exception('Invalid ' . $property, 1);
         }
-        if (isset($this->data['receiverPostCode']) && $this->data['receiverPostCode']) {
-            self::postCode($this->data['receiverPostCode']);
-        }
-        # Parcel validation
-        self::parcel($this->data['parcel']);
     }
 
     /**

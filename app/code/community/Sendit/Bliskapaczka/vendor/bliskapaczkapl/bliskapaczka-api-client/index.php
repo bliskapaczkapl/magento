@@ -50,10 +50,12 @@ $pricingData = [
 ];
 var_dump($apiClient->get($pricingData));
 
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill($apiKey, 'test');
+$apiClient->setOrderId('000000636P-000000108');
+
+var_dump($apiClient->get());
 
 $apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Report($apiKey, 'test');
 $apiClient->setOperator('ruch');
 
 file_put_contents('zupa.pdf', $apiClient->get());
-
-var_dump($apiClient->get($pricingData));

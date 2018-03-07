@@ -98,8 +98,14 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
         $date = time();
         $entityIds = $this->getRequest()->getParam('entity_id');
 
-        foreach ($entityIds as $id) {
-            $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($id);
+        $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
+
+        if ($entityIds) {
+            $bliskaOrderCollection->addFieldToSelect('*');
+            $bliskaOrderCollection->addFieldToFilter('entity_id', array('in' => $entityIds));
+        }
+
+        foreach ($bliskaOrderCollection as $bliskaOrder) {
             if (date($bliskaOrder->getCreationDate()) < $date) {
                 $date = $bliskaOrder->getCreationDate();
             }
@@ -116,10 +122,12 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
-            $this->_getSession()->addError($this->__('The report file has not been downloaded.') . ' ' . $e->getMessage());
+            $this->_getSession()->addError(
+                $this->__('The report file has not been downloaded.') . ' ' . $e->getMessage()
+            );
             Mage::logException($e);
         }
-        if($content) {
+        if ($content) {
             $this->_getSession()->addSuccess(
                 $this->__('The report file has been downloaded.')
             );

@@ -1,5 +1,6 @@
 <?php
 
+require_once $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Mapper/Abstract.php';
 require $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Mapper/Order.php';
 
 use PHPUnit\Framework\TestCase;
@@ -58,7 +59,7 @@ class OrderTest extends TestCase
                                      ->setMethods(
                                          array(
                                              'getParcelDimensions',
-                                             'telephoneNumberCeaning'
+                                             'telephoneNumberCleaning'
                                          )
                                      )
                                      ->getMock();
@@ -71,7 +72,7 @@ class OrderTest extends TestCase
         );
 
         $this->helperMock->method('getParcelDimensions')->will($this->returnValue($dimensions));
-        $this->helperMock->method('telephoneNumberCeaning')
+        $this->helperMock->method('telephoneNumberCleaning')
             ->with($this->equalTo('504 445 665'))
             ->will($this->returnValue('504445665'));
     }

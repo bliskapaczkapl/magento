@@ -1,7 +1,6 @@
 version: "3"
 services:
   magento:
-    # build: ./
     image: bliskapaczkapl/magento
     depends_on:
       - db

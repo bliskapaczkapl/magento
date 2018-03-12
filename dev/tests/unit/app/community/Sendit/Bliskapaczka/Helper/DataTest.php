@@ -290,7 +290,7 @@ class DataTest extends TestCase
     {
         $hepler = new Sendit_Bliskapaczka_Helper_Data();
      
-        $this->assertEquals('606606606', $hepler->telephoneNumberCeaning($phoneNumber));
+        $this->assertEquals('606606606', $hepler->telephoneNumberCleaning($phoneNumber));
     }
 
     public function phpneNumbers()

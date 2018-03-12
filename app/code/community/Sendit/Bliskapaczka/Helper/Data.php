@@ -27,6 +27,16 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const SENDER_POST_CODE = 'carriers/sendit_bliskapaczka/sender_post_code';
     const SENDER_CITY = 'carriers/sendit_bliskapaczka/sender_city';
 
+    const TODOOR_SENDER_EMAIL = 'carriers/sendit_bliskapaczka_courier/sender_email';
+    const TODOOR_SENDER_FIRST_NAME = 'carriers/sendit_bliskapaczka_courier/sender_first_name';
+    const TODOOR_SENDER_LAST_NAME = 'carriers/sendit_bliskapaczka_courier/sender_last_name';
+    const TODOOR_SENDER_PHONE_NUMBER = 'carriers/sendit_bliskapaczka_courier/sender_phone_number';
+    const TODOOR_SENDER_STREET = 'carriers/sendit_bliskapaczka_courier/sender_street';
+    const TODOOR_SENDER_BUILDING_NUMBER = 'carriers/sendit_bliskapaczka_courier/sender_building_number';
+    const TODOOR_SENDER_FLAT_NUMBER = 'carriers/sendit_bliskapaczka_courier/sender_flat_number';
+    const TODOOR_SENDER_POST_CODE = 'carriers/sendit_bliskapaczka_courier/sender_post_code';
+    const TODOOR_SENDER_CITY = 'carriers/sendit_bliskapaczka_courier/sender_city';
+
     const API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/bliskapaczkaapikey';
     const API_TEST_MODE_XML_PATH = 'carriers/sendit_bliskapaczka/test_mode';
 
@@ -118,8 +128,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getPriceList()
     {
-        $apiClient = $this->getApiClient();
-        $priceList = $apiClient->getPricing(
+        $apiClient = $this->getApiClientPricing();
+        $priceList = $apiClient->get(
             array("parcel" => array('dimensions' => $this->getParcelDimensions()))
         );
 
@@ -162,9 +172,144 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      *
      * @return \Bliskapaczka\ApiClient\Bliskapaczka
      */
-    public function getApiClient()
+    public function getApiClientOrder()
     {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka(
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientOrderAdvice()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientCancel()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Cancel(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientGet()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Get(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientWaybill()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientPricing()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientPricingTodoor()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing\Todoor(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientTodoor()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientTodoorAdvice()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientReport()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Report(
             Mage::getStoreConfig(self::API_KEY_XML_PATH),
             $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
         );
@@ -178,7 +323,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * @param string $phoneNumber
      * @return string
      */
-    public function telephoneNumberCeaning($phoneNumber)
+    public function telephoneNumberCleaning($phoneNumber)
     {
         $phoneNumber = preg_replace("/[^0-9]/", "", $phoneNumber);
 

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Sendit_Bliskapaczka>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Sendit_Bliskapaczka>
     </modules>
     <global>
@@ -11,10 +11,25 @@
                 <class>Sendit_Bliskapaczka_Helper</class>
             </sendit_bliskapaczka>
         </helpers>
+        <blocks>
+            <sendit_bliskapaczka>
+                <model>Sendit_Bliskapaczka_Block</model>
+            </sendit_bliskapaczka>
+        </blocks>
         <models>
             <sendit_bliskapaczka>
                 <class>Sendit_Bliskapaczka_Model</class>
+                <model>Sendit_Bliskapaczka_Model</model>
+                <resourceModel>sendit_bliskapaczka_resource</resourceModel>
             </sendit_bliskapaczka>
+            <sendit_bliskapaczka_resource>
+                <class>Sendit_Bliskapaczka_Model_Resource</class>
+                <entities>
+                    <order>
+                        <table>sendit_bliskapaczka_order</table>
+                    </order>
+                </entities>
+            </sendit_bliskapaczka_resource>
         </models>
         <events>
             <checkout_controller_onepage_save_shipping_method>
@@ -85,6 +100,35 @@
             </modules>
         </translate>
     </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <sendit_bliskapaczka before="Mage_Adminhtml">Sendit_Bliskapaczka_Adminhtml</sendit_bliskapaczka>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <sendit_bliskapaczka>
+                    <file>sendit_bliskapaczka.xml</file>
+                </sendit_bliskapaczka>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <sendit_bliskapaczka>
+                    <files>
+                        <default>Sendit_Bliskapaczka.csv</default>
+                    </files>
+                </sendit_bliskapaczka>
+            </modules>
+        </translate>
+    </adminhtml>
     <default>
         <carriers>
             <sendit_bliskapaczka>
@@ -94,6 +138,13 @@
                 <sort_order>10</sort_order>
                 <sallowspecific>0</sallowspecific>
             </sendit_bliskapaczka>
+            <sendit_bliskapaczka_courier>
+                <active>1</active>
+                <model>sendit_bliskapaczka/carrier_courier</model>
+                <title>Bliska Paczka Kurier</title>
+                <sort_order>10</sort_order>
+                <sallowspecific>0</sallowspecific>
+            </sendit_bliskapaczka_courier>
         </carriers>
     </default>
 </config>

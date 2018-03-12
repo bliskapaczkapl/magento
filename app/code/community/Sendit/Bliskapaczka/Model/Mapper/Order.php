@@ -3,7 +3,7 @@
 /**
  * Class to map order data to data acceptable by Sendit Bliskapaczka API
  */
-class Sendit_Bliskapaczka_Model_Mapper_Order
+class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_Mapper_Abstract
 {
 
     /**
@@ -21,7 +21,7 @@ class Sendit_Bliskapaczka_Model_Mapper_Order
 
         $data['receiverFirstName'] = $shippingAddress->getFirstname();
         $data['receiverLastName'] = $shippingAddress->getLastname();
-        $data['receiverPhoneNumber'] = $helper->telephoneNumberCeaning($shippingAddress->getTelephone());
+        $data['receiverPhoneNumber'] = $helper->telephoneNumberCleaning($shippingAddress->getTelephone());
         $data['receiverEmail'] = $shippingAddress->getEmail();
 
         $data['operatorName'] = $shippingAddress->getPosOperator();
@@ -34,17 +34,6 @@ class Sendit_Bliskapaczka_Model_Mapper_Order
         $data = $this->_prepareSenderData($data, $helper);
 
         return $data;
-    }
-
-    /**
-     * Get parcel dimensions in format accptable by Bliskapaczka API
-     *
-     * @param Sendit_Bliskapaczka_Helper_Data $helper
-     * @return array
-     */
-    protected function _getParcelDimensions(Sendit_Bliskapaczka_Helper_Data $helper)
-    {
-        return $helper->getParcelDimensions();
     }
 
     /**
@@ -71,7 +60,7 @@ class Sendit_Bliskapaczka_Model_Mapper_Order
         }
 
         if (Mage::getStoreConfig($helper::SENDER_PHONE_NUMBER)) {
-            $data['senderPhoneNumber'] = $helper->telephoneNumberCeaning(
+            $data['senderPhoneNumber'] = $helper->telephoneNumberCleaning(
                 Mage::getStoreConfig($helper::SENDER_PHONE_NUMBER)
             );
         }

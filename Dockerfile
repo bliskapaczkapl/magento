@@ -47,7 +47,8 @@ COPY js ${magento_path}/js
 COPY skin ${magento_path}/skin
 
 # Install Bliskapaczka
-COPY magento_composer.json ${magento_path}/composer.json
+COPY composer.json ${magento_path}/composer.json
+COPY composer.lock ${magento_path}/composer.lock
 RUN (cd ${magento_path} && composer install --no-dev)
 RUN sed -i 's%<active>false</active>%<active>true</active>%g' ${magento_path}/app/etc/modules/Sendit_Bliskapaczka.xml
 RUN (cd ${magento_path} && rm -rf var/cache/)

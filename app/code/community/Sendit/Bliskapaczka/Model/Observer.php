@@ -31,7 +31,7 @@ class Sendit_Bliskapaczka_Model_Observer
     {
         if (preg_match('#^(Bliskapaczka\\\\ApiClient)\b#', $class)) {
             $libDir = Mage::getModuleDir('', 'Sendit_Bliskapaczka')
-                . '/vendor/bliskapaczkapl/bliskapaczka-api-client/src/';
+                      . '/vendor/bliskapaczkapl/bliskapaczka-api-client/src/';
             $phpFile = $libDir . str_replace('\\', '/', $class) . '.php';
 
             // @codingStandardsIgnoreStart
@@ -77,23 +77,70 @@ class Sendit_Bliskapaczka_Model_Observer
             return $this;
         }
 
-        if ($order->getShippingMethod(true)->getMethod() != 'bliskapaczka_sendit_bliskapaczka') {
+        if (
+            $order->getShippingMethod(true)->getMethod() != 'bliskapaczka_sendit_bliskapaczka'
+            && $order->getShippingMethod(true)->getMethod() != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
+        ) {
             return $this;
         }
 
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
 
-        /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
-        $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
-        $data = $mapper->getData($order, $senditHelper);
+        if ($order->getShippingMethod(true)->getMethod() == 'bliskapaczka_sendit_bliskapaczka') {
+            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
+            $data = $mapper->getData($order, $senditHelper);
+
+            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Order */
+            $apiClient = $senditHelper->getApiClientOrderAdvice();
+        }
+
+        if ($order->getShippingMethod(true)->getMethod() == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {
+            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_todoor');
+            $data = $mapper->getData($order, $senditHelper);
+
+            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
+            $apiClient = $senditHelper->getApiClientTodoorAdvice();
+        }
 
         try {
-            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
-            $apiClient = $senditHelper->getApiClient();
-            $apiClient->createOrder($data);
+            $response = $apiClient->create($data);
+            $this->_saveResponse($order, $response);
         } catch (Exception $e) {
-            Mage::throwException($senditHelper->__($e->getMessage()), 1);
+            Mage::throwException($senditHelper->__($e->getMessage()));
+        }
+    }
+
+    /**
+     * @param Mage_Sales_Model_Order $order
+     * @param json $response
+     * @throws Exception
+     */
+    protected function _saveResponse($order, $response)
+    {
+        /** @var $coreHelper Mage_Core_Helper_Data */
+        $coreHelper = Mage::helper('core');
+
+        $decodedResponse = json_decode($response);
+
+        //checking reposponce
+        if ($response && $decodedResponse instanceof stdClass && empty($decodedResponse->errors)) {
+
+            $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order');
+            $bliskaOrder->setOrderId($order->getId());
+            $bliskaOrder->setNumber($coreHelper->stripTags($decodedResponse->number));
+            $bliskaOrder->setStatus($coreHelper->stripTags($decodedResponse->status));
+            $bliskaOrder->setDeliveryType($coreHelper->stripTags($decodedResponse->deliveryType));
+            $bliskaOrder->setCreationDate($coreHelper->stripTags($decodedResponse->creationDate));
+            $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));
+            $bliskaOrder->setTrackingNumber($coreHelper->stripTags($decodedResponse->trackingNumber));
+
+            $bliskaOrder->save();
+        } else {
+            //wyrzucamy wyjatek
+            throw new Exception(Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response'));
         }
     }
 }

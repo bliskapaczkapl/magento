@@ -111,10 +111,20 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             }
         }
 
+        if ($bliskaOrderCollection) {
+            $bliskaOrder = $bliskaOrderCollection->getFirstItem();
+            $order       = Mage::getModel('sales/order')->load($bliskaOrder->getOrderId());
+            if ($order && $order->getId()) {
+                $operator = $order->getShippingAddress()->getPosOperator();
+            }
+        }
+
         $senditHelper = Mage::helper('sendit_bliskapaczka');
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
         $apiClient = $senditHelper->getApiClientReport();
-        $apiClient->setOperator('ruch');
+        if(isset($operator)) {
+            $apiClient->setOperator($operator);
+        }
         $apiClient->setStartPeriod($date);
 
         try {

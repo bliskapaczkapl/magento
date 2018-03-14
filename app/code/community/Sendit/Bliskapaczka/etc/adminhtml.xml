@@ -8,12 +8,37 @@
                     <title>Bliskapaczka</title>
                     <children>
                         <order translate="title" module="sendit_bliskapaczka">
-                            <title>Order</title>
+                            <title>Orders</title>
                             <action>adminhtml/order/</action>
                         </order>
+                        <report translate="title" module="sendit_bliskapaczka">
+                            <title>Reports</title>
+                            <action>adminhtml/report/</action>
+                        </report>
                     </children>
                 </sendit_bliskapaczka>
             </children>
         </sales>
     </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <sales>
+                        <children>
+                            <sendit_bliskapaczka_order translate="title" module="sendit_bliskapaczka">
+                                <title>Orders</title>
+                            </sendit_bliskapaczka_order>
+                            <sendit_bliskapaczka_report translate="title" module="sendit_bliskapaczka">
+                                <title>Reports</title>
+                            </sendit_bliskapaczka_report>
+                        </children>
+                    </sales>
+                </children>
+            </admin>
+        </resources>
+    </acl>
 </config>

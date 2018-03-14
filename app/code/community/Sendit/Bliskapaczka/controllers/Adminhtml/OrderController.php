@@ -128,6 +128,9 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
         }
     }
 
+    /**
+     * @return array
+     */
     protected function prepareData() {
         $date = time();
         $entityIds = $this->getRequest()->getParam('entity_id');

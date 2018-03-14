@@ -95,29 +95,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
      */
     public function reportAction()
     {
-        $date = time();
-        $entityIds = $this->getRequest()->getParam('entity_id');
-
-        $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
-
-        if ($entityIds) {
-            $bliskaOrderCollection->addFieldToSelect('*');
-            $bliskaOrderCollection->addFieldToFilter('entity_id', array('in' => $entityIds));
-        }
-
-        foreach ($bliskaOrderCollection as $bliskaOrder) {
-            if (date($bliskaOrder->getCreationDate()) < $date) {
-                $date = $bliskaOrder->getCreationDate();
-            }
-        }
-
-        if ($bliskaOrderCollection) {
-            $bliskaOrder = $bliskaOrderCollection->getFirstItem();
-            $order       = Mage::getModel('sales/order')->load($bliskaOrder->getOrderId());
-            if ($order && $order->getId()) {
-                $operator = $order->getShippingAddress()->getPosOperator();
-            }
-        }
+        list($date, $operator) = $this->prepareData();
 
         $senditHelper = Mage::helper('sendit_bliskapaczka');
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
@@ -148,6 +126,34 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             $this->_getSession()->addError($this->__('The report file has not been downloaded.'));
             $this->_redirect('*/*/index');
         }
+    }
+
+    protected function prepareData() {
+        $date = time();
+        $entityIds = $this->getRequest()->getParam('entity_id');
+
+        $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
+
+        if ($entityIds) {
+            $bliskaOrderCollection->addFieldToSelect('*');
+            $bliskaOrderCollection->addFieldToFilter('entity_id', array('in' => $entityIds));
+        }
+
+        foreach ($bliskaOrderCollection as $bliskaOrder) {
+            if (date($bliskaOrder->getCreationDate()) < $date) {
+                $date = $bliskaOrder->getCreationDate();
+            }
+        }
+
+        if ($bliskaOrderCollection) {
+            $bliskaOrder = $bliskaOrderCollection->setPageSize(1, 1)->getLastItem();
+            $order       = Mage::getModel('sales/order')->load($bliskaOrder->getOrderId());
+            if ($order && $order->getId()) {
+                $operator = $order->getShippingAddress()->getPosOperator();
+            }
+        }
+
+        return array($date, $operator);
     }
 
     /**

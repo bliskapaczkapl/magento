@@ -21,7 +21,7 @@ class Advice extends Order implements ValidatorInterface
     protected function validationByProperty()
     {
         foreach ($this->properties as $property => $settings) {
-            if (!isset($this->data[$property])) {
+            if (!isset($this->data[$property]) && isset($settings['notblank']) && $settings['notblank'] === true) {
                 throw new Exception($property . " is required", 1);
             }
 

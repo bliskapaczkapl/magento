@@ -52,6 +52,15 @@ class AdviceTest extends TestCase
         $this->assertTrue(is_a($order, 'Bliskapaczka\ApiClient\ValidatorInterface'));
     }
 
+    public function testValid()
+    {
+        unset($this->orderData['postingCode']);
+
+        $order = new Advice();
+        $order->setData($this->orderData);
+        $order->validate();
+    }
+
     /**
      * @expectedException Bliskapaczka\ApiClient\Exception
      * @expectedExceptionMessageRegExp /Invalid \w+/

@@ -124,7 +124,7 @@ class CreateTest extends TestCase
   "provider_state": "Todoor order created correctly",
   "request": {
     "method": "post",
-    "path": "/v1/order/todoor/advice"
+    "path": "/v1/order/advice/todoor"
   },
   "response": {
     "status": 200,

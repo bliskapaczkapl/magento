@@ -51,4 +51,12 @@ class ObserverTest extends TestCase
          // $observer = new Sendit_Bliskapaczka_Model_Observer();
          // $observer->createOrderViaApi($this->observerMock);
      }
+
+     public function testValidateAdminConfiguration()
+     {
+        // spl_autoload_register(array(Sendit_Bliskapaczka_Model_Observer::class, 'load'), true, true);
+
+        // $observer = new Sendit_Bliskapaczka_Model_Observer();
+        // $observer->validateAdminConfiguration();
+     }
 }

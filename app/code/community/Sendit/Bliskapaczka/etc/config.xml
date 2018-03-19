@@ -59,6 +59,15 @@
                     </sendit_bliskapaczka_create_order_via_api>
                 </observers>
             </sales_order_place_after>
+            <admin_system_config_changed_section_carriers>
+                <observers>
+                    <sendit_bliskapaczka_validate_shipping_module_config_data>
+                        <type>singleton</type>
+                        <class>sendit_bliskapaczka/observer</class>
+                        <method>validateAdminConfiguration</method>
+                    </sendit_bliskapaczka_validate_shipping_module_config_data>
+                </observers>
+            </admin_system_config_changed_section_carriers>
         </events>
         <resources>
             <sendit_bliskapaczka_setup>

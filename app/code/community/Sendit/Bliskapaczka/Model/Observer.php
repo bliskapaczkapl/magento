@@ -143,4 +143,37 @@ class Sendit_Bliskapaczka_Model_Observer
             throw new Exception(Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response'));
         }
     }
+
+    /**
+     * Validate module configuration data
+     */
+    public function validateAdminConfiguration()
+    {
+        $post = Mage::app()->getRequest()->getPost();
+
+        $senditBliskapaczkaConfigData = $post['groups']['sendit_bliskapaczka'];
+        $senditCourierConfigData = $post['groups']['sendit_bliskapaczka_courier'];
+
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+        $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+        $sender = new \Bliskapaczka\ApiClient\Validator\Order\Advice\Sender();
+
+        if ($senditBliskapaczkaConfigData['fields']['active']['value'] == '1') {
+            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_admin');
+            $data = $mapper->getData($senditBliskapaczkaConfigData, $senditHelper);
+
+            $sender->setData($data);
+            $sender->validate();
+        }
+
+        if ($senditCourierConfigData['fields']['active']['value'] == '1') {
+            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_admin');
+            $data = $mapper->getData($senditCourierConfigData, $senditHelper);
+
+            $sender->setData($data);
+            $sender->validate();
+        }
+    }
 }

@@ -85,7 +85,7 @@ class Sendit_Bliskapaczka_Model_Observer
         }
 
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
-        $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+        $senditHelper = Mage::helper('sendit_bliskapaczka');
 
         if ($order->getShippingMethod(true)->getMethod() == 'bliskapaczka_sendit_bliskapaczka') {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
@@ -155,7 +155,7 @@ class Sendit_Bliskapaczka_Model_Observer
         $senditCourierConfigData = $post['groups']['sendit_bliskapaczka_courier'];
 
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
-        $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+        $senditHelper = Mage::helper('sendit_bliskapaczka');
         $sender = new \Bliskapaczka\ApiClient\Validator\Order\Advice\Sender();
 
         if ($senditBliskapaczkaConfigData['fields']['active']['value'] == '1') {
@@ -174,6 +174,47 @@ class Sendit_Bliskapaczka_Model_Observer
 
             $sender->setData($data);
             $sender->validate();
+        }
+    }
+
+    /**
+     * Update bliskapaczka shipping statuses
+     *
+     * Order statuses managed by bliskapaczka.pl are updating fast in processing order process.
+     */
+    public function updateFastStatuses()
+    {
+        spl_autoload_register(array($this, 'load'), true, true);
+
+        $fastStatuses  = Sendit_Bliskapaczka_Helper_Data::FAST_STATUSES;
+
+        $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
+        $bliskaOrderCollection->addFieldToSelect('*');
+        $bliskaOrderCollection->addFieldToFilter('status', array('in' => $fastStatuses));
+
+        foreach ($bliskaOrderCollection as $bliskaOrder) {
+            $bliskaOrder->get();
+        }
+    }
+
+    /**
+     * Update bliskapaczka shipping statuses
+     *
+     * Order statuses managed by provider and syhronized by bliskapaczka
+     * are updating slow (once per 1.5h) in processing order process.
+     */
+    public function updateSlowStatuses()
+    {
+        spl_autoload_register(array($this, 'load'), true, true);
+
+        $slowStatuses  = Sendit_Bliskapaczka_Helper_Data::SLOW_STATUSES;
+
+        $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
+        $bliskaOrderCollection->addFieldToSelect('*');
+        $bliskaOrderCollection->addFieldToFilter('status', array('in' => $slowStatuses));
+
+        foreach ($bliskaOrderCollection as $bliskaOrder) {
+            $bliskaOrder->get();
         }
     }
 }

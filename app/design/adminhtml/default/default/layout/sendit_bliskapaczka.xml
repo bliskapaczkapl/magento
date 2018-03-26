@@ -1,5 +1,13 @@
 <?xml version="1.0"?>
 <layout>
+    <adminhtml_report_index>
+        <reference name="content">
+            <block type="sendit_bliskapaczka/adminhtml_report" name="report_index" >
+                <block type="sendit_bliskapaczka/adminhtml_report_form" name="form" />
+            </block>
+        </reference>
+    </adminhtml_report_index>
+
     <adminhtml_order_index>
         <reference name="content">
             <block type="sendit_bliskapaczka/adminhtml_order" name="order_index" />

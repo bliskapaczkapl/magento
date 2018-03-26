@@ -39,8 +39,15 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
     const API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/bliskapaczkaapikey';
     const API_TEST_MODE_XML_PATH = 'carriers/sendit_bliskapaczka/test_mode';
+    const API_AUTO_ADVICE_XML_PATH = 'carriers/sendit_bliskapaczka/auto_advice';
 
     const GOOGLE_MAP_API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/google_map_api_key';
+
+    const SLOW_STATUSES = array('READY_TO_SEND', 'POSTED', 'ON_THE_WAY', 'READY_TO_PICKUP', 'OUT_FOR_DELIVERY',
+            'REMINDER_SENT', 'PICKUP_EXPIRED', 'AVIZO', 'RETURNED', 'OTHER', 'MARKED_FOR_CANCELLATION');
+    const FAST_STATUSES = array('SAVED', 'WAITING_FOR_PAYMENT', 'PAYMENT_CONFIRMED', 'PAYMENT_REJECTED',
+            'PAYMENT_CANCELLATION_ERROR', 'PROCESSING', 'ADVISING', 'ERROR');
+
 
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
@@ -315,6 +322,48 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         );
 
         return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param string $method
+     * @return mixed
+     */
+    public function getApiClientForOrder($method) {
+        $autoAdvice = Mage::getStoreConfig(self::API_AUTO_ADVICE_XML_PATH);
+
+        $methodName = $this->getApiClientForOrderMethodName($method, $autoAdvice);
+
+        return $this->{$methodName}();
+    }
+
+    /**
+     * Get method name to bliskapaczka api client create order action
+     *
+     * @param string $method
+     * @param string $autoAdvice
+     * @return string
+     */
+    public function getApiClientForOrderMethodName($method, $autoAdvice)
+    {
+        switch ($method) {
+            case 'bliskapaczka_sendit_bliskapaczka':
+                $type = 'Order';
+                break;
+
+            case 'bliskapaczka_courier_sendit_bliskapaczka_courier':
+                $type = 'Todoor';
+                break;
+        }
+
+        $methodName = 'getApiClient' . $type;
+
+        if ($autoAdvice) {
+            $methodName .= 'Advice';
+        }
+
+        return $methodName;
     }
 
     /**

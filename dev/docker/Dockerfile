@@ -20,6 +20,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php5-mcrypt \
     php5-curl \
     php5-gd \
+    cron \
+    nano \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -29,8 +31,8 @@ RUN  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 	&& php -r "unlink('composer-setup.php');"
 
 # Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY magento.conf /etc/nginx/sites-available/magento.conf
+COPY dev/docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY dev/docker/nginx/magento.conf /etc/nginx/sites-available/magento.conf
 RUN (cd /etc/nginx/sites-enabled && ln -s ../sites-available/magento.conf magento.conf && rm -rf default)
 
 # Magento
@@ -54,7 +56,7 @@ RUN sed -i 's%<active>false</active>%<active>true</active>%g' ${magento_path}/ap
 RUN (cd ${magento_path} && rm -rf var/cache/)
 
 # Copy Magento config file
-COPY local.xml ${magento_path}/app/etc/local.xml
+COPY dev/docker/magento/local.xml ${magento_path}/app/etc/local.xml
 
 # Download Sample Data
 RUN curl -L https://sourceforge.net/projects/mageloads/files/assets/1.9.2.4/magento-sample-data-1.9.2.4-fix.tar.gz/download -o ${magento_path}/magento-sample-data-1.9.2.4-fix.tar.gz \
@@ -66,11 +68,15 @@ RUN curl -L https://github.com/SnowdogApps/Magento-Translation-pl_PL/archive/mas
     && unzip -o /tmp/magento-translation-pl_pl.zip -d /tmp/ \
     && rsync -avzhq /tmp/Magento-Translation-pl_PL-master/ ${magento_path}/app/locale/
 
+# Install cron file
+COPY dev/docker/magento/crontab /tmp/crontab
+RUN crontab /tmp/crontab
+
 # Fix privileges
 RUN find ${magento_path} -type d -exec chmod 770 {} \; && find ${magento_path} -type f -exec chmod 660 {} \; \
     && chown -R :www-data ${magento_path}
 
-COPY run /opt/run
+COPY dev/docker/run /opt/run
 
 EXPOSE 80
 

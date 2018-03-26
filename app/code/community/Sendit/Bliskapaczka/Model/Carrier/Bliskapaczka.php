@@ -11,7 +11,9 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
     extends Sendit_Bliskapaczka_Model_Carrier_Abstract
     implements Mage_Shipping_Model_Carrier_Interface
 {
-    const SHIPPING_CODE = 'sendit_bliskapaczka';
+    const SHIPPING_CODE            = 'sendit_bliskapaczka';
+    const NEODYNAMIC_LICENSE_OWNER = 'carriers/sendit_bliskapaczka/neodinamic_license_owner';
+    const NEODYNAMIC_LICENSE_KEY   = 'carriers/sendit_bliskapaczka/neodinamic_license_owner';
 
     /**
      * Carrier's code

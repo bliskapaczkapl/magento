@@ -40,6 +40,12 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
                 'formtarget' => '_blank',
                 'onclick'    => 'window.open(\'' . $this->getWaybillUrl() . '\', \'_blank\')',
             ));
+
+            $this->_addButton('order_waybill_print', array(
+                'label'      => Mage::helper('sales')->__('Waybill print'),
+                'formtarget' => '_blank',
+                'onclick'    => 'window.open(\'' . $this->getWaybillPrintUrl() . '\', \'_blank\')',
+            ));
         }
 
         if ($this->_isAllowedAction('get')) {
@@ -83,7 +89,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
      */
     public function getCancelUrl()
     {
-        return $this->getUrl('*/*/cancel', array('bliska_order_id' => $this->getRequest()->getParam('bliska_order_id')));
+        return $this->getUrl('*/*/cancel', array(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER => $this->getRequest()->getParam(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER)));
     }
 
     /**
@@ -91,7 +97,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
      */
     public function getGetUrl()
     {
-        return $this->getUrl('*/*/get', array('bliska_order_id' => $this->getRequest()->getParam('bliska_order_id')));
+        return $this->getUrl('*/*/get', array(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER => $this->getRequest()->getParam(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER)));
     }
 
     /**
@@ -99,6 +105,14 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
      */
     public function getWaybillUrl()
     {
-        return $this->getUrl('*/*/waybill', array('bliska_order_id' => $this->getRequest()->getParam('bliska_order_id')));
+        return $this->getUrl('*/*/waybill', array(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER => $this->getRequest()->getParam(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER)));
+    }
+
+    /**
+     * @return string
+     */
+    public function getWaybillPrintUrl()
+    {
+        return $this->getUrl('*/*/waybillprint', array(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER => $this->getRequest()->getParam(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER)));
     }
 }

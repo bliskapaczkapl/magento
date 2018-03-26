@@ -131,7 +131,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/view', array('bliska_order_id' => $row->getId()));
+        return $this->getUrl('*/*/view', array(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER => $row->getId()));
     }
 
     /**

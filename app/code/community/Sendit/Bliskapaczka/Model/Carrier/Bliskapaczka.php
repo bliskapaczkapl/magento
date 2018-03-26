@@ -14,6 +14,7 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
     const SHIPPING_CODE            = 'sendit_bliskapaczka';
     const NEODYNAMIC_LICENSE_OWNER = 'carriers/sendit_bliskapaczka/neodinamic_license_owner';
     const NEODYNAMIC_LICENSE_KEY   = 'carriers/sendit_bliskapaczka/neodinamic_license_owner';
+    const NEODYNAMIC_PRINT         = 'carriers/sendit_bliskapaczka/neodinamic_print';
 
     /**
      * Carrier's code

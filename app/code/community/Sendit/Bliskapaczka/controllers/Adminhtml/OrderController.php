@@ -197,7 +197,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             }
 
             if ($url) {
-                $content = $this->downloadContent($url);
+                $content = Mage::helper('sendit_bliskapaczka')->downloadContent($url);
 
                 $this->getResponse()->setHeader('Content-type', 'application/pdf');
                 $this->getResponse()->setBody($content);
@@ -208,71 +208,24 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     }
 
     /**
-     * Download content from URL
-     *
-     * @param $url
-     *
-     * @return string
-     */
-    protected function downloadContent($url)
-    {
-        $content = '';
-
-        if (!$url) {
-            return $content;
-        }
-
-        $http = new Varien_Http_Adapter_Curl();
-        $http->write('GET', $url);
-        $content = $http->read();
-        $http->close();
-
-        return $content;
-    }
-
-    /**
-     * @param $path
-     * @param $fileName
-     * @param $content
-     *
-     * @return bool|void
-     */
-    protected function writeFile($path, $fileName, $content)
-    {
-        if (!$path || !$fileName || !$content) {
-            return false;
-        }
-
-        $io = new Varien_Io_File();
-        $io->setAllowCreateFolders(true);
-        $io->open(array('path' => $path));
-        if ($io->fileExists($fileName) && !$io->isWriteable($fileName)) {
-            // file does not exist or is not readable
-            return;
-        }
-
-        $io->streamOpen($fileName);
-        $io->streamWrite($content);
-        $io->streamClose();
-
-        return true;
-    }
-
-    /**
      * Waybill print action
      */
     public function waybillprintAction()
     {
+        // @codingStandardsIgnoreStart
         include 'lib/Neodinamic/SDK/Web/WebClientPrint.php';
+        // @codingStandardsIgnoreEnd
 
         //Set wcpcache folder RELATIVE to WebClientPrint.php file
         //FILE WRITE permission on this folder is required!!!
         WebClientPrint::$wcpCacheFolder = getcwd() . '/wcpcache/';
 
-        if (file_exists(WebClientPrint::$wcpCacheFolder) == false) {
+        $io = new Varien_Io_File();
+
+        if ($io->fileExists(WebClientPrint::$wcpCacheFolder) == false) {
             //create wcpcache folder
             $old_umask = umask(0);
-            mkdir(WebClientPrint::$wcpCacheFolder, 0777);
+            $io->mkdir(WebClientPrint::$wcpCacheFolder, 0777);
             umask($old_umask);
         }
 
@@ -304,9 +257,14 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
         }
     }
 
+    /**
+     * Neodinamic print
+     */
     public function neodinamicprintAction()
     {
+        // @codingStandardsIgnoreStart
         include 'lib/Neodinamic/SDK/Web/WebClientPrint.php';
+        // @codingStandardsIgnoreEnd
 
         // Setting WebClientPrint
         WebClientPrint::$licenseOwner = Mage::getStoreConfig(
@@ -324,33 +282,31 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
 
         // Process request
         // Generate ClientPrintJob? only if clientPrint param is in the query string
-        $urlParts = parse_url($_SERVER['REQUEST_URI']);
+        $clientPrint       = $this->getRequest()->getParam(WebClientPrint::CLIENT_PRINT_JOB);
+        $useDefaultPrinter = $this->getRequest()->getParam('useDefaultPrinter');
+        $printerName       = $this->getRequest()->getParam('printerName');
 
-        if (isset($urlParts['query'])) {
-            $rawQuery = $urlParts['query'];
-            parse_str($rawQuery, $qs);
-            if (isset($qs[WebClientPrint::CLIENT_PRINT_JOB])) {
+        if (isset($clientPrint) && isset($useDefaultPrinter) && isset($printerName)) {
 
-                if ($bliskaOrder = $this->_initBliskaOrder()) {
-                    try {
-                        $url = $bliskaOrder->waybill();
+            if ($bliskaOrder = $this->_initBliskaOrder()) {
+                try {
+                    $url = $bliskaOrder->waybill();
 
-                        $this->_getSession()->addSuccess(
-                            $this->__('The waybill has been downloaded.')
-                        );
-                    } catch (Mage_Core_Exception $e) {
-                        $this->_getSession()->addError($e->getMessage());
-                    } catch (Exception $e) {
-                        $this->_getSession()->addError(
-                            $this->__('The order has not been downloaded.') . ' ' . $e->getMessage()
-                        );
-                        Mage::logException($e);
-                    }
+                    $this->_getSession()->addSuccess(
+                        $this->__('The waybill has been downloaded.')
+                    );
+                } catch (Mage_Core_Exception $e) {
+                    $this->_getSession()->addError($e->getMessage());
+                } catch (Exception $e) {
+                    $this->_getSession()->addError(
+                        $this->__('The order has not been downloaded.') . ' ' . $e->getMessage()
+                    );
+                    Mage::logException($e);
                 }
+            }
 
-                if ($url) {
-                    $this->neodynamicPrint($url);
-                }
+            if ($url) {
+                $this->neodynamicPrint($url);
             }
         }
     }
@@ -358,7 +314,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     /**
      * Neodynamic print
      *
-     * @param $url
+     * @param string $url
      */
     protected function neodynamicPrint($url)
     {
@@ -367,9 +323,9 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
 
         $path = Mage::getBaseDir('media') . DS . 'tmp' . DS . 'pdf';
 
-        $content = $this->downloadContent($url);
+        $content = Mage::helper('sendit_bliskapaczka')->downloadContent($url);
 
-        $this->writeFile($path, $fileName, $content);
+        Mage::helper('sendit_bliskapaczka')->writeFile($path, $fileName, $content);
 
         $filePath = $path . DS . $fileName;
 
@@ -382,10 +338,9 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
         //Send ClientPrintJob back to the client
         ob_start();
         ob_clean();
-        header('Content-type: application/octet-stream');
-        echo $cpj->sendToClient();
+        $this->getResponse()->setHeader('Content-type', 'application/octet-stream');
+        $this->getResponse()->setBody($cpj->sendToClient());
         ob_end_flush();
-        exit();
     }
 
     /**

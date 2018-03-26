@@ -41,11 +41,18 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
                 'onclick'    => 'window.open(\'' . $this->getWaybillUrl() . '\', \'_blank\')',
             ));
 
-            $this->_addButton('order_waybill_print', array(
-                'label'      => Mage::helper('sales')->__('Waybill print'),
-                'formtarget' => '_blank',
-                'onclick'    => 'window.open(\'' . $this->getWaybillPrintUrl() . '\', \'_blank\')',
-            ));
+            if (Mage::getStoreConfig(
+                Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::NEODYNAMIC_PRINT
+            )) {
+                $this->_addButton(
+                    'order_waybill_print',
+                    array(
+                        'label'      => Mage::helper('sales')->__('Waybill print'),
+                        'formtarget' => '_blank',
+                        'onclick'    => 'window.open(\'' . $this->getWaybillPrintUrl() . '\', \'_blank\')',
+                    )
+                );
+            }
         }
 
         if ($this->_isAllowedAction('get')) {

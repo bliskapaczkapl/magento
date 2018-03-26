@@ -356,4 +356,55 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
         return $mode;
     }
+
+    /**
+     * Download content from URL
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    public function downloadContent($url)
+    {
+        $content = '';
+
+        if (!$url) {
+            return $content;
+        }
+
+        $http = new Varien_Http_Adapter_Curl();
+        $http->write('GET', $url);
+        $content = $http->read();
+        $http->close();
+
+        return $content;
+    }
+
+    /**
+     * @param string $path
+     * @param string $fileName
+     * @param string $content
+     *
+     * @return bool|void
+     */
+    public function writeFile($path, $fileName, $content)
+    {
+        if (!$path || !$fileName || !$content) {
+            return false;
+        }
+
+        $io = new Varien_Io_File();
+        $io->setAllowCreateFolders(true);
+        $io->open(array('path' => $path));
+        if ($io->fileExists($fileName) && !$io->isWriteable($fileName)) {
+            // file does not exist or is not readable
+            return;
+        }
+
+        $io->streamOpen($fileName);
+        $io->streamWrite($content);
+        $io->streamClose();
+
+        return true;
+    }
 }

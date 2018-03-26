@@ -77,9 +77,11 @@ class Sendit_Bliskapaczka_Model_Observer
             return $this;
         }
 
+        $method = $order->getShippingMethod(true)->getMethod();
+
         if (
-            $order->getShippingMethod(true)->getMethod() != 'bliskapaczka_sendit_bliskapaczka'
-            && $order->getShippingMethod(true)->getMethod() != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
+            $method != 'bliskapaczka_sendit_bliskapaczka'
+            && $method != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
         ) {
             return $this;
         }
@@ -87,23 +89,18 @@ class Sendit_Bliskapaczka_Model_Observer
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = Mage::helper('sendit_bliskapaczka');
 
-        if ($order->getShippingMethod(true)->getMethod() == 'bliskapaczka_sendit_bliskapaczka') {
+        if ($method == 'bliskapaczka_sendit_bliskapaczka') {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
-            $data = $mapper->getData($order, $senditHelper);
-
-            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Order */
-            $apiClient = $senditHelper->getApiClientOrderAdvice();
         }
 
-        if ($order->getShippingMethod(true)->getMethod() == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {
+        if ($method == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_todoor');
-            $data = $mapper->getData($order, $senditHelper);
-
-            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
-            $apiClient = $senditHelper->getApiClientTodoorAdvice();
         }
+
+        $data = $mapper->getData($order, $senditHelper);
+        $apiClient = $senditHelper->getApiClientForOrder($method);
 
         try {
             $response = $apiClient->create($data);

@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:80"
     env_file:
-     - ./env
+     - ./dev/docker/mysql/env
     environment:
       DB_HOST: db
   db:
@@ -15,4 +15,4 @@ services:
     ports:
       - "3306:3306"
     env_file:
-     - ./env
+     - ./dev/docker/mysql/env

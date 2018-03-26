@@ -233,7 +233,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
 
         $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($id);
 
-        if(!$bliskaOrder || !$bliskaOrder->getId()) {
+        if (!$bliskaOrder || !$bliskaOrder->getId()) {
             $this->_getSession()->addError($this->__('This order no longer exists.'));
             $this->_redirect('*/*/');
             $this->setFlag('', self::FLAG_NO_DISPATCH, true);
@@ -267,7 +267,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
 
         $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($id);
 
-        if(!$bliskaOrder || !$bliskaOrder->getId()) {
+        if (!$bliskaOrder || !$bliskaOrder->getId()) {
             $this->_getSession()->addError($this->__('This order no longer exists.'));
             $this->_redirect('*/*/');
             $this->setFlag('', self::FLAG_NO_DISPATCH, true);

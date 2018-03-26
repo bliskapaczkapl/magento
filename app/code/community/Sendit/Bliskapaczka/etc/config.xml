@@ -156,4 +156,24 @@
             </sendit_bliskapaczka_courier>
         </carriers>
     </default>
+    <crontab>
+        <jobs>
+            <update_fast_statuses>
+                <schedule>
+                    <cron_expr>* * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sendit_bliskapaczka/observer::updateFastStatuses</model>
+                </run>
+            </update_fast_statuses>
+            <update_slow_statuses>
+                <schedule>
+                    <cron_expr>* */2 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sendit_bliskapaczka/observer::updateSlowStatuses</model>
+                </run>
+            </update_slow_statuses>
+        </jobs>
+    </crontab>
 </config>

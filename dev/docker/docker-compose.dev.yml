@@ -1,7 +1,9 @@
 version: "3"
 services:
   magento:
-    build: ./
+    build:
+      context: ../../
+      dockerfile: dev/docker/Dockerfile
     volumes:
       - "./app/code/community/Sendit:/var/www/magento/app/code/community/Sendit"
       - "./app/design/frontend/base/default/layout/sendit:/var/www/magento/app/design/frontend/base/default/layout/sendit"

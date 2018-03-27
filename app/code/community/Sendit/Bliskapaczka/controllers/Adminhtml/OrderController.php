@@ -140,6 +140,31 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     }
 
     /**
+     * Mass cancel action
+     */
+    public function masscancelAction()
+    {
+        $bliskaOrderIds = $this->getRequest()->getParam('entity_id');
+        if(!is_array($bliskaOrderIds)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select order(s).'));
+        } else {
+            try {
+                foreach ($bliskaOrderIds as $bliskaOrderId) {
+                    $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
+                    $bliskaOrder->cancel()->save();
+                }
+                Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('adminhtml')->__('Total of %d record(s) were canceled.', count($bliskaOrderIds))
+                );
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            }
+        }
+
+        $this->_redirect('*/*/index');
+    }
+
+    /**
      * @return array
      */
     protected function prepareData()

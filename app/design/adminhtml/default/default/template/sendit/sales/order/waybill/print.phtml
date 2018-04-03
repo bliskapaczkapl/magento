@@ -8,7 +8,7 @@ $sessionId = $session->getSessionId();
 
 <iframe name="printPDF" id="printPDF" width="1" height="1" style="visibility: hidden; position: absolute;"
         src="webclientprintiv:<?php echo Mage::helper("adminhtml")->getUrl(
-            'adminhtml/order/neodinamicprint',
+            'adminhtml/print/neodinamicprint',
             array(
                 Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER => (int)$this->getRequest(
                 )->getParam(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER),

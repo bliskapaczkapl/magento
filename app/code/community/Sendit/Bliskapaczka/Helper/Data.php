@@ -1,7 +1,12 @@
 <?php
 
 use Bliskapaczka\ApiClient;
-
+use Neodynamic\SDK\Web\WebClientPrint;
+use Neodynamic\SDK\Web\DefaultPrinter;
+use Neodynamic\SDK\Web\InstalledPrinter;
+use Neodynamic\SDK\Web\PrintFile;
+use Neodynamic\SDK\Web\PrintFilePDF;
+use Neodynamic\SDK\Web\ClientPrintJob;
 /**
  * Bliskapaczka helper
  *
@@ -407,53 +412,46 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
-     * Download content from URL
-     *
-     * @param string $url
-     *
-     * @return string
+     * @return array
      */
-    public function downloadContent($url)
+    public function prepareData()
     {
-        $content = '';
+        $date      = time();
+        $entityIds = $this->getRequest()->getParam('entity_id');
 
-        if (!$url) {
-            return $content;
+        $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
+
+        if ($entityIds) {
+            $bliskaOrderCollection->addFieldToSelect('*');
+            $bliskaOrderCollection->addFieldToFilter('entity_id', array('in' => $entityIds));
         }
 
-        $http = new Varien_Http_Adapter_Curl();
-        $http->write('GET', $url);
-        $content = $http->read();
-        $http->close();
+        foreach ($bliskaOrderCollection as $bliskaOrder) {
+            if (date($bliskaOrder->getCreationDate()) < $date) {
+                $date = $bliskaOrder->getCreationDate();
+            }
+        }
 
-        return $content;
+        if ($bliskaOrderCollection) {
+            $bliskaOrder = $bliskaOrderCollection->setPageSize(1, 1)->getLastItem();
+            $order       = Mage::getModel('sales/order')->load($bliskaOrder->getOrderId());
+            if ($order && $order->getId()) {
+                $operator = $order->getShippingAddress()->getPosOperator();
+            }
+        }
+
+        return array(
+            $date,
+            $operator,
+        );
     }
 
     /**
-     * @param string $path
-     * @param string $fileName
-     * @param string $content
-     *
-     * @return bool|void
+     * @param int $bliskaOrderId
      */
-    public function writeFile($path, $fileName, $content)
+    public function cancel($bliskaOrderId)
     {
-        if (!$path || !$fileName || !$content) {
-            return false;
-        }
-
-        $io = new Varien_Io_File();
-        $io->setAllowCreateFolders(true);
-        $io->open(array('path' => $path));
-        if ($io->fileExists($fileName) && !$io->isWriteable($fileName)) {
-            // file does not exist or is not readable
-            return;
-        }
-
-        $io->streamOpen($fileName);
-        $io->streamWrite($content);
-        $io->streamClose();
-
-        return true;
+        $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
+        $bliskaOrder->cancel()->save();
     }
 }

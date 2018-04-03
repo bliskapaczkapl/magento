@@ -60,10 +60,10 @@
         </reference>
     </adminhtml_order_view>
 
-    <adminhtml_order_waybillprint>
+    <adminhtml_print_waybillprint>
         <update handle="adminhtml_order_view"/>
         <reference name="content">
             <block type="adminhtml/template" name="waybill_print" template="sendit/sales/order/waybill/print.phtml"></block>
         </reference>
-    </adminhtml_order_waybillprint>
+    </adminhtml_print_waybillprint>
 </layout>

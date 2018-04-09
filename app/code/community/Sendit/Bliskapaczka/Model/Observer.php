@@ -79,10 +79,7 @@ class Sendit_Bliskapaczka_Model_Observer
 
         $method = $order->getShippingMethod(true)->getMethod();
 
-        if (
-            $method != 'bliskapaczka_sendit_bliskapaczka'
-            && $method != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
-        ) {
+        if (strpos($method, 'bliskapaczka') === false) {
             return $this;
         }
 
@@ -92,9 +89,7 @@ class Sendit_Bliskapaczka_Model_Observer
         if ($method == 'bliskapaczka_sendit_bliskapaczka') {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
-        }
-
-        if ($method == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {
+        } else {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_todoor');
         }
@@ -154,24 +149,19 @@ class Sendit_Bliskapaczka_Model_Observer
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = Mage::helper('sendit_bliskapaczka');
         $sender = new \Bliskapaczka\ApiClient\Validator\Order\Advice\Sender();
+        /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+        $mapper = Mage::getModel('sendit_bliskapaczka/mapper_admin');
 
-        if ($senditBliskapaczkaConfigData['fields']['active']['value'] == '1') {
-            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
-            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_admin');
-            $data = $mapper->getData($senditBliskapaczkaConfigData, $senditHelper);
-
-            $sender->setData($data);
-            $sender->validate();
-        }
+        // if ($senditBliskapaczkaConfigData['fields']['active']['value'] == '1') {
+        //     $data = $mapper->getData($senditBliskapaczkaConfigData, $senditHelper);
+        // }
 
         if ($senditCourierConfigData['fields']['active']['value'] == '1') {
-            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
-            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_admin');
             $data = $mapper->getData($senditCourierConfigData, $senditHelper);
-
-            $sender->setData($data);
-            $sender->validate();
         }
+
+        $sender->setData($data);
+        $sender->validate();
     }
 
     /**

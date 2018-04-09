@@ -357,9 +357,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 $type = 'Order';
                 break;
 
-            case 'bliskapaczka_courier_sendit_bliskapaczka_courier':
+            default:
                 $type = 'Todoor';
-                break;
         }
 
         $methodName = 'getApiClient' . $type;

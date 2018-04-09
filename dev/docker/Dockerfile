@@ -46,7 +46,7 @@ RUN curl https://codeload.github.com/OpenMage/magento-mirror/tar.gz/$MAGENTO_VER
 COPY app ${magento_path}/app
 COPY dev ${magento_path}/dev
 COPY js ${magento_path}/js
-COPY js ${magento_path}/lib
+COPY lib ${magento_path}/lib
 COPY skin ${magento_path}/skin
 
 # Install Bliskapaczka

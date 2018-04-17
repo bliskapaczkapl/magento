@@ -223,7 +223,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
     /**
      * Create shipment based on status
      *
-     * @param $status
+     * @param string $status
      */
     protected function createShipment($status)
     {
@@ -231,8 +231,8 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         $order = Mage::getModel('sales/order')->load($this->getOrderId());
 
         //if there is no shipment yet
-        if (in_array($status, $this->_sentStatuses) && !$order->getShipmentsCollection()->getFirstItem()->getIs()) {
-            $shipmentApi2 = new Mage_Sales_Model_Order_Shipment_Api_V2();
+        if (in_array($status, $this->_sentStatuses) && !$order->getShipmentsCollection()->setPageSize(1, 1)->getLastItem()->getId()) {
+            $shipmentApi2 = Mage::getModel('sales/order_shipment_api_v2');
             $shipmentApi2->create($order->getIncrementId());
         }
     }

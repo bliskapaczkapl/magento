@@ -83,11 +83,35 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Report_Form extends Mage_Adminhtml_Blo
                 );
 
                 $fieldset->addField(
-                    $operator . '_date',
+                    $operator . '_date_from',
                     'datetime',
                     array(
                         'name'     => $operator . '_date_from',
                         'label'    => Mage::helper('sendit_bliskapaczka')->__('Date from'),
+                        //'after_element_html' => '<small>Comments</small>',
+                        'tabindex' => 1,
+                        'image'    => $this->getSkinUrl('images/grid-cal.gif'),
+                        'format'   => Mage::app()->getLocale()->getDateTimeFormat(
+                            Mage_Core_Model_Locale::FORMAT_TYPE_SHORT
+                        ),
+                        'time'     => true,
+                        'value'    => date(
+                            Mage::app()->getLocale()->getDateStrFormat(
+                                Mage_Core_Model_Locale::FORMAT_TYPE_SHORT
+                            ) . ' ' . Mage::app()->getLocale()->getTimeStrFormat(
+                                Mage_Core_Model_Locale::FORMAT_TYPE_SHORT
+                            ),
+                            time()
+                        ),
+                    )
+                );
+
+                $fieldset->addField(
+                    $operator . '_date_to',
+                    'datetime',
+                    array(
+                        'name'     => $operator . '_date_to',
+                        'label'    => Mage::helper('sendit_bliskapaczka')->__('Date to'),
                         //'after_element_html' => '<small>Comments</small>',
                         'tabindex' => 1,
                         'image'    => $this->getSkinUrl('images/grid-cal.gif'),

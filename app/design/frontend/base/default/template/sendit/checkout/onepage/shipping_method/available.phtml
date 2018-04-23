@@ -44,10 +44,10 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
                 <?php $shippingCodePrice[] = "'".$_rate->getCode()."':".(float)$_rate->getPrice(); ?>
                 <li 
                     <?php
-                    if ($_rate->getCode() != Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE 
-                        && strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) !== false
-                        && strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Courier::SHIPPING_CODE) === false
-                    ) {
+                        if ($_rate->getCode() != Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE 
+                            && strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) !== false
+                            && strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Courier::SHIPPING_CODE) === false
+                        ) {
                             echo 'style="display:none"';
                         }
                     ?>

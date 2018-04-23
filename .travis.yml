@@ -25,7 +25,7 @@ script:
   - $VENDOR_DIR/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
 
 after_success:
-  - docker build -t bliskapaczkapl/magento:$COMMIT -t bliskapaczkapl/magento:latest .
+  - docker build -t bliskapaczkapl/magento:$COMMIT -t bliskapaczkapl/magento:latest -f dev/docker/Dockerfile .
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   - docker push bliskapaczkapl/magento:$COMMIT
   - if [ "$TRAVIS_BRANCH" == "master" ]; then

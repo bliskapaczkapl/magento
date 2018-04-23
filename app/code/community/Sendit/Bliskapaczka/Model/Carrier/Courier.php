@@ -35,6 +35,7 @@ class Sendit_Bliskapaczka_Model_Carrier_Courier
             array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()))
         );
 
-        return $priceList;
+        return json_decode($priceList);
     }
+
 }

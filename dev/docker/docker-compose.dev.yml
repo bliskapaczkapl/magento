@@ -1,16 +1,20 @@
 version: "3"
 services:
   magento:
-    build: ./
+    build:
+      context: ../../
+      dockerfile: dev/docker/Dockerfile
     volumes:
       - "./app/code/community/Sendit:/var/www/magento/app/code/community/Sendit"
       - "./app/design/frontend/base/default/layout/sendit:/var/www/magento/app/design/frontend/base/default/layout/sendit"
       - "./app/design/frontend/base/default/template/sendit:/var/www/magento/app/design/frontend/base/default/template/sendit"
       - "./app/design/adminhtml/default/default/layout/sendit_bliskapaczka.xml:/var/www/magento/app/design/adminhtml/default/default/layout/sendit_bliskapaczka.xml"
       - "./app/design/adminhtml/default/default/template/sendit:/var/www/magento/app/design/adminhtml/default/default/template/sendit"
+      - "./app/design/adminhtml/default/default/template/sendit/sales/order/waybill/print.phtml:/var/www/magento/app/design/adminhtml/default/default/template/sendit/sales/order/waybill/print.phtml"
       - "./app/etc/modules/Sendit_Bliskapaczka.xml:/var/www/magento/app/etc/modules/Sendit_Bliskapaczka.xml"
       - "./app/locale/pl_PL/Sendit_Bliskapaczka.csv:/var/www/magento/app/locale/pl_PL/Sendit_Bliskapaczka.csv"
       - "./dev:/var/www/magento/dev"
       - "./js/sendit:/var/www/magento/js/sendit"
+      - "./lib/Neodinamic/SDK/Web/WebClientPrint.php:/var/www/magento/lib/Neodinamic/SDK/Web/WebClientPrint.php"
       - "./skin/frontend/base/default/css/bliskapaczka.css:/var/www/magento/skin/frontend/base/default/css/bliskapaczka.css"
       - "./composer.json:/var/www/magento/composer.json"

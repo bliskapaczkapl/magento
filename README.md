@@ -91,7 +91,7 @@ Panel admina jest dostępny pod adresem  `http://127.0.0.1:8080/admin`, dane dos
 W celu developmentu można uruchomić docker-compose prze komendę:
 
 ```
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+docker-compose -f docker-compose.yml -f dev/docker/docker-compose.dev.yml up
 ```
 
 ### Instalacja zależności

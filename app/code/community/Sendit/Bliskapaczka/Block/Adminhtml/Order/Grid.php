@@ -29,6 +29,12 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
         $collection = Mage::getResourceModel('sendit_bliskapaczka/order_collection');
         $collection->addFieldToSelect(['entity_id', 'order_id', 'number', 'status', 'delivery_type', 'creation_date', 'advice_date', 'tracking_number']);
 
+        $collection->getSelect()->joinLeft(
+            'sales_flat_order',
+            'main_table.order_id = sales_flat_order.entity_id',
+            array('increment_id' => 'increment_id')
+        );
+
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -48,11 +54,11 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'index'     => 'entity_id',
         ]);
 
-        $this->addColumn('order_id', [
-            'header'    => $this->__('ID'),
+        $this->addColumn('increment_id', [
+            'header'    => $this->__('order id'),
             'type'      => 'number',
             'align'     => 'right',
-            'index'     => 'order_id',
+            'index'     => 'increment_id',
         ]);
 
         $this->addColumn('number', [
@@ -120,6 +126,11 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'url'  => $this->getUrl('*/*/report', array('' => ''))
         ));
 
+        $this->getMassactionBlock()->addItem('mass cancel', array(
+            'label'=> Mage::helper('sendit_bliskapaczka')->__('Cancel'),
+            'url'  => $this->getUrl('*/*/masscancel', array('' => ''))
+        ));
+
         return $this;
     }
 
@@ -131,7 +142,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/view', array('bliska_order_id' => $row->getId()));
+        return $this->getUrl('*/*/view', array(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER => $row->getId()));
     }
 
     /**

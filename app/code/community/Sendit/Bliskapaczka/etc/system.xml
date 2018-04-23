@@ -43,20 +43,32 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <comment>For "Sandbox mode" put API Key from sandbox-bliskapaczka.pl</comment>
                         </bliskapaczkaapikey>
                         <test_mode translate="label">
-                            <label>Test mode enabled</label>
+                            <label>Sandbox mode enabled</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>131</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
+                            <comment>If yes all orders will be created on sandbox-bliskapaczka.pl</comment>
                         </test_mode>
+                        <auto_advice translate="label">
+                            <label>Auto advice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>132</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>If yes all new orders will be automatically advice</comment>
+                        </auto_advice>
                         <google_map_api_key>
                             <label>Google Map API Key</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>132</sort_order>
+                            <sort_order>133</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -212,6 +224,39 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </sort_order>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>900</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sort_order>
+                        <neodinamic_license_owner>
+                            <label>Neodinamic License Owner</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>910</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </neodinamic_license_owner>
+                        <neodinamic_license_key>
+                            <label>Neodinamic License Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>920</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </neodinamic_license_key>
+                        <neodinamic_print translate="label">
+                            <label>Neodinamic Print</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>9320</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </neodinamic_print>
                     </fields>
                 </sendit_bliskapaczka>
                 <sendit_bliskapaczka_courier translate="label">
@@ -254,9 +299,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <comment>For "Sandbox mode" put API Key from sandbox-bliskapaczka.pl</comment>
                         </bliskapaczkaapikey>
                         <test_mode translate="label">
-                            <label>Test mode enabled</label>
+                            <label>Sandbox mode enabled</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>131</sort_order>
@@ -264,10 +310,20 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </test_mode>
+                        <auto_advice translate="label">
+                            <label>Auto advice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>132</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>If yes all orders will be created on sandbox-bliskapaczka.pl</comment>
+                        </auto_advice>
                         <google_map_api_key>
                             <label>Google Map API Key</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>132</sort_order>
+                            <sort_order>133</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>

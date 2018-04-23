@@ -1,10 +1,20 @@
 <?php
 
+use Neodynamic\SDK\Web\WebClientPrint;
+use Neodynamic\SDK\Web\DefaultPrinter;
+use Neodynamic\SDK\Web\InstalledPrinter;
+use Neodynamic\SDK\Web\PrintFile;
+use Neodynamic\SDK\Web\PrintFilePDF;
+use Neodynamic\SDK\Web\ClientPrintJob;
+
 /**
  * Class Sendit_Bliskapaczka_Adminhtml_OrderController
  */
 class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Action
 {
+
+    const BLISKA_ORDER_ID_PARAMETER = 'bliskaOrderId';
+
     /**
      * @return bool
      */
@@ -48,14 +58,18 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     {
         $this->_title($this->__('Bliskapaczka'))->_title($this->__('Orders'));
 
-        $order = $this->_initOrder();
+        list($order, $bliskaOrder) = $this->_initOrder();
         if ($order) {
 
             $isActionsNotPermitted = $order->getActionFlag(
                 Mage_Sales_Model_Order::ACTION_FLAG_PRODUCTS_PERMISSION_DENIED
             );
             if ($isActionsNotPermitted) {
-                $this->_getSession()->addError($this->__('You don\'t have permissions to manage this order because of one or more products are not permitted for your website.'));
+                $this->_getSession()->addError(
+                    $this->__(
+                        'You don\'t have permissions to manage this order because of one or more products are not permitted for your website.'
+                    )
+                );
             }
 
             $this->_initAction();
@@ -78,15 +92,13 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
                 $this->_getSession()->addSuccess(
                     $this->__('The order has been cancelled.')
                 );
-            }
-            catch (Mage_Core_Exception $e) {
+            } catch (Mage_Core_Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $this->_getSession()->addError($this->__('The order has not been cancelled.') . ' ' . $e->getMessage());
                 Mage::logException($e);
             }
-            $this->_redirect('*/*/view', array('bliska_order_id' => $bliskaOrder->getId()));
+            $this->_redirect('*/*/view', array(self::BLISKA_ORDER_ID_PARAMETER => $bliskaOrder->getId()));
         }
     }
 
@@ -95,7 +107,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
      */
     public function reportAction()
     {
-        list($date, $operator) = $this->prepareData();
+        list($date, $operator) = Mage::helper('sendit_bliskapaczka')->prepareData();
 
         $senditHelper = Mage::helper('sendit_bliskapaczka');
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
@@ -129,34 +141,27 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     }
 
     /**
-     * @return array
+     * Mass cancel action
      */
-    protected function prepareData() {
-        $date = time();
-        $entityIds = $this->getRequest()->getParam('entity_id');
-
-        $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
-
-        if ($entityIds) {
-            $bliskaOrderCollection->addFieldToSelect('*');
-            $bliskaOrderCollection->addFieldToFilter('entity_id', array('in' => $entityIds));
-        }
-
-        foreach ($bliskaOrderCollection as $bliskaOrder) {
-            if (date($bliskaOrder->getCreationDate()) < $date) {
-                $date = $bliskaOrder->getCreationDate();
+    public function masscancelAction()
+    {
+        $bliskaOrderIds = $this->getRequest()->getParam('entity_id');
+        if(!is_array($bliskaOrderIds)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select order(s).'));
+        } else {
+            try {
+                foreach ($bliskaOrderIds as $bliskaOrderId) {
+                    Mage::helper('sendit_bliskapaczka')->cancel($bliskaOrderId);
+                }
+                Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('adminhtml')->__('Total of %d record(s) were canceled.', count($bliskaOrderIds))
+                );
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
 
-        if ($bliskaOrderCollection) {
-            $bliskaOrder = $bliskaOrderCollection->setPageSize(1, 1)->getLastItem();
-            $order       = Mage::getModel('sales/order')->load($bliskaOrder->getOrderId());
-            if ($order && $order->getId()) {
-                $operator = $order->getShippingAddress()->getPosOperator();
-            }
-        }
-
-        return array($date, $operator);
+        $this->_redirect('*/*/index');
     }
 
     /**
@@ -173,26 +178,20 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
                 $this->_getSession()->addSuccess(
                     $this->__('The waybill has been downloaded.')
                 );
-            }
-            catch (Mage_Core_Exception $e) {
+            } catch (Mage_Core_Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
-            }
-            catch (Exception $e) {
-                $this->_getSession()->addError($this->__('The order has not been cancelled.') . ' ' . $e->getMessage());
+            } catch (Exception $e) {
+                $this->_getSession()->addError($this->__('The order has not been downloaded.') . ' ' . $e->getMessage());
                 Mage::logException($e);
             }
 
-            if($url) {
-
-                $http = new Varien_Http_Adapter_Curl();
-                $http->write('GET', $url);
-                $content = $http->read();
-                $http->close();
+            if ($url) {
+                $content = Mage::helper('sendit_bliskapaczka/print')->downloadContent($url);
 
                 $this->getResponse()->setHeader('Content-type', 'application/pdf');
                 $this->getResponse()->setBody($content);
             } else {
-                $this->_redirect('*/*/view', array('bliska_order_id' => $bliskaOrder->getId()));
+                $this->_redirect('*/*/view', array(self::BLISKA_ORDER_ID_PARAMETER => $bliskaOrder->getId()));
             }
         }
     }
@@ -209,34 +208,33 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
                 $this->_getSession()->addSuccess(
                     $this->__('The order has been updated.')
                 );
-            }
-            catch (Mage_Core_Exception $e) {
+            } catch (Mage_Core_Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $this->_getSession()->addError($this->__('The order has not been updated.') . ' ' . $e->getMessage());
                 Mage::logException($e);
             }
 
-            $this->_redirect('*/*/view', array('bliska_order_id' => $bliskaOrder->getId()));
+            $this->_redirect('*/*/view', array(self::BLISKA_ORDER_ID_PARAMETER => $bliskaOrder->getId()));
         }
     }
 
     /**
      * Initialize order model instance
      *
-     * @return Mage_Sales_Model_Order || false
+     * @return Mage_Sales_Model_Order || Sendit_Bliskapaczka_Model_Order
      */
     protected function _initOrder()
     {
-        $id = $this->getRequest()->getParam('bliska_order_id');
+        $id = $this->getRequest()->getParam(self::BLISKA_ORDER_ID_PARAMETER);
 
         $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($id);
 
-        if(!$bliskaOrder || !$bliskaOrder->getId()) {
+        if (!$bliskaOrder || !$bliskaOrder->getId()) {
             $this->_getSession()->addError($this->__('This order no longer exists.'));
             $this->_redirect('*/*/');
             $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+
             return false;
         }
 
@@ -246,6 +244,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             $this->_getSession()->addError($this->__('This order no longer exists.'));
             $this->_redirect('*/*/');
             $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+
             return false;
         }
 
@@ -253,7 +252,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
         Mage::register('sales_order', $order);
         Mage::register('current_order', $order);
 
-        return $order;
+        return array($order, $bliskaOrder);
     }
 
     /**
@@ -263,16 +262,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
      */
     protected function _initBliskaOrder()
     {
-        $id = $this->getRequest()->getParam('bliska_order_id');
-
-        $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($id);
-
-        if(!$bliskaOrder || !$bliskaOrder->getId()) {
-            $this->_getSession()->addError($this->__('This order no longer exists.'));
-            $this->_redirect('*/*/');
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-            return false;
-        }
+        list($order, $bliskaOrder) = $this->_initOrder();
 
         return $bliskaOrder;
     }
@@ -283,7 +273,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     public function exportCsvAction()
     {
         $fileName = 'order_list.csv';
-        $content = $this->getLayout()->createBlock('sendit_bliskapaczka/adminhtml_order_grid');
+        $content  = $this->getLayout()->createBlock('sendit_bliskapaczka/adminhtml_order_grid');
 
         $this->_prepareDownloadResponse($fileName, $content->getCsvFile());
     }
@@ -294,7 +284,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     public function exportXmlAction()
     {
         $fileName = 'order_list.xml';
-        $content = $this->getLayout()->createBlock('sendit_bliskapaczka/adminhtml_order_grid');
+        $content  = $this->getLayout()->createBlock('sendit_bliskapaczka/adminhtml_order_grid');
 
         $this->_prepareDownloadResponse($fileName, $content->getXml());
     }

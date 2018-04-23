@@ -1,0 +1,16 @@
+<?php
+
+$session = Mage::getSingleton('core/session', array('name' => 'adminhtml'));
+$sessionName = $session->getSessionName();
+$sessionId = $session->getSessionId();
+
+?>
+
+<iframe name="printPDF" id="printPDF" width="1" height="1" style="visibility: hidden; position: absolute;"
+        src="webclientprintiv:<?php echo Mage::helper("adminhtml")->getUrl(
+            'adminhtml/print/neodinamicprint',
+            array(
+                Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER => (int)$this->getRequest(
+                )->getParam(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER),
+            )
+        ); ?>?SID=<?php echo $sessionId; ?>&clientPrint&useDefaultPrinter=undefined&printerName=null"></iframe>

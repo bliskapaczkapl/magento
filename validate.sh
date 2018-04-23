@@ -9,6 +9,4 @@ $VENDOR_DIR/bin/phpdoccheck --directory=app --exclude=code/community/Sendit/Blis
 $VENDOR_DIR/bin/phploc app/
 $VENDOR_DIR/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
 
-exit 0;
-
 docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -v ~/.composer:/tmp/composer -e COMPOSER_HOME=/tmp/composer composer/composer:php5 install --no-dev

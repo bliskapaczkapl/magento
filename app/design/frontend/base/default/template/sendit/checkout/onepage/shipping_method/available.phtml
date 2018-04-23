@@ -42,7 +42,16 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
             <ul>
             <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
                 <?php $shippingCodePrice[] = "'".$_rate->getCode()."':".(float)$_rate->getPrice(); ?>
-                <li>
+                <li 
+                    <?php
+                    if ($_rate->getCode() != Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE 
+                        && strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) !== false
+                        && strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Courier::SHIPPING_CODE) === false
+                    ) {
+                            echo 'style="display:none"';
+                        }
+                    ?>
+                >
                     <?php if ($_rate->getErrorMessage()): ?>
                         <ul class="messages"><li class="error-msg"><ul><li><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></li></ul></li></ul>
                     <?php else: ?>
@@ -145,8 +154,8 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
                 if (methods[i].checked
                     && methods[i].value == '<?php echo Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE; ?>') {
 
-                    posCode = document.getElementById('s_method_<?php echo $_rate->getCode() ?>_posCode').value;
-                    posOperator = document.getElementById('s_method_<?php echo $_rate->getCode() ?>_posOperator').value;
+                    posCode = document.getElementById('s_method_<?php echo Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE ?>_posCode').value;
+                    posOperator = document.getElementById('s_method_<?php echo Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE ?>_posOperator').value;
 
                     // Check if poperator and point code are selected
                     if (!posCode || !posOperator) {

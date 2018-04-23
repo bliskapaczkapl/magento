@@ -44,12 +44,18 @@ class Sendit_Bliskapaczka_Adminhtml_ReportController extends Mage_Adminhtml_Cont
         $operator = $this->getRequest()->getParam('operator');
         $dateFrom = $this->getRequest()->getParam($operator . '_date_from');
 
+        $operator = $this->getRequest()->getParam('operator');
+        $dateTo = $this->getRequest()->getParam($operator . '_date_to');
+
         $senditHelper = Mage::helper('sendit_bliskapaczka');
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
         $apiClient = $senditHelper->getApiClientReport();
         $apiClient->setOperator($coreHelper->stripTags($operator));
         if($dateFrom) {
             $apiClient->setStartPeriod($coreHelper->stripTags($dateFrom));
+        }
+        if($dateTo) {
+            $apiClient->setEndPeriod($coreHelper->stripTags($dateTo));
         }
 
         try {

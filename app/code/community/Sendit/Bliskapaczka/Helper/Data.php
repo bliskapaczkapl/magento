@@ -344,6 +344,19 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
+     * Get Bliskapaczka API Client
+     *
+     * @param string $method
+     * @return mixed
+     */
+    public function getApiClientForAdvice($method)
+    {
+        $methodName = $this->getApiClientForAdviceMethodName($method);
+
+        return $this->{$methodName}();
+    }
+
+    /**
      * Get method name to bliskapaczka api client create order action
      *
      * @param string $method
@@ -366,6 +379,30 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         if ($autoAdvice) {
             $methodName .= 'Advice';
         }
+
+        return $methodName;
+    }
+
+    /**
+     * Get method name to bliskapaczka api client create order action
+     *
+     * @param string $method
+     * @param string $autoAdvice
+     * @return string
+     */
+    public function getApiClientForAdviceMethodName($method)
+    {
+        switch ($method) {
+            case 'bliskapaczka_sendit_bliskapaczka':
+                $type = 'Order';
+                break;
+
+            case 'bliskapaczka_courier_sendit_bliskapaczka_courier':
+                $type = 'Todoor';
+                break;
+        }
+
+        $methodName = 'getApiClient' . $type . 'Advice';
 
         return $methodName;
     }
@@ -416,7 +453,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function prepareData()
     {
         $date      = time();
-        $entityIds = $this->getRequest()->getParam('entity_id');
+
+        $entityIds = $this->_getRequest()->getParam('entity_id');
 
         $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
 
@@ -452,5 +490,14 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     {
         $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
         $bliskaOrder->cancel()->save();
+    }
+
+    /**
+     * @param int $bliskaOrderId
+     */
+    public function advice($bliskaOrderId)
+    {
+        $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
+        $bliskaOrder->advice();
     }
 }

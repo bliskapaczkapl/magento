@@ -131,6 +131,11 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'url'  => $this->getUrl('*/*/masscancel', array('' => ''))
         ));
 
+        $this->getMassactionBlock()->addItem('mass advice', array(
+            'label'=> Mage::helper('sendit_bliskapaczka')->__('Advice'),
+            'url'  => $this->getUrl('*/advice/massadvice', array('' => ''))
+        ));
+
         return $this;
     }
 

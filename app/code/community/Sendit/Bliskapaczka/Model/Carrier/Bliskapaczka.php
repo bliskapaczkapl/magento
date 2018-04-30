@@ -60,10 +60,8 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
      *
      * @return bool|false|Mage_Core_Model_Abstract|Mage_Shipping_Model_Rate_Result|null
      */
-    protected function _collectRatesForAgregated(
-        Mage_Shipping_Model_Rate_Request $request,
-        Mage_Shipping_Model_Rate_Result_Method $result
-    ) {
+    protected function _collectRatesForAgregated(Mage_Shipping_Model_Rate_Request $request, $result)
+    {
         $this->setFreeBoxes($this->_calculateFreeBoxes($request));
 
         // $result = Mage::getModel('shipping/rate_result');
@@ -94,10 +92,10 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
             // Get shipping price by Bliskapaczka API
             if ($quote && $quote->getShippingAddress()->getPosOperator()) {
                 $posOperator = $quote->getShippingAddress()->getPosOperator();
-                $shippingPrice = round($senditHelper->getPriceForCarrier(json_decode($priceList), $posOperator), 2);
+                $shippingPrice = round($senditHelper->getPriceForCarrier($priceList, $posOperator), 2);
             } else {
                 // Get lowest price by Bliskapaczka API because we don't know which carrier will be chosen
-                $shippingPrice = round($senditHelper->getLowestPrice(json_decode($priceList)), 2);
+                $shippingPrice = round($senditHelper->getLowestPrice($priceList), 2);
             }
         }
 

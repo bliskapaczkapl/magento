@@ -1,0 +1,1 @@
+document.write('<link rel="stylesheet" href="https://widget.bliskapaczka.pl/v5/main.css" />');

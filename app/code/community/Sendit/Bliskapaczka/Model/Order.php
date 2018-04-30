@@ -3,7 +3,7 @@
 /**
  * Class Sendit_Bliskapaczka_Model_Order
  */
-class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
+    class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
 {
     const NEW_STATUS                     = 'NEW';
     const SAVED                          = 'SAVED';

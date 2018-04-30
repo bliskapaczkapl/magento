@@ -48,7 +48,37 @@ class Sendit_Bliskapaczka_Model_Observer
     public function setPosData(Varien_Event_Observer $observer)
     {
         $data = $observer->getEvent()->getRequest()->getParam('bliskapaczka');
+
         $quote = $observer->getEvent()->getQuote();
+        
+        $this->_setPos($data, $quote);
+    }
+
+    /**
+     * Set POS data
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function setPosDataAdmin(Varien_Event_Observer $observer)
+    {
+        $request = $observer->getEvent()->getRequest();
+
+        $data = $request['bliskapaczka'];
+
+        $quote = $observer->getEvent()->getOrderCreateModel()->getQuote();
+
+        $this->_setPos($data, $quote);
+    }
+
+
+    /**
+     * Set POS data for Quote
+     *
+     * @param array $data
+     * @param Mage_Sales_Model_Quote $quote
+     */
+    protected function _setPos($data, $quote)
+    {
         $shippingAddress = $quote->getShippingAddress();
 
         $shippingAddress->setPosCode($data['posCode']);

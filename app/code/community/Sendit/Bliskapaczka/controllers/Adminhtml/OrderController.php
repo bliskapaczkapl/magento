@@ -112,7 +112,8 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
         $senditHelper = Mage::helper('sendit_bliskapaczka');
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
         $apiClient = $senditHelper->getApiClientReport();
-        if (isset($operator)) {$apiClient->setOperator($operator);
+        if(isset($operator)) {
+            $apiClient->setOperator($operator);
         }
         $apiClient->setStartPeriod($date);
 

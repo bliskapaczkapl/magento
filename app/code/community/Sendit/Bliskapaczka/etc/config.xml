@@ -68,6 +68,15 @@
                     </sendit_bliskapaczka_validate_shipping_module_config_data>
                 </observers>
             </admin_system_config_changed_section_carriers>
+            <adminhtml_sales_order_create_process_data>
+                <observers>
+                    <sendit_bliskapaczka_set_pos_data>
+                        <type>singleton</type>
+                        <class>sendit_bliskapaczka/observer</class>
+                        <method>setPosDataAdmin</method>
+                    </sendit_bliskapaczka_set_pos_data>
+                </observers>
+            </adminhtml_sales_order_create_process_data>
         </events>
         <resources>
             <sendit_bliskapaczka_setup>
@@ -119,6 +128,13 @@
                 </args>
             </adminhtml>
         </routers>
+        <layout>
+            <updates>
+                <sendit_bliskapaczka>
+                    <file>sendit/bliskapaczka.xml</file>
+                </sendit_bliskapaczka>
+            </updates>
+        </layout>
     </admin>
     <adminhtml>
         <layout>

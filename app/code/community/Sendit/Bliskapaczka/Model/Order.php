@@ -29,7 +29,6 @@
     const OTHER                          = 'OTHER';
     const MARKED_FOR_CANCELLATION_STATUS = 'MARKED_FOR_CANCELLATION';
     const CANCELED                       = 'CANCELED';
-
     /**
      * Waybill NOT possible statuses
      *
@@ -45,15 +44,27 @@
         self::PROCESSING,
         self::ADVISING,
         self::ERROR,
-        self::CANCELED
+        self::CANCELED,
     );
-
     /**
      * Cancel possible statuses
      *
      * @var array
      */
     protected $_cancelStatuses = array(self::MARKED_FOR_CANCELLATION_STATUS);
+    /**
+     * Cancel possible statuses
+     *
+     * @var array
+     */
+    protected $_sentStatuses = array(
+        self::POSTED,
+        self::ON_THE_WAY,
+        self::READY_TO_PICKUP,
+        self::OUT_FOR_DELIVERY,
+        self::DELIVERED,
+        'CANCELED'
+    );
 
     /**
      * Model constructor
@@ -69,8 +80,8 @@
      * @return $this
      * @throws Exception
      */
-    public function cancel() {
-
+    public function cancel()
+    {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
 
@@ -88,12 +99,17 @@
         //checking reposponce
         if ($response && $properResponse) {
             $this->setStatus($decodedResponse->status);
+
+            $this->createShipment($decodedResponse->status);
+
             return $this;
         } else {
             $message = ($decodedResponse ? current($decodedResponse->errors)->message : '');
 
             //throwing exception
-            throw new Exception(Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response' . ' ' . $message));
+            throw new Exception(
+                Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response' . ' ' . $message)
+            );
         }
     }
 
@@ -115,8 +131,8 @@
      * @return $this
      * @throws Exception
      */
-    public function waybill() {
-
+    public function waybill()
+    {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
 
@@ -139,7 +155,9 @@
             $message = ($decodedResponse ? current($decodedResponse->errors)->message : '');
 
             //throwing exception
-            throw new Exception(Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response' . ' ' . $message));
+            throw new Exception(
+                Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response' . ' ' . $message)
+            );
         }
     }
 
@@ -190,6 +208,8 @@
             $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));
             $bliskaOrder->setTrackingNumber($coreHelper->stripTags($decodedResponse->trackingNumber));
             $bliskaOrder->save();
+
+            $this->createShipment($decodedResponse->status);
         } else {
             $message = ($decodedResponse ? current($decodedResponse->errors)->message : '');
 
@@ -197,6 +217,23 @@
             throw new Exception(
                 Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response' . ' ' . $message)
             );
+        }
+    }
+
+    /**
+     * Create shipment based on status
+     *
+     * @param string $status
+     */
+    protected function createShipment($status)
+    {
+        /** @var Mage_Sales_Model_Order */
+        $order = Mage::getModel('sales/order')->load($this->getOrderId());
+
+        //if there is no shipment yet
+        if (in_array($status, $this->_sentStatuses) && !$order->getShipmentsCollection()->setPageSize(1, 1)->getLastItem()->getId()) {
+            $shipmentApi2 = Mage::getModel('sales/order_shipment_api_v2');
+            $shipmentApi2->create($order->getIncrementId());
         }
     }
 }

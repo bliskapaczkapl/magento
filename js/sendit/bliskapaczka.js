@@ -51,16 +51,21 @@ Bliskapaczka.pointSelected = function(data, operators)
 
 Bliskapaczka.updatePrice = function (posOperator, operators) {
     boxSpan = document.getElementsByClassName('bliskapaczka_price_box')[0];
-    priceSpan = boxSpan.getElementsByClassName('price')[0];
+    if (boxSpan) {
+        if (boxSpan.getElementsByClassName('price')) {
+            priceSpan = boxSpan.getElementsByClassName('price')[0];
 
-    for (var i = 0; i < operators.length; i++) {
-        if (operators[i].operator == posOperator) {
-            price = operators[i].price;
+            for (var i = 0; i < operators.length; i++) {
+                if (operators[i].operator == posOperator) {
+                    price = operators[i].price;
+                }
+            }
+
+            priceSpan.innerHTML = priceSpan.innerHTML.replace(/([\d\.,]{2,})/, price);
+            // Remove word "From"
+            boxSpan.innerHTML = '';
+            boxSpan.appendChild(priceSpan)
         }
     }
 
-    priceSpan.innerHTML = priceSpan.innerHTML.replace(/([\d\.,]{2,})/, price);
-    // Remove word "From"
-    boxSpan.innerHTML = '';
-    boxSpan.appendChild(priceSpan)
 }

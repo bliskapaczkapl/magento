@@ -2,7 +2,7 @@ version: "3"
 services:
   magento:
     build:
-      context: ../../
+      context: ./
       dockerfile: dev/docker/Dockerfile
     volumes:
       - "./app/code/community/Sendit:/var/www/magento/app/code/community/Sendit"

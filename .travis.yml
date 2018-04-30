@@ -31,3 +31,6 @@ after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker push bliskapaczkapl/magento:latest;
     fi
+  - if [ "$TRAVIS_BRANCH" == "develop" ]; then
+    docker push bliskapaczkapl/magento:develop;
+    fi

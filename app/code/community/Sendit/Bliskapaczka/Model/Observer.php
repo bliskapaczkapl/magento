@@ -210,7 +210,11 @@ class Sendit_Bliskapaczka_Model_Observer
         $bliskaOrderCollection->addFieldToFilter('status', array('in' => $fastStatuses));
 
         foreach ($bliskaOrderCollection as $bliskaOrder) {
-            $bliskaOrder->get();
+            try{
+                $bliskaOrder->get();
+            } catch(Exception $e) {
+                Mage::log($e->getMessage());
+            }
         }
     }
 
@@ -231,7 +235,11 @@ class Sendit_Bliskapaczka_Model_Observer
         $bliskaOrderCollection->addFieldToFilter('status', array('in' => $slowStatuses));
 
         foreach ($bliskaOrderCollection as $bliskaOrder) {
-            $bliskaOrder->get();
+            try{
+                $bliskaOrder->get();
+            } catch(Exception $e) {
+                Mage::log($e->getMessage());
+            }
         }
     }
 }

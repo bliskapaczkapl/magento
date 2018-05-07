@@ -27,7 +27,18 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
     {
         /** @var Sendit_Bliskapaczka_Model_Resource_Order_Collection $collection */
         $collection = Mage::getResourceModel('sendit_bliskapaczka/order_collection');
-        $collection->addFieldToSelect(['entity_id', 'order_id', 'number', 'status', 'delivery_type', 'creation_date', 'advice_date', 'tracking_number']);
+        $collection->addFieldToSelect(
+            array(
+                'entity_id',
+                'order_id',
+                'number',
+                'status',
+                'delivery_type',
+                'creation_date',
+                'advice_date',
+                'tracking_number'
+            )
+        );
 
         $collection->getSelect()->joinLeft(
             'sales_flat_order',
@@ -142,7 +153,10 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/view', array(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER => $row->getId()));
+        return $this->getUrl(
+            '*/*/view',
+            array(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER => $row->getId())
+        );
     }
 
     /**

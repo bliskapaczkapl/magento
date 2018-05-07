@@ -231,7 +231,10 @@
         $order = Mage::getModel('sales/order')->load($this->getOrderId());
 
         //if there is no shipment yet
-        if (in_array($status, $this->_sentStatuses) && !$order->getShipmentsCollection()->setPageSize(1, 1)->getLastItem()->getId()) {
+        if (
+            in_array($status, $this->_sentStatuses)
+            && !$order->getShipmentsCollection()->setPageSize(1, 1)->getLastItem()->getId()
+        ) {
             $shipmentApi2 = Mage::getModel('sales/order_shipment_api_v2');
             $shipmentApi2->create($order->getIncrementId());
         }

@@ -99,6 +99,11 @@ docker-compose -f docker-compose.yml -f dev/docker/docker-compose.dev.yml up
 composer install --dev
 ```
 
+#### Przy pomocy docker
+```
+docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -v ~/.composer:/tmp/composer -e COMPOSER_HOME=/tmp/composer composer/composer:php5 install
+```
+
 ### Jak uruchomić testy jednostkowe 
 ```
 php vendor/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/

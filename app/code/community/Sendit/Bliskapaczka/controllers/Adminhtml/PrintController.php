@@ -52,7 +52,8 @@ class Sendit_Bliskapaczka_Adminhtml_PrintController extends Sendit_Bliskapaczka_
             if ($isActionsNotPermitted) {
                 $this->_getSession()->addError(
                     $this->__(
-                        'You don\'t have permissions to manage this order because of one or more products are not permitted for your website.'
+                        'You don\'t have permissions to manage this order because of one ' .
+                        'or more products are not permitted for your website.'
                     )
                 );
             }

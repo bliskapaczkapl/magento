@@ -64,7 +64,8 @@ class Sendit_Bliskapaczka_Adminhtml_ReportController extends Mage_Adminhtml_Cont
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {
             $this->_getSession()->addError(
-                Mage::helper('sendit_bliskapaczka')->__('The report file has not been downloaded.') . ' ' . $e->getMessage()
+                Mage::helper('sendit_bliskapaczka')->__('The report file has not been downloaded.') .
+                ' ' . $e->getMessage()
             );
             Mage::logException($e);
         }
@@ -76,7 +77,9 @@ class Sendit_Bliskapaczka_Adminhtml_ReportController extends Mage_Adminhtml_Cont
             $this->getResponse()->setHeader('Content-type', 'application/pdf');
             $this->getResponse()->setBody($content);
         } else {
-            $this->_getSession()->addError(Mage::helper('sendit_bliskapaczka')->__('The report file has not been downloaded.'));
+            $this->_getSession()->addError(
+                Mage::helper('sendit_bliskapaczka')->__('The report file has not been downloaded.')
+            );
             $this->_redirect('*/*/index');
         }
     }

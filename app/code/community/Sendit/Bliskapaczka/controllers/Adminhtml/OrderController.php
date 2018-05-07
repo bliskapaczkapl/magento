@@ -67,7 +67,8 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             if ($isActionsNotPermitted) {
                 $this->_getSession()->addError(
                     $this->__(
-                        'You don\'t have permissions to manage this order because of one or more products are not permitted for your website.'
+                        'You don\'t have permissions to manage this order because of one ' .
+                        'or more products are not permitted for your website.'
                     )
                 );
             }
@@ -181,7 +182,9 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             } catch (Mage_Core_Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
             } catch (Exception $e) {
-                $this->_getSession()->addError($this->__('The order has not been downloaded.') . ' ' . $e->getMessage());
+                $this->_getSession()->addError(
+                    $this->__('The order has not been downloaded.') . ' ' . $e->getMessage()
+                );
                 Mage::logException($e);
             }
 

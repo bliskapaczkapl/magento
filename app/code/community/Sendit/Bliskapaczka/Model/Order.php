@@ -63,8 +63,14 @@
         self::READY_TO_PICKUP,
         self::OUT_FOR_DELIVERY,
         self::DELIVERED,
-        'CANCELED'
+        self::CANCELED
     );
+    /**
+     * Advice possible statuses
+     *
+     * @var array
+     */
+    protected $_adviceStatuses = array(self::SAVED);
 
     /**
      * Model constructor
@@ -174,6 +180,18 @@
     }
 
     /**
+     * @return bool
+     */
+    public function canAdvice()
+    {
+        if (!empty($this->getNumber()) && in_array($this->getStatus(), $this->_adviceStatuses)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get order data
      *
      * @return mixed
@@ -237,6 +255,97 @@
         ) {
             $shipmentApi2 = Mage::getModel('sales/order_shipment_api_v2');
             $shipmentApi2->create($order->getIncrementId());
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function getMethod()
+    {
+        $method = '';
+
+        $order = Mage::getModel('sales/order')->load($this->getOrderId());
+
+        if ($order && $order->getId()) {
+            $method = $order->getShippingMethod(true)->getMethod();
+        }
+
+        return array(
+            $order,
+            $method,
+        );
+    }
+
+    /**
+     * @param string $method
+     *
+     * @return Sendit_Bliskapaczka_Helper_Data
+     */
+    protected function getMapper($method)
+    {
+        if ($method == 'bliskapaczka_sendit_bliskapaczka') {
+            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
+        }
+
+        if ($method == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {
+            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_todoor');
+        }
+
+        return $mapper;
+    }
+
+    /**
+     * Advice order
+     *
+     * @return $this
+     * @throws Exception
+     */
+    public function advice()
+    {
+        /** @var $coreHelper Mage_Core_Helper_Data */
+        $coreHelper = Mage::helper('core');
+
+        list($order, $method) = $this->getMethod();
+
+        if (
+            $method != 'bliskapaczka_sendit_bliskapaczka'
+            && $method != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
+        ) {
+            return $this;
+        }
+
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+        $senditHelper = Mage::helper('sendit_bliskapaczka');
+
+        $mapper = $this->getMapper($method);
+
+        $data      = $mapper->getData($order, $senditHelper);
+        $apiClient = $senditHelper->getApiClientForAdvice($method);
+
+        $apiClient->setOrderId($this->getNumber());
+
+        $response = $apiClient->create($data);
+
+        $decodedResponse = json_decode($response);
+
+        $properResponse = $decodedResponse instanceof stdClass && empty($decodedResponse->errors);
+
+        //checking reposponce
+        if ($response && $properResponse) {
+            $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($this->getId());
+            $bliskaOrder->setStatus($coreHelper->stripTags($decodedResponse->status));
+            $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));
+            $bliskaOrder->save();
+        } else {
+            $message = ($decodedResponse ? current($decodedResponse->errors)->message : '');
+
+            //throwing exception
+            throw new Exception(
+                Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response' . ' ' . $message)
+            );
         }
     }
 }

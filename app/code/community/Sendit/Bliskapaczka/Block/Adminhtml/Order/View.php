@@ -66,6 +66,18 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
                 'onclick'   => 'deleteConfirm(\'' . $confirmationMessage . '\', \'' . $this->getGetUrl() . '\')',
             ));
         }
+
+        if ($this->_isAllowedAction('advice') && $bliskaOrder->canAdvice()) {
+            $confirmationMessage = $coreHelper->jsQuoteEscape(
+                Mage::helper('sales')->__('Are you sure you want to advice this order?')
+            );
+
+            $this->_addButton('order_advice', array(
+                'label'      => Mage::helper('sales')->__('Advice'),
+                'formtarget' => '_blank',
+                'onclick'   => 'deleteConfirm(\'' . $confirmationMessage . '\', \'' . $this->getAdviceUrl() . '\')',
+            ));
+        }
     }
 
     /**
@@ -88,6 +100,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
         } else {
             $_extOrderId = '';
         }
+
         return Mage::helper('sales')->__(
             'Bliskapaczka Order # %s %s | %s',
             $this->getOrder()->getRealOrderId(),
@@ -151,6 +164,22 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
     {
         return $this->getUrl(
             '*/print/waybillprint',
+            array(
+                Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER =>
+                $this
+                    ->getRequest()
+                    ->getParam(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER)
+            )
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdviceUrl()
+    {
+        return $this->getUrl(
+            '*/advice/advice',
             array(
                 Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER =>
                 $this

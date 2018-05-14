@@ -15,11 +15,18 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, codOnly = 
         {
             googleMapApiKey: googleMapApiKey,
             callback: function(data) {
-                posCodeForm = document.getElementsByName('bliskapaczka[posCode]')[0]
-                posOperatorForm = document.getElementsByName('bliskapaczka[posOperator]')[0]
+                posCodeForm = document.getElementsByName('bliskapaczka[posCode]')
+                posOperatorForm = document.getElementsByName('bliskapaczka[posOperator]')
 
-                posCodeForm.value = data.code;
-                posOperatorForm.value = data.operator;
+                function setPosCode(element, index) {
+                    element.value = data.code;
+                }
+                posCodeForm.forEach(setPosCode);
+
+                function setPosOperator(element, index) {
+                    element.value = data.operator;
+                }
+                posOperatorForm.forEach(setPosOperator);
 
                 Bliskapaczka.pointSelected(data, operators);
             },

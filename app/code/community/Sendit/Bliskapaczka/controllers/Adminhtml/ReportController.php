@@ -51,10 +51,10 @@ class Sendit_Bliskapaczka_Adminhtml_ReportController extends Mage_Adminhtml_Cont
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
         $apiClient = $senditHelper->getApiClientReport();
         $apiClient->setOperator($coreHelper->stripTags($operator));
-        if($dateFrom) {
+        if ($dateFrom) {
             $apiClient->setStartPeriod($coreHelper->stripTags($dateFrom));
         }
-        if($dateTo) {
+        if ($dateTo) {
             $apiClient->setEndPeriod($coreHelper->stripTags($dateTo));
         }
 

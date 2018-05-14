@@ -53,6 +53,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const FAST_STATUSES = array('SAVED', 'WAITING_FOR_PAYMENT', 'PAYMENT_CONFIRMED', 'PAYMENT_REJECTED',
             'PAYMENT_CANCELLATION_ERROR', 'PROCESSING', 'ADVISING', 'ERROR');
 
+    const LOG_FILE = 'sendit.log';
 
     /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
@@ -141,11 +142,18 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function getPriceList()
     {
         $apiClient = $this->getApiClientPricing();
-        $priceList = $apiClient->get(
-            array("parcel" => array('dimensions' => $this->getParcelDimensions()))
-        );
+        try {
+            $priceList = $apiClient->get(
+                array("parcel" => array('dimensions' => $this->getParcelDimensions()))
+            );
+        } catch (Exception $e) {
+            $priceList = '{}';            
+            Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
+        }
 
-        return json_decode($priceList);
+        $priceList = json_decode($priceList);
+
+        return $priceList;
     }
 
     /**

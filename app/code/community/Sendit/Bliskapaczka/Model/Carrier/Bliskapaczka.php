@@ -34,9 +34,15 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
         $apiClient = $senditHelper->getApiClientPricing();
-        $priceList = $apiClient->get(
-            array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()))
-        );
+
+        try {
+            $priceList = $apiClient->get(
+                array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()))
+            );
+        } catch (Exception $e) {
+            $priceList = '{}';            
+            Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
+        }
 
         return json_decode($priceList);
     }
@@ -64,45 +70,45 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
     {
         $this->setFreeBoxes($this->_calculateFreeBoxes($request));
 
-        // $result = Mage::getModel('shipping/rate_result');
-
-        $method = Mage::getModel('shipping/rate_result_method');
-
-        $method->setCarrier($this->_code);
-        $method->setCarrierTitle($this->getConfigData('title'));
-
-        $method->setMethod($this->_code);
-        $method->setMethodTitle($this->getConfigData('name'));
-
         $priceList = $this->_getPricing();
-        
-        // Get Quote
-        $quote = false;
-        foreach ($request->getAllItems() as $item){
-            $quote = $item->getQuote();
-            break;
-        }
 
-        if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
-            $shippingPrice = '0.00';
-        } else {
-            /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
-            $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+        if ($priceList != new stdClass()) {
+            $method = Mage::getModel('shipping/rate_result_method');
 
-            // Get shipping price by Bliskapaczka API
-            if ($quote && $quote->getShippingAddress()->getPosOperator()) {
-                $posOperator = $quote->getShippingAddress()->getPosOperator();
-                $shippingPrice = round($senditHelper->getPriceForCarrier($priceList, $posOperator), 2);
-            } else {
-                // Get lowest price by Bliskapaczka API because we don't know which carrier will be chosen
-                $shippingPrice = round($senditHelper->getLowestPrice($priceList), 2);
+            $method->setCarrier($this->_code);
+            $method->setCarrierTitle($this->getConfigData('title'));
+
+            $method->setMethod($this->_code);
+            $method->setMethodTitle($this->getConfigData('name'));
+
+            // Get Quote
+            $quote = false;
+            foreach ($request->getAllItems() as $item){
+                $quote = $item->getQuote();
+                break;
             }
+
+            if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
+                $shippingPrice = '0.00';
+            } else {
+                /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+                $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+
+                // Get shipping price by Bliskapaczka API
+                if ($quote && $quote->getShippingAddress()->getPosOperator()) {
+                    $posOperator = $quote->getShippingAddress()->getPosOperator();
+                    $shippingPrice = round($senditHelper->getPriceForCarrier($priceList, $posOperator), 2);
+                } else {
+                    // Get lowest price by Bliskapaczka API because we don't know which carrier will be chosen
+                    $shippingPrice = round($senditHelper->getLowestPrice($priceList), 2);
+                }
+            }
+
+            $method->setPrice($shippingPrice);
+            $method->setCost($shippingPrice);
+
+            $result->append($method);
         }
-
-        $method->setPrice($shippingPrice);
-        $method->setCost($shippingPrice);
-
-        $result->append($method);
 
         return $result;
     }

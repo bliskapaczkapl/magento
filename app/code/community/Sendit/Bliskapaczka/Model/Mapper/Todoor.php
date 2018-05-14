@@ -32,10 +32,7 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
         $data['receiverPostCode'] = $shippingAddress->getPostcode();
         $data['receiverCity'] = $shippingAddress->getCity();
 
-        $operatorName = $order->getShippingMethod(true)->getMethod();
-        $operatorName = str_replace('bliskapaczka_courier_', '', $operatorName);
-
-        $data['operatorName'] = $operatorName;
+        $data['operatorName'] = $shippingAddress->getPosOperator();
 
         $data['parcel'] = [
             'dimensions' => $this->_getParcelDimensions($helper)

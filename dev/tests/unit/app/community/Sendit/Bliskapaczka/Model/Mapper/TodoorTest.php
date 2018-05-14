@@ -21,9 +21,6 @@ class TodoorTest extends TestCase
         $this->receiverPostCode = '12-345';
         $this->receiverCity = 'Mistowe';
 
-        $shippingMethod = new Varien_Object;
-        $shippingMethod->setMethod($this->operatorName);
-
         $this->addressMock = $this->getMockBuilder(Mage_Sales_Model_Order_Address::class)
                                     ->disableOriginalConstructor()
                                     ->disableOriginalClone()
@@ -35,6 +32,7 @@ class TodoorTest extends TestCase
                                             'getLastname',
                                             'getTelephone',
                                             'getEmail',
+                                            'getPosOperator',
                                             'getStreet',
                                             'getPostcode',
                                             'getCity'
@@ -46,6 +44,7 @@ class TodoorTest extends TestCase
         $this->addressMock->method('getLastname')->will($this->returnValue($this->receiverLastName));
         $this->addressMock->method('getTelephone')->will($this->returnValue($this->receiverPhoneNumber));
         $this->addressMock->method('getEmail')->will($this->returnValue($this->receiverEmail));
+        $this->addressMock->method('getPosOperator')->will($this->returnValue($this->operatorName));
         $this->addressMock->method('getStreet')->will($this->returnValue(
             array(0 => $this->receiverStreet . ' ' . $this->receiverBuildingNumber))
         );

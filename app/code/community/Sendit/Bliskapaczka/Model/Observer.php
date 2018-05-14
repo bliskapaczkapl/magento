@@ -149,6 +149,7 @@ class Sendit_Bliskapaczka_Model_Observer
             $response = $apiClient->create($data);
             $this->_saveResponse($order, $response);
         } catch (Exception $e) {
+            Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             Mage::throwException($senditHelper->__($e->getMessage()));
         }
     }
@@ -231,7 +232,7 @@ class Sendit_Bliskapaczka_Model_Observer
             try{
                 $bliskaOrder->get();
             } catch(Exception $e) {
-                Mage::log($e->getMessage());
+                Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             }
         }
     }
@@ -256,7 +257,7 @@ class Sendit_Bliskapaczka_Model_Observer
             try{
                 $bliskaOrder->get();
             } catch(Exception $e) {
-                Mage::log($e->getMessage());
+                Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             }
         }
     }

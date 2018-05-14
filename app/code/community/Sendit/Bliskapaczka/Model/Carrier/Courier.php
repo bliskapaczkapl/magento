@@ -31,9 +31,15 @@ class Sendit_Bliskapaczka_Model_Carrier_Courier
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
         $apiClient = $senditHelper->getApiClientPricingTodoor();
-        $priceList = $apiClient->get(
-            array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()))
-        );
+
+        try {
+            $priceList = $apiClient->get(
+                array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()))
+            );
+        } catch (Exception $e) {
+            $priceList = '{}';            
+            Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
+        }
 
         return json_decode($priceList);
     }

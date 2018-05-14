@@ -63,11 +63,13 @@ class Sendit_Bliskapaczka_Model_Observer
     {
         $request = $observer->getEvent()->getRequest();
 
-        $data = $request['bliskapaczka'];
+        if (isset($request['bliskapaczka'])) {
+            $data = $request['bliskapaczka'];
 
-        $quote = $observer->getEvent()->getOrderCreateModel()->getQuote();
+            $quote = $observer->getEvent()->getOrderCreateModel()->getQuote();
 
-        $this->_setPos($data, $quote);
+            $this->_setPos($data, $quote);
+        }
     }
 
 
@@ -82,9 +84,19 @@ class Sendit_Bliskapaczka_Model_Observer
         $shippingAddress = $quote->getShippingAddress();
 
         $operatorName = $data['posOperator'];
-        if (!$operatorName) {
+        if (
+            !$operatorName
+            && strpos(
+                $quote->getShippingAddress()->getShippingMethod(),
+                Sendit_Bliskapaczka_Model_Carrier_Courier::SHIPPING_CODE
+            ) !== false
+        ) {
             $operatorName = $quote->getShippingAddress()->getShippingMethod();
-            $operatorName = str_replace(Sendit_Bliskapaczka_Model_Carrier_Courier::SHIPPING_CODE . '_', '', $operatorName);
+            $operatorName = str_replace(
+                Sendit_Bliskapaczka_Model_Carrier_Courier::SHIPPING_CODE . '_',
+                '',
+                $operatorName
+            );
         }
 
         $shippingAddress->setPosCode($data['posCode']);

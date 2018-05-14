@@ -41,57 +41,61 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
             <?php foreach ($_rates as $_rate): ?>
                 <?php $_radioProperty = 'name="order[shipping_method]" type="radio" onclick="order.setShippingMethod(this.value)"' ?>
                 <?php $_code=$_rate->getCode() ?>
-                <li
-                    <?php
-                        if ($_rate->getCode() != Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE 
-                            && strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) !== false
+                <?php
+                    if (
+                        (
+                            strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) === false
                             && strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Courier::SHIPPING_CODE) === false
-                        ) {
-                            echo 'style="display:none"';
-                        }
-                    ?>
-                >
-                   <?php if ($_rate->getErrorMessage()): ?>
-                        <ul class="messages">
-                            <li class="error-msg"><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></li>
-                        </ul>
-                   <?php else: ?>
-                        <?php $_checked = $this->isMethodActive($_code) ? 'checked="checked"' : '' ?>
-                        <input <?php echo $_radioProperty ?> value="<?php echo $_code ?>" id="s_method_<?php echo $_code ?>" <?php echo $_checked ?>/>
-                        <label class="normal" for="s_method_<?php echo $_code ?>">
-                            <?php echo $this->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
-                            <strong>
-                                <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
-                                <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+                        ) || (
+                            $_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE 
+                        ) || (
+                            strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Courier::SHIPPING_CODE) !== false
+                        )
+                    ):
+                ?>
+                    <li>
+                       <?php if ($_rate->getErrorMessage()): ?>
+                            <ul class="messages">
+                                <li class="error-msg"><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></li>
+                            </ul>
+                       <?php else: ?>
+                            <?php $_checked = $this->isMethodActive($_code) ? 'checked="checked"' : '' ?>
+                            <input <?php echo $_radioProperty ?> value="<?php echo $_code ?>" id="s_method_<?php echo $_code ?>" <?php echo $_checked ?>/>
+                            <label class="normal" for="s_method_<?php echo $_code ?>">
+                                <?php echo $this->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
+                                <strong>
+                                    <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+                                    <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
 
-                                <?php echo $_excl; ?>
-                                <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                                    (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                                <?php endif; ?>
-                            </strong>
-                        </label>
-                        <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>
-                            <a 
-                                onclick='Bliskapaczka.showMap(
-                                    <?php echo $senditHelper->getOperatorsForWidget(null, $_rate->getPrice()); ?>,
-                                    "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
-                                    <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>
-                                )'
-                                href="#bpWidget_wrapper"
-                            >
-                                <?php echo $this->__('Select delivery point'); ?>
-                            </a>
+                                    <?php echo $_excl; ?>
+                                    <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                        (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                                    <?php endif; ?>
+                                </strong>
+                            </label>
+                            <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>
+                                <a 
+                                    onclick='Bliskapaczka.showMap(
+                                        <?php echo $senditHelper->getOperatorsForWidget(null, $_rate->getPrice()); ?>,
+                                        "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
+                                        <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>
+                                    )'
+                                    href="#bpWidget_wrapper"
+                                >
+                                    <?php echo $this->__('Select delivery point'); ?>
+                                </a>
 
-                            <input name="bliskapaczka[posCode]" type="hidden" id="s_method_bliskapaczka_posCode_0" />
-                            <input name="bliskapaczka[posOperator]" type="hidden" id="s_method_bliskapaczka_posOperator_0" />
-                            <a name="bpWidget_wrapper"></a>
-                            <div id="bpWidget" style="height: 600px; width: 100%; display: none;"></div>
-                            <div id="bpWidget_aboutPoint" style="width: 100%; display: none;">
-                                <p><?php echo $this->__('Selected Point'); ?>: <span id="bpWidget_aboutPoint_posData"></span></p>
-                            </div>
-                        <?php endif; ?>
-                   <?php endif ?>
-                </li>
+                                <input name="bliskapaczka[posCode]" type="hidden" id="s_method_bliskapaczka_posCode_0" />
+                                <input name="bliskapaczka[posOperator]" type="hidden" id="s_method_bliskapaczka_posOperator_0" />
+                                <a name="bpWidget_wrapper"></a>
+                                <div id="bpWidget" style="height: 600px; width: 100%; display: none;"></div>
+                                <div id="bpWidget_aboutPoint" style="width: 100%; display: none;">
+                                    <p><?php echo $this->__('Selected Point'); ?>: <span id="bpWidget_aboutPoint_posData"></span></p>
+                                </div>
+                            <?php endif; ?>
+                       <?php endif ?>
+                    </li>
+                <?php endif ?>
             <?php endforeach; ?>
             </ul>
         </dd>

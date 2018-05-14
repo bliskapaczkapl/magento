@@ -55,7 +55,7 @@
                     <sendit_bliskapaczka_create_order_via_api>
                         <type>singleton</type>
                         <class>sendit_bliskapaczka/observer</class>
-                        <method>createOrderViaApiWrapper</method>
+                        <method>createOrderViaApi</method>
                     </sendit_bliskapaczka_create_order_via_api>
                 </observers>
             </sales_order_place_after>

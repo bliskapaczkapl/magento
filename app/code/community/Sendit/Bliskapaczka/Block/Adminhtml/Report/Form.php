@@ -170,7 +170,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Report_Form extends Mage_Adminhtml_Blo
         foreach ($orderCollection as $order) {
             $shippingAddress = $order->getShippingAddress();
 
-            if ($shippingAddress && $shippingAddress->getId()) {
+            if ($shippingAddress && $shippingAddress->getId() && $shippingAddress->getPosOperator()) {
                 $operators[$shippingAddress->getPosOperator()] = $shippingAddress->getPosOperator();
             }
         }

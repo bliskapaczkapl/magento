@@ -147,7 +147,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 array("parcel" => array('dimensions' => $this->getParcelDimensions()))
             );
         } catch (Exception $e) {
-            $priceList = '{}';            
+            $priceList = '{}';
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
         }
 

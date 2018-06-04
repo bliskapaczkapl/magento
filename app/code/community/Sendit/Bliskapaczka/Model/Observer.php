@@ -180,7 +180,7 @@ class Sendit_Bliskapaczka_Model_Observer
 
             $bliskaOrder->save();
         } else {
-            //wyrzucamy wyjatek
+            //Something went wrong. Throw exception.
             throw new Exception(Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response'));
         }
     }

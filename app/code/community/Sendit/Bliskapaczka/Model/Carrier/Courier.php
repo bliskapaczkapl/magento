@@ -37,7 +37,7 @@ class Sendit_Bliskapaczka_Model_Carrier_Courier
                 array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()))
             );
         } catch (Exception $e) {
-            $priceList = '{}';            
+            $priceList = '{}';
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
         }
 

@@ -48,12 +48,6 @@ class ApiCaller
 
         $response = curl_exec($curl);
 
-        $responseCopy = json_decode($response);
-        if ($responseCopy->error) {
-            throw new Exception($responseCopy->error . ": " . $responseCopy->error_description, 1);
-        }
-
-// var_dump($response);
         return $response;
     }
 }

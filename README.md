@@ -43,7 +43,7 @@ Tryb testowy, czli komunikacja z testową wersją znajdującą się pod adresem 
 ## Zarządzanie przesyłkami
 Zarządanie przesyłkami odbywa się przez menu Sprzedaż -> Bliskapaczka. Tam dostępna jest lista wszystkich przesyłek.
 
-## Dodatkowe możliwości
+## Dodatkowe informacje
 ### Punkty z płatnością przy dobiorze
 
 Widget bliskapaczka.pl przewiduje możliwość wyświetlenia tylko punktów z obsługą płatności przy pobraniu (więcej informacji w [dokumentacji](https://widget.bliskapaczka.pl)). W magento można wyświetlić widget tylk oz punktami obsługującymi płatność przy odbiorze przez wywołanie metody `Bliskapaczka.showMap` z ustawionym parametrem `codOnly` na `true`. Przykład wywołania:
@@ -57,24 +57,8 @@ Bliskapaczka.showMap(
 )
 ```
 
-### Zmian przewoźnika przy metodzie dostawy Bliska Paczka Kurier
-Na razie zmana przewoźnika jest możliwa tylko przez edycję kodu wtyczki. Aby przewoźnik został zmieniony trzeba wyedytować klase Sendit_Bliskapaczka_Model_Mapper_Todoor zmieniając w lini 35 parametr operatorName, jak w przykładzie 
-
-```
-<?php
-
-class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_Mapper_Abstract
-{
-    ...
-    public function getData(Mage_Sales_Model_Order $order, Sendit_Bliskapaczka_Helper_Data $helper)
-    {
-        ...
-        $data['operatorName'] = "FEDEX";
-        ...
-    }
-    ...
-}
-```
+### Informacja o punkcie dostawy
+Takie informacje przechowywane są w tabelach sales_flat_quote_address i sales_flat_order_address w polach pos_operator i pos_code.
 
 ## Docker demo
 

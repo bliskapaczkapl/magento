@@ -11,7 +11,8 @@ class Sendit_Bliskapaczka_Model_Carrier_Courier
     extends Sendit_Bliskapaczka_Model_Carrier_Abstract
     implements Mage_Shipping_Model_Carrier_Interface
 {
-    const SHIPPING_CODE = 'sendit_bliskapaczka_courier';
+    const SHIPPING_CODE     = 'sendit_bliskapaczka_courier';
+    const SHIPPING_CODE_COD = 'sendit_bliskapaczka_courier_cod';
 
     /**
      * Carrier's code

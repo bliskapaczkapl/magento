@@ -44,9 +44,10 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
                 <?php $shippingCodePrice[] = "'".$_rate->getCode()."':".(float)$_rate->getPrice(); ?>
                 <li 
                     <?php
-                        if ($_rate->getCode() != Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE 
+                        if ($_rate->getCode() != Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE
                             && strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) !== false
                             && strpos($_rate->getCode(), Sendit_Bliskapaczka_Model_Carrier_Courier::SHIPPING_CODE) === false
+                            && $_rate->getCode() != Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
                         ) {
                             echo 'style="display:none"';
                         }
@@ -88,7 +89,7 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
                                 </span>
                             <?php endif; ?>
 
-                            <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>
+                            <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) { ?>
                                 <a 
                                     onclick='Bliskapaczka.showMap(
                                         <?php echo $senditHelper->getOperatorsForWidget(null, $_rate->getPrice()); ?>,
@@ -99,7 +100,19 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
                                 >
                                     <?php echo $this->__('Select delivery point'); ?>
                                 </a>
-                            <?php endif; ?>
+                            <?php } elseif($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD) { ?>
+                                <a
+                                        onclick='Bliskapaczka.showMap(
+                                            <?php echo $senditHelper->getOperatorsForWidget(null, $_rate->getPrice()); ?>,
+                                            "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
+                                            <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>,
+                                            true
+                                        )'
+                                        href="#bpWidget_wrapper"
+                                >
+                                    <?php echo $this->__('Select delivery point'); ?>
+                                </a>
+                            <?php } ?>
                         </label>
 
                         <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>

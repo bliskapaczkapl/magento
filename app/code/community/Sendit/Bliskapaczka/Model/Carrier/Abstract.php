@@ -120,9 +120,35 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
                 $method->setCost($shippingPrice);
 
                 $result->append($method);
+
+                if (Mage::getStoreConfig(
+                    Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH
+                )) {
+                    $this->addCODMethodWithOperator($result, $operator, $shippingPrice);
+                }
             }
         }
 
         return $result;
+    }
+
+    /**
+     * @param Mage_Shipping_Model_Rate_Result_Method $result
+     * @param                                        $operator
+     * @param float                                  $shippingPrice
+     */
+    protected function addCODMethodWithOperator($result, $operator, $shippingPrice)
+    {
+        $method = Mage::getModel('shipping/rate_result_method');
+        $method->setCarrier($this->_code);
+        $method->setCarrierTitle($this->getConfigData('title'));
+
+        $method->setMethod($operator->operatorName . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD);
+        $method->setMethodTitle($operator->operatorName . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD);
+
+        $method->setPrice($shippingPrice);
+        $method->setCost($shippingPrice);
+
+        $result->append($method);
     }
 }

@@ -12,9 +12,12 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
     implements Mage_Shipping_Model_Carrier_Interface
 {
     const SHIPPING_CODE            = 'sendit_bliskapaczka';
+    const SHIPPING_CODE_COD        = 'sendit_bliskapaczka_cod';
+    const COD                      = 'COD';
     const NEODYNAMIC_LICENSE_OWNER = 'carriers/sendit_bliskapaczka/neodinamic_license_owner';
     const NEODYNAMIC_LICENSE_KEY   = 'carriers/sendit_bliskapaczka/neodinamic_license_owner';
     const NEODYNAMIC_PRINT         = 'carriers/sendit_bliskapaczka/neodinamic_print';
+    const COD_SWITCH               = 'carriers/sendit_bliskapaczka/cod';
 
     /**
      * Carrier's code
@@ -98,8 +101,36 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
             $method->setCost($shippingPrice);
 
             $result->append($method);
+
+            if (Mage::getStoreConfig(
+                Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH
+            )) {
+                $this->addCODMethod($result, $shippingPrice);
+            }
         }
 
         return $result;
+    }
+
+    /**
+     * @param Mage_Shipping_Model_Rate_Result_Method $result
+     * @param float                                  $shippingPrice
+     */
+    protected function addCODMethod($result, $shippingPrice)
+    {
+        $method = Mage::getModel('shipping/rate_result_method');
+
+        $method->setCarrier($this->_code);
+        $method->setCarrierTitle($this->getConfigData('title'));
+
+        $method->setMethod($this->_code . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD);
+        $method->setMethodTitle(
+            $this->getConfigData('name') . ' ' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
+        );
+
+        $method->setPrice($shippingPrice);
+        $method->setCost($shippingPrice);
+
+        $result->append($method);
     }
 }

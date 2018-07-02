@@ -32,19 +32,9 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
     {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
-        /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
-        $apiClient = $senditHelper->getApiClientPricing();
+        $priceList = $senditHelper->getPriceList();
 
-        try {
-            $priceList = $apiClient->get(
-                array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()))
-            );
-        } catch (Exception $e) {
-            $priceList = '{}';
-            Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
-        }
-
-        return json_decode($priceList);
+        return $priceList;
     }
 
     /**
@@ -68,11 +58,11 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
      */
     protected function _collectRatesForAgregated(Mage_Shipping_Model_Rate_Request $request, $result)
     {
-        $this->setFreeBoxes($this->_calculateFreeBoxes($request));
-
         $priceList = $this->_getPricing();
 
         if ($priceList != new stdClass()) {
+            $this->setFreeBoxes($this->_calculateFreeBoxes($request));
+
             $method = Mage::getModel('shipping/rate_result_method');
 
             $method->setCarrier($this->_code);

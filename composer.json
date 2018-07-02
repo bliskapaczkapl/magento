@@ -12,7 +12,8 @@
         "sebastian/phpcpd":"^2.0",
         "block8/php-docblock-checker":"^1.1",
         "phploc/phploc":"^3.0",
-        "magento-ecg/coding-standard": "2.*"
+        "magento-ecg/coding-standard": "2.*",
+        "sensiolabs/security-checker": "4.*"
     },
     "repositories": [
         {

@@ -16,7 +16,8 @@ services:
 before_script:
   - composer install
 
-script: 
+script:
+  - $VENDOR_DIR/bin/security-checker security:check ./composer.lock
   - $VENDOR_DIR/bin/phpcs -s --colors --standard=./$VENDOR_DIR/magento-ecg/coding-standard/Ecg app/ --ignore=app/code/community/Sendit/Bliskapaczka/vendor/*
   - $VENDOR_DIR/bin/phpmd app/ text codesize --exclude app/code/community/Sendit/Bliskapaczka/vendor
   - $VENDOR_DIR/bin/phpcpd --exclude vendor app/

@@ -115,7 +115,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
 
         $this->addColumn('tracking_number', [
             'header'    => $this->__('tracking_number'),
-            'type'      => 'number',
+            'type'      => 'text',
             'align'     => 'right',
             'index'     => 'tracking_number',
         ]);

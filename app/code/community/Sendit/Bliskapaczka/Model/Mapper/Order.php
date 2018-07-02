@@ -27,6 +27,8 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
         $data['operatorName'] = $shippingAddress->getPosOperator();
         $data['destinationCode'] = $shippingAddress->getPosCode();
 
+        $data['additionalInformation'] = $order->getIncrementId();
+
         $data['parcel'] = [
             'dimensions' => $this->_getParcelDimensions($helper)
         ];

@@ -6,4 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname(dirname(dirname(dirname(dirname($vendorDir))))));
 
 return array(
+    'SensioLabs\\Security' => array($vendorDir . '/sensiolabs/security-checker'),
+    'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
+    'PHPMD\\' => array($vendorDir . '/phpmd/phpmd/src/main/php'),
 );

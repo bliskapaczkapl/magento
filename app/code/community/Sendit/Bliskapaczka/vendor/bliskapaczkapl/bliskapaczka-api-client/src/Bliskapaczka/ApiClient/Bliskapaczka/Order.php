@@ -16,7 +16,7 @@ class Order extends AbstractBliskapaczka implements BliskapaczkaInterface
 {
     const REQUEST_URL = 'order';
 
-    private $orderId = null;
+    protected $orderId = null;
 
     /**
      * Set order id

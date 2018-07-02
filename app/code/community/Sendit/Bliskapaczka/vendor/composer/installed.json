@@ -1,30 +1,5 @@
 [
     {
-        "name": "firegento/magento",
-        "version": "v1.9.3.2",
-        "version_normalized": "1.9.3.2",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/firegento/magento.git",
-            "reference": "b6d5eb96a8ca3675db1b7ae8403294440bc9d56b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/firegento/magento/zipball/b6d5eb96a8ca3675db1b7ae8403294440bc9d56b",
-            "reference": "b6d5eb96a8ca3675db1b7ae8403294440bc9d56b",
-            "shasum": ""
-        },
-        "time": "2017-02-08 10:51:10",
-        "type": "magento-core",
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "OSL-3.0",
-            "AFL-3.0"
-        ],
-        "description": "Magento CE"
-    },
-    {
         "name": "psr/log",
         "version": "1.0.2",
         "version_normalized": "1.0.2.0",
@@ -116,6 +91,31 @@
             "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/2.12.0",
             "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
         }
+    },
+    {
+        "name": "firegento/magento",
+        "version": "v1.9.3.2",
+        "version_normalized": "1.9.3.2",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/firegento/magento.git",
+            "reference": "b6d5eb96a8ca3675db1b7ae8403294440bc9d56b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/firegento/magento/zipball/b6d5eb96a8ca3675db1b7ae8403294440bc9d56b",
+            "reference": "b6d5eb96a8ca3675db1b7ae8403294440bc9d56b",
+            "shasum": ""
+        },
+        "time": "2017-02-08 10:51:10",
+        "type": "magento-core",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "OSL-3.0",
+            "AFL-3.0"
+        ],
+        "description": "Magento CE"
     },
     {
         "name": "symfony/polyfill-ctype",

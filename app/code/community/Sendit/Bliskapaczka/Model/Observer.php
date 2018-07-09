@@ -148,7 +148,7 @@ class Sendit_Bliskapaczka_Model_Observer
 
         try {
             $response = $apiClient->create($data);
-            $this->_saveResponse($order, $response);
+            $this->_saveResponse($order, $response, $senditHelper);
         } catch (Exception $e) {
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             Mage::throwException($senditHelper->__($e->getMessage()));
@@ -158,9 +158,10 @@ class Sendit_Bliskapaczka_Model_Observer
     /**
      * @param Mage_Sales_Model_Order $order
      * @param json $response
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
      * @throws Exception
      */
-    protected function _saveResponse($order, $response)
+    protected function _saveResponse($order, $response, $senditHelper)
     {
         /** @var $coreHelper Mage_Core_Helper_Data */
         $coreHelper = Mage::helper('core');
@@ -178,6 +179,22 @@ class Sendit_Bliskapaczka_Model_Observer
             $bliskaOrder->setCreationDate($coreHelper->stripTags($decodedResponse->creationDate));
             $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));
             $bliskaOrder->setTrackingNumber($coreHelper->stripTags($decodedResponse->trackingNumber));
+
+            $bliskaOrder->setPosCode($decodedResponse->destinationCode);
+            $bliskaOrder->setPosOperator($decodedResponse->operatorName);
+
+            // Get information about point
+            $apiClient = $senditHelper->getApiClientPos();
+            $apiClient->setPointCode($decodedResponse->destinationCode);
+            $apiClient->setOperator($decodedResponse->operatorName);
+            $posInfo = json_decode($apiClient->get());
+
+            $destination = $posInfo->operator . '</br>' .
+                (($posInfo->description) ? $posInfo->description . '</br>': '') .
+                $posInfo->street . '</br>' .
+                (($posInfo->postalCode) ? $posInfo->postalCode . ' ': '') . $posInfo->city;
+
+            $bliskaOrder->setPosCodeDescription($destination);
 
             $bliskaOrder->save();
         } else {

@@ -340,6 +340,21 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     /**
      * Get Bliskapaczka API Client
      *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientPos()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pos(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
      * @param string $method
      * @return mixed
      */

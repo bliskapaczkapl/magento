@@ -11,7 +11,6 @@ use Bliskapaczka\ApiClient\Exception;
  * Bliskapaczka class
  *
  * @author  Mateusz Koszutowski (mkoszutowski@divante.pl)
- * @version 0.1.0
  */
 abstract class AbstractBliskapaczka
 {
@@ -153,7 +152,7 @@ abstract class AbstractBliskapaczka
         
         // set options
         $options[CURLOPT_URL] = $this->apiUrl . '/v1/' . $url;
-        $options[CURLOPT_TIMEOUT] = 20;
+        $options[CURLOPT_TIMEOUT] = 2;
         $options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
         $options[CURLOPT_HTTPHEADER] = $headers;
         

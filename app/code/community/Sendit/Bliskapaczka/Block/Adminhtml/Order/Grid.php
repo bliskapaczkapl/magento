@@ -35,6 +35,9 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
                 'status',
                 'delivery_type',
                 'creation_date',
+                'pos_operator',
+                'pos_code',
+                'pos_code_description',
                 'advice_date',
                 'tracking_number'
             )
@@ -104,6 +107,27 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'creation_date',
             'type'      =>  'datetime',
+        ]);
+
+        $this->addColumn('pos_operator', [
+            'header'    =>  $this->__('Operator Name'),
+            'align'     =>  'left',
+            'index'     =>  'pos_operator',
+            'type'      =>  'text',
+        ]);
+
+        $this->addColumn('pos_code', [
+            'header'    =>  $this->__('Destination Code'),
+            'align'     =>  'left',
+            'index'     =>  'pos_code',
+            'type'      =>  'text',
+        ]);
+
+        $this->addColumn('pos_code_description', [
+            'header'    =>  $this->__('Destination Point Description'),
+            'align'     =>  'left',
+            'index'     =>  'pos_code_description',
+            'type'      =>  'text',
         ]);
 
         $this->addColumn('advice_date', [

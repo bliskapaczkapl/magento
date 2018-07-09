@@ -197,20 +197,31 @@ class Sendit_Bliskapaczka_Model_Observer
 
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = Mage::helper('sendit_bliskapaczka');
-        $sender = new \Bliskapaczka\ApiClient\Validator\Order\Advice\Sender();
+
         /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
         $mapper = Mage::getModel('sendit_bliskapaczka/mapper_admin');
 
-        // if ($senditBliskapaczkaConfigData['fields']['active']['value'] == '1') {
-        //     $data = $mapper->getData($senditBliskapaczkaConfigData, $senditHelper);
-        // }
-
-        if ($senditCourierConfigData['fields']['active']['value'] == '1') {
-            $data = $mapper->getData($senditCourierConfigData, $senditHelper);
+        if ($senditBliskapaczkaConfigData['fields']['active']['value'] == '1') {
+            if ($senditBliskapaczkaConfigData['fields']['auto_advice']['value'] == '1') {
+                $sender = new \Bliskapaczka\ApiClient\Validator\Order\Advice\Sender();
+            } else {
+                $sender = new \Bliskapaczka\ApiClient\Validator\Order\Sender();
+            }
+            $data = $mapper->getData($senditBliskapaczkaConfigData, $senditHelper);
+            $sender->setData($data);
+            $sender->validate();
         }
 
-        $sender->setData($data);
-        $sender->validate();
+        if ($senditCourierConfigData['fields']['active']['value'] == '1') {
+            if ($senditCourierConfigData['fields']['auto_advice']['value'] == '1') {
+                $sender = new \Bliskapaczka\ApiClient\Validator\Order\Advice\Sender();
+            } else {
+                $sender = new \Bliskapaczka\ApiClient\Validator\Order\Sender();
+            }
+            $data = $mapper->getData($senditCourierConfigData, $senditHelper);
+            $sender->setData($data);
+            $sender->validate();
+        }
     }
 
     /**

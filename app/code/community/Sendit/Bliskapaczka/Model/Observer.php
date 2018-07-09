@@ -101,6 +101,7 @@ class Sendit_Bliskapaczka_Model_Observer
 
         $shippingAddress->setPosCode($data['posCode']);
         $shippingAddress->setPosOperator($operatorName);
+        $shippingAddress->setPosCodeDescription(strip_tags($data['posCodeDescription'], '<br>'));
 
         $shippingAddress->setShippingDescription($shippingAddress->getShippingDescription() . ' ' . $data['posCode']);
 
@@ -181,6 +182,7 @@ class Sendit_Bliskapaczka_Model_Observer
             $bliskaOrder->save();
         } else {
             //Something went wrong. Throw exception.
+            Mage::log($response, null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             throw new Exception(Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response'));
         }
     }

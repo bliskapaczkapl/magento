@@ -17,6 +17,7 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, codOnly = 
             callback: function(data) {
                 posCodeForm = document.getElementsByName('bliskapaczka[posCode]')
                 posOperatorForm = document.getElementsByName('bliskapaczka[posOperator]')
+                posCodeDescriptionForm = document.getElementsByName('bliskapaczka[posCodeDescription]')
 
                 function setPosCode(element, index) {
                     element.value = data.code;
@@ -27,6 +28,14 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, codOnly = 
                     element.value = data.operator;
                 }
                 posOperatorForm.forEach(setPosOperator);
+
+                function setPosCodeDescription(element, index) {
+                    element.value = data.operator + '</br>'
+                    + ((data.description) ? data.description + '</br>': '')
+                    + data.street + '</br>'
+                    + ((data.postalCode) ? data.postalCode + ' ': '') + data.city
+                }
+                posCodeDescriptionForm.forEach(setPosCodeDescription);
 
                 Bliskapaczka.pointSelected(data, operators);
             },

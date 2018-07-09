@@ -105,6 +105,7 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
                         <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>
                             <input name="bliskapaczka[posCode]" type="hidden" id="s_method_<?php echo $_rate->getCode() ?>_posCode" />
                             <input name="bliskapaczka[posOperator]" type="hidden" id="s_method_<?php echo $_rate->getCode() ?>_posOperator" />
+                            <input name="bliskapaczka[posCodeDescription]" type="hidden" id="s_method_<?php echo $_rate->getCode() ?>_posCodeDescription" />
                             <a name="bpWidget_wrapper"></a>
                             <div id="bpWidget" style="height: 600px; width: 100%; display: none;"></div>
                             <div id="bpWidget_aboutPoint" style="width: 100%; display: none;">

@@ -105,26 +105,28 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
 
-        foreach ($priceList as $operator) {
-            if ($operator->availabilityStatus != false) {
-                $shippingPrice = $operator->price->gross;
+        if(!empty($priceList)) {
+            foreach ($priceList as $operator) {
+                if ($operator->availabilityStatus != false) {
+                    $shippingPrice = $operator->price->gross;
 
-                $method = Mage::getModel('shipping/rate_result_method');
-                $method->setCarrier($this->_code);
-                $method->setCarrierTitle($this->getConfigData('title'));
+                    $method = Mage::getModel('shipping/rate_result_method');
+                    $method->setCarrier($this->_code);
+                    $method->setCarrierTitle($this->getConfigData('title'));
 
-                $method->setMethod($operator->operatorName);
-                $method->setMethodTitle($operator->operatorName);
+                    $method->setMethod($operator->operatorName);
+                    $method->setMethodTitle($operator->operatorName);
 
-                $method->setPrice($shippingPrice);
-                $method->setCost($shippingPrice);
+                    $method->setPrice($shippingPrice);
+                    $method->setCost($shippingPrice);
 
-                $result->append($method);
+                    $result->append($method);
 
-                if (Mage::getStoreConfig(
-                    Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH
-                )) {
-                    $this->addCODMethodWithOperator($result, $operator, $shippingPrice);
+                    if (Mage::getStoreConfig(
+                        Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH
+                    )) {
+                        $this->addCODMethodWithOperator($result, $operator, $shippingPrice);
+                    }
                 }
             }
         }

@@ -94,9 +94,10 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
                                     onclick='Bliskapaczka.showMap(
                                         <?php echo $senditHelper->getOperatorsForWidget(null, $_rate->getPrice()); ?>,
                                         "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
-                                        <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>
+                                        <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>,
+                                        "<?php echo $_rate->getCode() ?>",
                                     )'
-                                    href="#bpWidget_wrapper"
+                                    href="#bpWidget_wrapper_<?php echo $_rate->getCode(); ?>"
                                 >
                                     <?php echo $this->__('Select delivery point'); ?>
                                 </a>
@@ -106,22 +107,26 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
                                             <?php echo $senditHelper->getOperatorsForWidget(null, $_rate->getPrice()); ?>,
                                             "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
                                             <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>,
+                                            "<?php echo $_rate->getCode() ?>",
                                             true
                                         )'
-                                        href="#bpWidget_wrapper"
+                                        href="#bpWidget_wrapper_<?php echo $_rate->getCode(); ?>"
                                 >
                                     <?php echo $this->__('Select delivery point'); ?>
                                 </a>
                             <?php } ?>
                         </label>
 
-                        <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) : ?>
-                            <input name="bliskapaczka[posCode]" type="hidden" id="s_method_<?php echo $_rate->getCode() ?>_posCode" />
-                            <input name="bliskapaczka[posOperator]" type="hidden" id="s_method_<?php echo $_rate->getCode() ?>_posOperator" />
-                            <a name="bpWidget_wrapper"></a>
-                            <div id="bpWidget" style="height: 600px; width: 100%; display: none;"></div>
-                            <div id="bpWidget_aboutPoint" style="width: 100%; display: none;">
-                                <p><?php echo $this->__('Selected Point'); ?>: <span id="bpWidget_aboutPoint_posData"></span></p>
+                    <?php if ($_rate->getCode(
+                        ) == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE
+                              || $_rate->getCode(
+                        ) == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD) : ?>
+                            <input name="bliskapaczka[posCode]" type="hidden" id="s_method_<?php echo $_rate->getCode(); ?>_posCode" />
+                            <input name="bliskapaczka[posOperator]" type="hidden" id="s_method_<?php echo $_rate->getCode(); ?>_posOperator" />
+                            <a name="bpWidget_wrapper_<?php echo $_rate->getCode(); ?>"></a>
+                            <div id="bpWidget_<?php echo $_rate->getCode(); ?>" style="height: 600px; width: 100%; display: none;"></div>
+                            <div id="bpWidget_aboutPoint_<?php echo $_rate->getCode(); ?>" style="width: 100%; display: none;">
+                                <p><?php echo $this->__('Selected Point'); ?>: <span id="bpWidget_aboutPoint_posData_<?php echo $_rate->getCode(); ?>"></span></p>
                             </div>
                         <?php endif; ?>                      
                     <?php endif ?>

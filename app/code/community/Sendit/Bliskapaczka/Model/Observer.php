@@ -190,6 +190,8 @@ class Sendit_Bliskapaczka_Model_Observer
      */
     public function validateAdminConfiguration()
     {
+        $data = [];
+
         $post = Mage::app()->getRequest()->getPost();
 
         $senditBliskapaczkaConfigData = $post['groups']['sendit_bliskapaczka'];

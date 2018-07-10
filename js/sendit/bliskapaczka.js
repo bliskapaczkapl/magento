@@ -2,12 +2,12 @@ function Bliskapaczka()
 {
 }
  
-Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, codOnly = false)
+Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, rateCode, codOnly = false)
 {
-    aboutPoint = document.getElementById('bpWidget_aboutPoint');
+    aboutPoint = document.getElementById('bpWidget_aboutPoint_' + rateCode);
     aboutPoint.style.display = 'none';
 
-    bpWidget = document.getElementById('bpWidget');
+    bpWidget = document.getElementById('bpWidget_' + rateCode);
     bpWidget.style.display = 'block';
 
     BPWidget.init(
@@ -15,20 +15,15 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, codOnly = 
         {
             googleMapApiKey: googleMapApiKey,
             callback: function(data) {
-                posCodeForm = document.getElementsByName('bliskapaczka[posCode]')
-                posOperatorForm = document.getElementsByName('bliskapaczka[posOperator]')
 
-                function setPosCode(element, index) {
-                    element.value = data.code;
-                }
-                posCodeForm.forEach(setPosCode);
+                posCodeForm = document.getElementById('s_method_' + rateCode + '_posCode');
+                posOperatorForm = document.getElementById('s_method_' + rateCode + '_posOperator');
 
-                function setPosOperator(element, index) {
-                    element.value = data.operator;
-                }
-                posOperatorForm.forEach(setPosOperator);
+                posCodeForm.value = data.code;
 
-                Bliskapaczka.pointSelected(data, operators);
+                posOperatorForm.value = data.operator;
+
+                Bliskapaczka.pointSelected(data, operators, rateCode);
             },
             operators: operators,
             posType: 'DELIVERY',
@@ -38,17 +33,17 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, codOnly = 
     );
 }
 
-Bliskapaczka.pointSelected = function(data, operators)
+Bliskapaczka.pointSelected = function(data, operators, rateCode)
 {
     Bliskapaczka.updatePrice(data.operator, operators);
 
-    bpWidget = document.getElementById('bpWidget');
+    bpWidget = document.getElementById('bpWidget_' + rateCode);
     bpWidget.style.display = 'none';
 
-    aboutPoint = document.getElementById('bpWidget_aboutPoint');
+    aboutPoint = document.getElementById('bpWidget_aboutPoint_' + rateCode);
     aboutPoint.style.display = 'block';
 
-    posDataBlock = document.getElementById('bpWidget_aboutPoint_posData');
+    posDataBlock = document.getElementById('bpWidget_aboutPoint_posData_' + rateCode);
 
     posDataBlock.innerHTML =  data.operator + '</br>'
         + ((data.description) ? data.description + '</br>': '')

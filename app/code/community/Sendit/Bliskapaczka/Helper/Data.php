@@ -170,17 +170,19 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
         $operators = array();
 
-        foreach ($priceList as $operator) {
-            $price = $operator->price->gross;
-            if ($operator->availabilityStatus != false) {
-                if ($priceFromCarrier <= 0.0001) {
-                    $price = 0;
-                }
+        if (!empty($priceList)) {
+            foreach ($priceList as $operator) {
+                $price = $operator->price->gross;
+                if ($operator->availabilityStatus != false) {
+                    if ($priceFromCarrier <= 0.0001) {
+                        $price = 0;
+                    }
 
-                $operators[] = array(
-                    "operator" => $operator->operatorName,
-                    "price" => $price
-                );
+                    $operators[] = array(
+                        "operator" => $operator->operatorName,
+                        "price"    => $price
+                    );
+                }
             }
         }
 

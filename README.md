@@ -53,6 +53,7 @@ Bliskapaczka.showMap(
     [{"operator":"POCZTA","price":9.69},{"operator":"INPOST","price":9.25},{"operator":"RUCH","price":8},{"operator":"DPD","price":9.99}],
     "AIzaSyCUyydNCGhxGi5GIt5z5I-X6hofzptsRjE",
     true,
+    "sendit_bliskapaczka_sendit_bliskapaczka_COD"
     true
 )
 ```

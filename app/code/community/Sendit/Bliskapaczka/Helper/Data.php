@@ -376,7 +376,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiClientForAdvice($method)
     {
-        $methodName = $this->getApiClientForAdviceMethodName($method);
+        $methodName = $this->getApiClientForAdviceMethodName($method, '1');
 
         return $this->{$methodName}();
     }
@@ -405,30 +405,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         if ($autoAdvice) {
             $methodName .= 'Advice';
         }
-
-        return $methodName;
-    }
-
-    /**
-     * Get method name to bliskapaczka api client create order action
-     *
-     * @param string $method
-     * @param string $autoAdvice
-     * @return string
-     */
-    public function getApiClientForAdviceMethodName($method)
-    {
-        switch ($method) {
-            case 'bliskapaczka_sendit_bliskapaczka':
-                $type = 'Order';
-                break;
-
-            case 'bliskapaczka_courier_sendit_bliskapaczka_courier':
-                $type = 'Todoor';
-                break;
-        }
-
-        $methodName = 'getApiClient' . $type . 'Advice';
 
         return $methodName;
     }

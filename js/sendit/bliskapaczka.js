@@ -31,7 +31,7 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, rateCode, 
                 }
                 posCodeDescriptionForm.forEach(setPosCodeDescription);
 
-                Bliskapaczka.pointSelected(data, operators);
+                Bliskapaczka.pointSelected(data, operators, rateCode);
             },
             operators: operators,
             posType: 'DELIVERY',

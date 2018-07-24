@@ -135,7 +135,10 @@ class Sendit_Bliskapaczka_Model_Observer
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = Mage::helper('sendit_bliskapaczka');
 
-        if ($method == 'bliskapaczka_sendit_bliskapaczka') {
+        if (
+            $method == 'bliskapaczka_sendit_bliskapaczka'
+            || $method == 'bliskapaczka_sendit_bliskapaczka_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
+        ) {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
         } else {

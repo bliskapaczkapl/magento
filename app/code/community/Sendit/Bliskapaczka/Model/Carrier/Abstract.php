@@ -136,8 +136,8 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
 
     /**
      * @param Mage_Shipping_Model_Rate_Result_Method $result
-     * @param                                        $operator
-     * @param float                                  $shippingPrice
+     * @param string $operator
+     * @param float $shippingPrice
      */
     protected function addCODMethodWithOperator($result, $operator, $shippingPrice)
     {

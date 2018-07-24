@@ -392,6 +392,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     {
         switch ($method) {
             case 'bliskapaczka_sendit_bliskapaczka':
+            case 'bliskapaczka_sendit_bliskapaczka_COD':
                 $type = 'Order';
                 break;
 

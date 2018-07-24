@@ -333,6 +333,8 @@ class DataTest extends TestCase
         return [
             ['bliskapaczka_sendit_bliskapaczka', '0', 'getApiClientOrder'],
             ['bliskapaczka_sendit_bliskapaczka', '1', 'getApiClientOrderAdvice'],
+            ['bliskapaczka_sendit_bliskapaczka_COD', '0', 'getApiClientOrder'],
+            ['bliskapaczka_sendit_bliskapaczka_COD', '1', 'getApiClientOrderAdvice'],
             ['bliskapaczka_courier_sendit_bliskapaczka_courier', '0', 'getApiClientTodoor'],
             ['bliskapaczka_courier_sendit_bliskapaczka_courier', '1', 'getApiClientTodoorAdvice'],
         ];

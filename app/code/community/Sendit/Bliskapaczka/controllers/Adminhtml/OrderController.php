@@ -198,6 +198,28 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     }
 
     /**
+     * Waybill action
+     */
+    public function confirmAction()
+    {
+        try {
+            $senditHelper = Mage::helper('sendit_bliskapaczka');
+            /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
+            $apiClient = $senditHelper->getApiClientConfirm();
+            $apiClient->setOperator('POCZTA');
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Exception $e) {
+            $this->_getSession()->addError(
+                $this->__('The confirmation has not been sent.') . ' ' . $e->getMessage()
+            );
+            Mage::logException($e);
+        }
+
+        $this->_redirect('*/*/index');
+    }
+
+    /**
      * Get action
      */
     public function getAction()

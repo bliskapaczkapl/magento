@@ -16,5 +16,21 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order extends Mage_Adminhtml_Block_Wid
 
         parent::__construct();
         $this->_removeButton('add');
+
+        $this->_addButton("Confirm", array(
+            "label" => Mage::helper("core")->__("Confirm"),
+            "onclick" => "location.href = '" . $this->getConfirmUrl() . "';",
+            "class" => "btn btn-danger",
+        ));
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfirmUrl()
+    {
+        return $this->getUrl(
+            '*/*/confirm'
+        );
     }
 }

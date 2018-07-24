@@ -41,15 +41,23 @@ class OrderTest extends TestCase
         $this->addressMock->method('getPosOperator')->will($this->returnValue($this->operatorName));
         $this->addressMock->method('getPosCode')->will($this->returnValue($this->destinationCode));
 
+        $this->incrementId = '000000000001191';
+
         $this->orderMock = $this->getMockBuilder(Mage_Sales_Model_Order::class)
                                      ->disableOriginalConstructor()
                                      ->disableOriginalClone()
                                      ->disableArgumentCloning()
                                      ->disallowMockingUnknownTypes()
-                                     ->setMethods(array('getShippingAddress'))
+                                     ->setMethods(
+                                        array(
+                                            'getShippingAddress',
+                                            'getIncrementId'
+                                        )
+                                    )
                                      ->getMock();
 
         $this->orderMock->method('getShippingAddress')->will($this->returnValue($this->addressMock));
+        $this->orderMock->method('getIncrementId')->will($this->returnValue($this->incrementId));
 
         $this->helperMock = $this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
                                      ->disableOriginalConstructor()
@@ -149,5 +157,14 @@ class OrderTest extends TestCase
         $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertTrue(is_array($data['parcel']));
+    }
+
+
+    public function testMapperForAdditionalInformation()
+    {
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
+        $data = $mapper->getData($this->orderMock, $this->helperMock);
+
+        $this->assertEquals($this->incrementId, $data['additionalInformation']);
     }
 }

@@ -15,15 +15,23 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, rateCode, 
         {
             googleMapApiKey: googleMapApiKey,
             callback: function(data) {
-
                 posCodeForm = document.getElementById('s_method_' + rateCode + '_posCode');
                 posOperatorForm = document.getElementById('s_method_' + rateCode + '_posOperator');
+                posCodeDescriptionForm = document.getElementsByName('s_method_' + rateCode + '_posOperator')
 
                 posCodeForm.value = data.code;
 
                 posOperatorForm.value = data.operator;
 
-                Bliskapaczka.pointSelected(data, operators, rateCode);
+                function setPosCodeDescription(element, index) {
+                    element.value = data.operator + '</br>'
+                    + ((data.description) ? data.description + '</br>': '')
+                    + data.street + '</br>'
+                    + ((data.postalCode) ? data.postalCode + ' ': '') + data.city
+                }
+                posCodeDescriptionForm.forEach(setPosCodeDescription);
+
+                Bliskapaczka.pointSelected(data, operators);
             },
             operators: operators,
             posType: 'DELIVERY',

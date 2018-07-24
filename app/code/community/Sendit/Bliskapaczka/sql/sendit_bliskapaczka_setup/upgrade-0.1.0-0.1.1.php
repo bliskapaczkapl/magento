@@ -99,4 +99,3 @@ $orderTable =
         )->setComment('Bliskapaczka order entity');
 
 $conn->createTable($orderTable);
-

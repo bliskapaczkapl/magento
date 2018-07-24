@@ -108,15 +108,12 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
      */
     public function reportAction()
     {
-        list($date, $operator) = Mage::helper('sendit_bliskapaczka')->prepareData();
+        $numbers = Mage::helper('sendit_bliskapaczka')->prepareDataForMassActionReport();
 
         $senditHelper = Mage::helper('sendit_bliskapaczka');
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
         $apiClient = $senditHelper->getApiClientReport();
-        if(isset($operator)) {
-            $apiClient->setOperator($operator);
-        }
-        $apiClient->setStartPeriod($date);
+        $apiClient->setNumbers($numbers);
 
         try {
             $content = $apiClient->get();
@@ -128,6 +125,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             );
             Mage::logException($e);
         }
+
         if ($content) {
             $this->_getSession()->addSuccess(
                 $this->__('The report file has been downloaded.')

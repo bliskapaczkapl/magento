@@ -342,6 +342,21 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     /**
      * Get Bliskapaczka API Client
      *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientPos()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pos(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
      * @param string $method
      * @return mixed
      */
@@ -458,12 +473,11 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
-     * @return array
+     * For choosen orders create string with order numbers to get data from API
+     * @return string
      */
-    public function prepareData()
+    public function prepareDataForMassActionReport()
     {
-        $date      = time();
-
         $entityIds = $this->_getRequest()->getParam('entity_id');
 
         $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
@@ -473,24 +487,16 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
             $bliskaOrderCollection->addFieldToFilter('entity_id', array('in' => $entityIds));
         }
 
+        $numbers = '';
         foreach ($bliskaOrderCollection as $bliskaOrder) {
-            if (date($bliskaOrder->getCreationDate()) < $date) {
-                $date = $bliskaOrder->getCreationDate();
+            if ($numbers && $bliskaOrder->getNumber()) {
+                $numbers .= ',' . $bliskaOrder->getNumber();
+            } else {
+                $numbers = $bliskaOrder->getNumber();
             }
         }
 
-        if ($bliskaOrderCollection) {
-            $bliskaOrder = $bliskaOrderCollection->setPageSize(1, 1)->getLastItem();
-            $order       = Mage::getModel('sales/order')->load($bliskaOrder->getOrderId());
-            if ($order && $order->getId()) {
-                $operator = $order->getShippingAddress()->getPosOperator();
-            }
-        }
-
-        return array(
-            $date,
-            $operator,
-        );
+        return $numbers;
     }
 
     /**

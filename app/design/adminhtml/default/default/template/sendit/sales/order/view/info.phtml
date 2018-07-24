@@ -27,6 +27,22 @@ $_order = $this->getBliskaOrder();
                 <td class="value"><strong><?php echo ($_order->getCreationDate() ?: '-') ?></strong></td>
             </tr>
             <tr>
+                <td class="label"><label><?php echo Mage::helper('sales')->__('Operator Name') ?></label></td>
+                <td class="value"><strong><?php echo ($_order->getPosCode() ?: '-') ?></strong></td>
+            </tr>
+            <tr>
+                <td class="label"><label><?php echo Mage::helper('sales')->__('Destination Code') ?></label></td>
+                <td class="value"><strong><?php echo ($_order->getPosOperator() ?: '-') ?></strong></td>
+            </tr>
+            <tr>
+                <td class="label">
+                    <label>
+                        <?php echo Mage::helper('sales')->__('Destination Point Description') ?>
+                    </label>
+                </td>
+                <td class="value"><strong><?php echo ($_order->getPosCodeDescription() ?: '-') ?></strong></td>
+            </tr>
+            <tr>
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Advice date') ?></label></td>
                 <td class="value"><strong><?php echo ($_order->getDeviceDate() ?: '-') ?></strong></td>
             </tr>

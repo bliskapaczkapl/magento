@@ -76,7 +76,6 @@ abstract class AbstractValidator
     protected function notBlank($property, $settings)
     {
         if (isset($settings['notblank'])
-            && isset($this->data[$property])
             && isset($settings['notblank']) === true
             && (is_null($this->data[$property]) || strlen($this->data[$property]) == 0)
         ) {
@@ -93,7 +92,6 @@ abstract class AbstractValidator
     protected function maxLength($property, $settings)
     {
         if (isset($settings['maxlength'])
-            && isset($this->data[$property])
             && $settings['maxlength'] > 0
             && strlen($this->data[$property]) > $settings['maxlength']
         ) {

@@ -12,7 +12,6 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
     implements Mage_Shipping_Model_Carrier_Interface
 {
     const SHIPPING_CODE            = 'sendit_bliskapaczka';
-    const SHIPPING_CODE_COD        = 'sendit_bliskapaczka_cod';
     const COD                      = 'COD';
     const NEODYNAMIC_LICENSE_OWNER = 'carriers/sendit_bliskapaczka/neodinamic_license_owner';
     const NEODYNAMIC_LICENSE_KEY   = 'carriers/sendit_bliskapaczka/neodinamic_license_owner';
@@ -29,13 +28,15 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
     /**
      * Get price list for carrier
      *
+     * @param boot $cod
+     *
      * @return json
      */
-    public function _getPricing()
+    public function _getPricing($cod = null)
     {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
-        $priceList = $senditHelper->getPriceList();
+        $priceList = $senditHelper->getPriceList($cod);
 
         return $priceList;
     }
@@ -54,6 +55,8 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
     }
 
     /**
+     * Add agregated bliskapaczka shipping method
+     *
      * @param Mage_Shipping_Model_Rate_Request $request
      * @param Mage_Shipping_Model_Rate_Result_Method $result
      *
@@ -61,51 +64,23 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
      */
     protected function _collectRatesForAgregated(Mage_Shipping_Model_Rate_Request $request, $result)
     {
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+        $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+
+        $operator = new stdClass();
+        $operator->operatorName = $this->_code;
+
         $priceList = $this->_getPricing();
+        if (!empty($priceList)) {
+            $shippingPrice = $this->_shippingPriceForAgregated($senditHelper, $request, $priceList);
+            $this->_addShippingMethod($result, $operator, false, $senditHelper, $shippingPrice);
+        }
 
-        if ($priceList != new stdClass()) {
-            $this->setFreeBoxes($this->_calculateFreeBoxes($request));
-
-            $method = Mage::getModel('shipping/rate_result_method');
-
-            $method->setCarrier($this->_code);
-            $method->setCarrierTitle($this->getConfigData('title'));
-
-            $method->setMethod($this->_code);
-            $method->setMethodTitle($this->getConfigData('name'));
-
-            // Get Quote
-            $quote = false;
-            foreach ($request->getAllItems() as $item){
-                $quote = $item->getQuote();
-                break;
-            }
-
-            if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
-                $shippingPrice = '0.00';
-            } else {
-                /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
-                $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
-
-                // Get shipping price by Bliskapaczka API
-                if ($quote && $quote->getShippingAddress()->getPosOperator()) {
-                    $posOperator = $quote->getShippingAddress()->getPosOperator();
-                    $shippingPrice = round($senditHelper->getPriceForCarrier($priceList, $posOperator), 2);
-                } else {
-                    // Get lowest price by Bliskapaczka API because we don't know which carrier will be chosen
-                    $shippingPrice = round($senditHelper->getLowestPrice($priceList), 2);
-                }
-            }
-
-            $method->setPrice($shippingPrice);
-            $method->setCost($shippingPrice);
-
-            $result->append($method);
-
-            if (Mage::getStoreConfig(
-                Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH
-            )) {
-                $this->addCODMethod($result, $shippingPrice);
+        if (Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH)) {
+            $priceList = $this->_getPricing(true);
+            if (!empty($priceList)) {
+                $shippingPrice = $this->_shippingPriceForAgregated($$senditHelper, $request, $priceList);
+                $this->_addShippingMethod($result, $operator, true, $senditHelper, $shippingPrice);
             }
         }
 
@@ -113,24 +88,36 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
     }
 
     /**
-     * @param Mage_Shipping_Model_Rate_Result_Method $result
-     * @param float                                  $shippingPrice
+     * Calculate shipping price for agregated bliskapaczka shipping method
+     *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @param Mage_Shipping_Model_Rate_Request $request
+     * @param json $priceList
+     *
+     * @return float
      */
-    protected function addCODMethod($result, $shippingPrice)
+    protected function _shippingPriceForAgregated($senditHelper, $request, $priceList)
     {
-        $method = Mage::getModel('shipping/rate_result_method');
+        // Get Quote
+        $quote = false;
+        foreach ($request->getAllItems() as $item){
+            $quote = $item->getQuote();
+            break;
+        }
 
-        $method->setCarrier($this->_code);
-        $method->setCarrierTitle($this->getConfigData('title'));
+        if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
+            $shippingPrice = '0.00';
+        } else {
+            // Get shipping price by Bliskapaczka API
+            if ($quote && $quote->getShippingAddress()->getPosOperator()) {
+                $posOperator = $quote->getShippingAddress()->getPosOperator();
+                $shippingPrice = round($senditHelper->getPriceForCarrier($priceList, $posOperator), 2);
+            } else {
+                // Get lowest price by Bliskapaczka API because we don't know which carrier will be chosen
+                $shippingPrice = round($senditHelper->getLowestPrice($priceList), 2);
+            }
+        }
 
-        $method->setMethod($this->_code . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD);
-        $method->setMethodTitle(
-            $this->getConfigData('name') . ' ' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
-        );
-
-        $method->setPrice($shippingPrice);
-        $method->setCost($shippingPrice);
-
-        $result->append($method);
+        return $shippingPrice;
     }
 }

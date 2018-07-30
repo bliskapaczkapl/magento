@@ -137,15 +137,21 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     /**
      * Get operators and prices from Bliskapaczka API
      *
+     * @param boot $cod
+     *
      * @return string
      */
-    public function getPriceList()
+    public function getPriceList($cod = null)
     {
         $apiClient = $this->getApiClientPricing();
+
+        $data = array("parcel" => array('dimensions' => $this->getParcelDimensions()));
+        if ($cod) {
+            $data['codValue'] = 1;
+        }
+
         try {
-            $priceList = $apiClient->get(
-                array("parcel" => array('dimensions' => $this->getParcelDimensions()))
-            );
+            $priceList = $apiClient->get($data);
         } catch (Exception $e) {
             $priceList = '{}';
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
@@ -161,12 +167,14 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      *
      * @param array $priceList
      * @param float $priceFromCarrier
+     * @param boot $cod
+     *
      * @return array
      */
-    public function getOperatorsForWidget($priceList = null, $priceFromCarrier = null)
+    public function getOperatorsForWidget($priceList = null, $priceFromCarrier = null, $cod = null)
     {
         if (!$priceList) {
-            $priceList = $this->getPriceList();
+            $priceList = $this->getPriceList($cod);
         }
         $operators = array();
 

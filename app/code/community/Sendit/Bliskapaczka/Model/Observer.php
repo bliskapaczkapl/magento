@@ -47,9 +47,12 @@ class Sendit_Bliskapaczka_Model_Observer
      */
     public function setPosData(Varien_Event_Observer $observer)
     {
-        $data = $observer->getEvent()->getRequest()->getParam('bliskapaczka');
+        $allData = $observer->getEvent()->getRequest()->getParam('bliskapaczka');
 
         $quote = $observer->getEvent()->getQuote();
+        foreach (array('posCode', 'posOperator', 'posCodeDescription') as $type) {
+            $data[$type] = $allData[$quote->getShippingAddress()->getShippingMethod() . '_' . $type];
+        }
 
         $this->_setPos($data, $quote);
     }

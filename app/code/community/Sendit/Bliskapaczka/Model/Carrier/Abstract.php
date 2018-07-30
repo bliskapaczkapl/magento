@@ -76,9 +76,11 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
     /**
      * Get price list for carrier
      *
+     * @param boot $cod
+     *
      * @return json
      */
-    protected function _getPricing() {
+    protected function _getPricing($cod = null) {
 
     }
 
@@ -93,39 +95,27 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
 
         $result = Mage::getModel('shipping/rate_result');
 
-        $priceList = $this->_getPricing();
-
-        // Get Quote
-        $quote = false;
-        foreach ($request->getAllItems() as $item){
-            $quote = $item->getQuote();
-            break;
-        }
-
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
 
+        $priceList = $this->_getPricing();
         if(!empty($priceList)) {
             foreach ($priceList as $operator) {
                 if ($operator->availabilityStatus != false) {
-                    $shippingPrice = $operator->price->gross;
+                    $shippingPrice = $this->_shippingPrice($operator, $request);
+                    $this->_addShippingMethod($result, $operator, false, $senditHelper, $shippingPrice);
+                }
+            }
+        }
 
-                    $method = Mage::getModel('shipping/rate_result_method');
-                    $method->setCarrier($this->_code);
-                    $method->setCarrierTitle($this->getConfigData('title'));
+        if (Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH)) {
+            $priceListCod = $this->_getPricing(true);
 
-                    $method->setMethod($operator->operatorName);
-                    $method->setMethodTitle($operator->operatorName);
-
-                    $method->setPrice($shippingPrice);
-                    $method->setCost($shippingPrice);
-
-                    $result->append($method);
-
-                    if (Mage::getStoreConfig(
-                        Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH
-                    )) {
-                        $this->addCODMethodWithOperator($result, $operator, $shippingPrice);
+            if(!empty($priceListCod)) {
+                foreach ($priceListCod as $operator) {
+                    if ($operator->availabilityStatus != false) {
+                        $shippingPrice = $this->_shippingPrice($operator, $request);
+                        $this->_addShippingMethod($result, $operator, true, $senditHelper, $shippingPrice);
                     }
                 }
             }
@@ -135,22 +125,64 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
     }
 
     /**
+     * Set shipping method for operator
+     *
      * @param Mage_Shipping_Model_Rate_Result_Method $result
      * @param string $operator
+     * @param bool $cod
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
      * @param float $shippingPrice
      */
-    protected function addCODMethodWithOperator($result, $operator, $shippingPrice)
+    protected function _addShippingMethod($result, $operator, $cod, $senditHelper, $shippingPrice)
     {
+        if ($this->_code != $operator->operatorName) {
+            $methodName = $methodTitle = $operator->operatorName;
+        } else {
+            $methodName = $this->_code;
+            $methodTitle = '';
+        }
+
+        if ($cod) {
+            $methodName .= '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD;
+            $methodTitle .= (($methodTitle) ? ' - ' : '') . $senditHelper->__('Cash on Delivery' );
+        }
+
         $method = Mage::getModel('shipping/rate_result_method');
         $method->setCarrier($this->_code);
         $method->setCarrierTitle($this->getConfigData('title'));
 
-        $method->setMethod($operator->operatorName . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD);
-        $method->setMethodTitle($operator->operatorName . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD);
+        $method->setMethod($methodName);
+        $method->setMethodTitle($methodTitle);
 
         $method->setPrice($shippingPrice);
         $method->setCost($shippingPrice);
 
         $result->append($method);
+    }
+
+    /**
+     * Calculate shipping price for bliskapaczka shipping method
+     *
+     * @param stdClass $operator
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return float
+     */
+    protected function _shippingPrice($operator, $request)
+    {
+        // Get Quote
+        $quote = false;
+        foreach ($request->getAllItems() as $item){
+            $quote = $item->getQuote();
+            break;
+        }
+
+        if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
+            $shippingPrice = '0.00';
+        } else {
+            $shippingPrice = $operator->price->gross;
+        }
+
+        return $shippingPrice;
     }
 }

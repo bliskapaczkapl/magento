@@ -12,7 +12,6 @@ class Sendit_Bliskapaczka_Model_Carrier_Courier
     implements Mage_Shipping_Model_Carrier_Interface
 {
     const SHIPPING_CODE     = 'sendit_bliskapaczka_courier';
-    const SHIPPING_CODE_COD = 'sendit_bliskapaczka_courier_cod';
 
     /**
      * Carrier's code
@@ -24,19 +23,24 @@ class Sendit_Bliskapaczka_Model_Carrier_Courier
 	/**
      * Get price list for carrier
      *
+     * @param boot $cod
+     *
      * @return json
      */
-    public function _getPricing()
+    public function _getPricing($cod = null)
     {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
         $apiClient = $senditHelper->getApiClientPricingTodoor();
 
+        $data = array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()));
+        if ($cod) {
+            $data['codValue'] = 1;
+        }
+
         try {
-            $priceList = $apiClient->get(
-                array("parcel" => array('dimensions' => $senditHelper->getParcelDimensions()))
-            );
+            $priceList = $apiClient->get($data);
         } catch (Exception $e) {
             $priceList = '{}';
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);

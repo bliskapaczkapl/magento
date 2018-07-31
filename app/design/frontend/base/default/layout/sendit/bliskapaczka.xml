@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <default>
+    <checkout_cart_index>
+        <update handle="checkout_bliskapaczka"/>
+    </checkout_cart_index>
+    <checkout_onepage_index>
+        <update handle="checkout_bliskapaczka"/>
+    </checkout_onepage_index>
+    <checkout_bliskapaczka>
         <reference name="head">
             <block type="core/text" name="widget.bliskapaczka.pl">
                 <action method="setText">
@@ -19,7 +25,7 @@
             <action method="addJs"><script>sendit/bliskapaczka.js</script></action>
             <action method="addCss"><script>css/bliskapaczka.css</script></action>
         </reference>
-    </default>
+    </checkout_bliskapaczka>
     <checkout_onepage_shippingmethod>
         <!-- Mage_Checkout -->
         <remove name="right"/>

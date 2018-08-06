@@ -79,7 +79,7 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
         if (Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH)) {
             $priceList = $this->_getPricing(true);
             if (!empty($priceList)) {
-                $shippingPrice = $this->_shippingPriceForAgregated($$senditHelper, $request, $priceList);
+                $shippingPrice = $this->_shippingPriceForAgregated($senditHelper, $request, $priceList);
                 $this->_addShippingMethod($result, $operator, true, $senditHelper, $shippingPrice);
             }
         }

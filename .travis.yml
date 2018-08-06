@@ -28,7 +28,7 @@ after_success:
   - docker build -t bliskapaczkapl/magento:$COMMIT -t bliskapaczkapl/magento:latest -t bliskapaczkapl/magento:develop -f dev/docker/Dockerfile .
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   - docker push bliskapaczkapl/magento:$COMMIT
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+  - if [ "$TRAVIS_BRANCH" == "master" -a "$TRAVIS_PULL_REQUEST" == "true" ]; then
     docker push bliskapaczkapl/magento:latest;
     fi
   - if [ "$TRAVIS_BRANCH" == "develop" ]; then

@@ -13,7 +13,7 @@ class Sendit_Bliskapaczka_Adminhtml_ReportController extends Mage_Adminhtml_Cont
         /** @var Mage_Admin_Model_Session $session */
         $session = Mage::getSingleton('admin/session');
 
-        return $session->isAllowed('sendit_bliskapaczka/report');
+        return $session->isAllowed('sales/sendit_bliskapaczka/report');
     }
 
     /**

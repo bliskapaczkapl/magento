@@ -1,3 +1,22 @@
+var Point = Class.create();
+Point.prototype = {
+    initialize: function () {
+        this.code = null;
+        this.operator = null;
+    },
+    setCode: function (code) {
+        this.code = code;
+    },
+    setOperator: function (operator) {
+        this.operator = operator;
+    },
+    getObject: function () {
+        return {"code": this.code, "operator": this.operator}
+    }
+
+}
+
+pointSelected = new Point();
 function Bliskapaczka()
 {
 }
@@ -15,6 +34,8 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, rateCode, 
         {
             googleMapApiKey: googleMapApiKey,
             callback: function(data) {
+                pointSelected.setCode(data.code);
+                pointSelected.setOperator(data.operator);
                 posCodeForm = document.getElementById('s_method_' + rateCode + '_posCode');
                 posOperatorForm = document.getElementById('s_method_' + rateCode + '_posOperator');
 
@@ -26,7 +47,8 @@ Bliskapaczka.showMap = function(operators, googleMapApiKey, testMode, rateCode, 
             operators: operators,
             posType: 'DELIVERY',
             testMode: testMode,
-            codOnly: codOnly
+            codOnly: codOnly,
+            selectedPos: pointSelected.getObject()
         }
     );
 }

@@ -40,6 +40,7 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
     /**
      * Get Bliskapaczka API Client
      *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
      * @return \Bliskapaczka\ApiClient\Bliskapaczka
      */
     public function getApiClientPos($senditHelper)

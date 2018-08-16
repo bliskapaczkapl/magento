@@ -1,12 +1,7 @@
 <?php
 
 use Bliskapaczka\ApiClient;
-use Neodynamic\SDK\Web\WebClientPrint;
-use Neodynamic\SDK\Web\DefaultPrinter;
-use Neodynamic\SDK\Web\InstalledPrinter;
-use Neodynamic\SDK\Web\PrintFile;
-use Neodynamic\SDK\Web\PrintFilePDF;
-use Neodynamic\SDK\Web\ClientPrintJob;
+
 /**
  * Bliskapaczka helper
  *
@@ -355,41 +350,16 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     /**
      * Get Bliskapaczka API Client
      *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientPos()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pos(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
      * @param string $method
+     * @param bool $advice
      * @return mixed
      */
-    public function getApiClientForOrder($method) {
-        $autoAdvice = Mage::getStoreConfig(self::API_AUTO_ADVICE_XML_PATH);
+    public function getApiClientForOrder($method, $advice = false) {
+        if (!$advice) {
+            $advice = Mage::getStoreConfig(self::API_AUTO_ADVICE_XML_PATH);
+        }
 
-        $methodName = $this->getApiClientForOrderMethodName($method, $autoAdvice);
-
-        return $this->{$methodName}();
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @param string $method
-     * @return mixed
-     */
-    public function getApiClientForAdvice($method)
-    {
-        $methodName = $this->getApiClientForOrderMethodName($method, '1');
+        $methodName = $this->getApiClientForOrderMethodName($method, $advice);
 
         return $this->{$methodName}();
     }
@@ -456,33 +426,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         return $mode;
-    }
-
-    /**
-     * For choosen orders create string with order numbers to get data from API
-     * @return string
-     */
-    public function prepareDataForMassActionReport()
-    {
-        $entityIds = $this->_getRequest()->getParam('entity_id');
-
-        $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
-
-        if ($entityIds) {
-            $bliskaOrderCollection->addFieldToSelect('*');
-            $bliskaOrderCollection->addFieldToFilter('entity_id', array('in' => $entityIds));
-        }
-
-        $numbers = '';
-        foreach ($bliskaOrderCollection as $bliskaOrder) {
-            if ($numbers && $bliskaOrder->getNumber()) {
-                $numbers .= ',' . $bliskaOrder->getNumber();
-            } else {
-                $numbers = $bliskaOrder->getNumber();
-            }
-        }
-
-        return $numbers;
     }
 
     /**

@@ -23,7 +23,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
         /** @var Mage_Admin_Model_Session $session */
         $session = Mage::getSingleton('admin/session');
 
-        return $session->isAllowed('sendit_bliskapaczka/order');
+        return $session->isAllowed('sales/sendit_bliskapaczka/order');
     }
 
     /**

@@ -27,7 +27,7 @@ class BliskapaczkaXmlTest extends TestCase
         $jsHttps = false;
         $jsV2 = false;
 
-        $blocks = $this->layout->default->reference->block;
+        $blocks = $this->layout->checkout_bliskapaczka->reference->block;
 
         foreach ($blocks as $block) {
             if ($block->attributes()->name == 'styles_for_widget.bliskapaczka.pl') {

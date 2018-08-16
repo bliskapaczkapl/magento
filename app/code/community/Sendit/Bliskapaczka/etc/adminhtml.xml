@@ -27,14 +27,28 @@
             </all>
             <admin>
                 <children>
-                    <sales>
+                    <sales translate="title" module="sales">
+                        <title>Sales</title>
                         <children>
-                            <sendit_bliskapaczka_order translate="title" module="sendit_bliskapaczka">
-                                <title>Orders</title>
-                            </sendit_bliskapaczka_order>
-                            <sendit_bliskapaczka_report translate="title" module="sendit_bliskapaczka">
-                                <title>Reports</title>
-                            </sendit_bliskapaczka_report>
+                            <sendit_bliskapaczka translate="title" module="sales">
+                                <title>Bliskapaczka</title>
+                                <children>
+                                    <order translate="title" module="sendit_bliskapaczka">
+                                        <title>Orders</title>
+                                        <children>
+                                            <create translate="title"><title>Create</title></create>
+                                            <view translate="title"><title>View</title></view>
+                                        </children>
+                                    </order>
+                                    <report translate="title" module="sendit_bliskapaczka">
+                                        <title>Reports</title>
+                                        <children>
+                                            <create translate="title"><title>Create</title></create>
+                                            <view translate="title"><title>View</title></view>
+                                        </children>
+                                    </report>
+                                </children>
+                            </sendit_bliskapaczka>
                         </children>
                     </sales>
                 </children>

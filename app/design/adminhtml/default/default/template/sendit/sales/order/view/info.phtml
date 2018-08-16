@@ -44,7 +44,7 @@ $_order = $this->getBliskaOrder();
             </tr>
             <tr>
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Advice date') ?></label></td>
-                <td class="value"><strong><?php echo ($_order->getDeviceDate() ?: '-') ?></strong></td>
+                <td class="value"><strong><?php echo ($_order->getAdviceDate() ?: '-') ?></strong></td>
             </tr>
             <tr>
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Tracking number') ?></label></td>

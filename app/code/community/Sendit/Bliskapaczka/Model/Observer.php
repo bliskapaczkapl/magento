@@ -186,21 +186,26 @@ class Sendit_Bliskapaczka_Model_Observer
             $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));
             $bliskaOrder->setTrackingNumber($coreHelper->stripTags($decodedResponse->trackingNumber));
 
-            $bliskaOrder->setPosCode($decodedResponse->destinationCode);
             $bliskaOrder->setPosOperator($decodedResponse->operatorName);
 
-            // Get information about point
-            $apiClient = $senditHelper->getApiClientPos();
-            $apiClient->setPointCode($decodedResponse->destinationCode);
-            $apiClient->setOperator($decodedResponse->operatorName);
-            $posInfo = json_decode($apiClient->get());
+            // Get information about point, not for courier
+            $method = $order->getShippingMethod(true)->getMethod();
 
-            $destination = $posInfo->operator . '</br>' .
-                (($posInfo->description) ? $posInfo->description . '</br>': '') .
-                $posInfo->street . '</br>' .
-                (($posInfo->postalCode) ? $posInfo->postalCode . ' ': '') . $posInfo->city;
+            if ($senditHelper->isPoint($method)) {
+                $bliskaOrder->setPosCode($decodedResponse->destinationCode);
 
-            $bliskaOrder->setPosCodeDescription($destination);
+                $apiClient = $senditHelper->getApiClientPos();
+                $apiClient->setPointCode($decodedResponse->destinationCode);
+                $apiClient->setOperator($decodedResponse->operatorName);
+                $posInfo = json_decode($apiClient->get());
+
+                $destination = $posInfo->operator . '</br>' .
+                    (($posInfo->description) ? $posInfo->description . '</br>': '') .
+                    $posInfo->street . '</br>' .
+                    (($posInfo->postalCode) ? $posInfo->postalCode . ' ': '') . $posInfo->city;
+
+                $bliskaOrder->setPosCodeDescription($destination);
+            }
 
             $bliskaOrder->save();
         } else {

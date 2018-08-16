@@ -201,12 +201,12 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
                 }
            }
            $newRule->setConditionsSerialized(serialize($conditions));
-            if ($newRule->getConditions()->validate($firstItem) === true) {
+            if ($newRule->getConditions()->validate($firstItem) === true || $request->getPackageQty() == $this->getFreeBoxes()) {
                 return  '0.00';
             }
         }
 
-        return  $operator->price->gross;
+        return $operator->price->gross;
     }
 
 }

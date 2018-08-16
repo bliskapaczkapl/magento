@@ -152,7 +152,7 @@ abstract class AbstractBliskapaczka
         
         // set options
         $options[CURLOPT_URL] = $this->apiUrl . '/v1/' . $url;
-        $options[CURLOPT_TIMEOUT] = 2;
+        $options[CURLOPT_TIMEOUT] = 12;
         $options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
         $options[CURLOPT_HTTPHEADER] = $headers;
         

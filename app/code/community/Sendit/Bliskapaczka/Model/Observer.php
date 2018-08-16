@@ -194,7 +194,9 @@ class Sendit_Bliskapaczka_Model_Observer
             if ($senditHelper->isPoint($method)) {
                 $bliskaOrder->setPosCode($decodedResponse->destinationCode);
 
-                $apiClient = $senditHelper->getApiClientPos();
+                /* @var $senditHelper Sendit_Bliskapaczka_Helper_Api */
+                $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
+                $apiClient = $senditApiHelper->getApiClientPos($senditHelper);
                 $apiClient->setPointCode($decodedResponse->destinationCode);
                 $apiClient->setOperator($decodedResponse->operatorName);
                 $posInfo = json_decode($apiClient->get());

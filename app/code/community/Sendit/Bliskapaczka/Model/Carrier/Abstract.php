@@ -37,7 +37,15 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
      */
     public function getAllowedMethods()
     {
-        return array($this->_code => $this->getConfigData('name'));
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+        $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+
+        $priceList = $this->_getPricing();
+        $allowedShippingMethod = array();
+        foreach ($priceList as $k) {
+            $allowedShippingMethod[$k->operatorName] = $k->operatorFullName;
+        }
+        return $allowedShippingMethod;
     }
 
     /**
@@ -172,17 +180,33 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
     {
         // Get Quote
         $quote = false;
+        $firstItem = false;
         foreach ($request->getAllItems() as $item){
             $quote = $item->getQuote();
+            $firstItem = $item;
             break;
         }
 
-        if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
-            $shippingPrice = '0.00';
-        } else {
-            $shippingPrice = $operator->price->gross;
+        $rules =  Mage::getModel('salesrule/rule')
+            ->getCollection()
+            ->addFieldToFilter('simple_free_shipping', array('eq' => Mage_SalesRule_Model_Rule::FREE_SHIPPING_ADDRESS))
+            ->addFieldToFilter('conditions_serialized', array('like' => '%'. $operator->operatorName . '%'));
+
+        foreach ($rules as $index => $rule) {
+           $newRule  = clone  $rule;
+           $conditions = unserialize($newRule->getConditionsSerialized());
+            foreach ($conditions['conditions'] as $index => $condition) {
+                if ($condition['value'] == $this->_code . '_' . $operator->operatorName) {
+                    unset($conditions['conditions'][$index]);
+                }
+           }
+           $newRule->setConditionsSerialized(serialize($conditions));
+            if ($newRule->getConditions()->validate($firstItem) === true) {
+                return  '0.00';
+            }
         }
 
-        return $shippingPrice;
+        return  $operator->price->gross;
     }
+
 }

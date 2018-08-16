@@ -92,9 +92,19 @@ $bliskapaczkaCodCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_
                             <?php endif; ?>
 
                             <?php if ($_rate->getCode() == $bliskapaczkaCode || $_rate->getCode() == $bliskapaczkaCodCode) { ?>
+                                <?php
+                                    $priceList = array_map(function ($val){
+                                        $obj = new StdClass();
+                                        $obj->operatorName = $val->getMethod();
+                                        $price = new StdClass();
+                                        $price->gross = (float)$val->getPrice();
+                                        $obj->price = $price;
+                                        return $obj;
+                                    }, $_rates)
+                                ?>
                                 <a
                                     onclick='Bliskapaczka.showMap(
-                                        <?php echo $senditHelper->getOperatorsForWidget(null, $_rate->getPrice(), ($_rate->getCode() == $bliskapaczkaCodCode) ? true : false) ?>,
+                                        <?php echo $senditHelper->getOperatorsForWidget($priceList, $_rate->getPrice(), ($_rate->getCode() == $bliskapaczkaCodCode) ? true : false) ?>,
                                         "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
                                         <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>,
                                         "<?php echo $_rate->getCode() ?>",

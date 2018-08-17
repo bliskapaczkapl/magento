@@ -37,9 +37,6 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
      */
     public function getAllowedMethods()
     {
-        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
-        $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
-
         $priceList = $this->_getPricing();
         $allowedShippingMethod = array();
         foreach ($priceList as $k) {
@@ -88,7 +85,7 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
      *
      * @return json
      */
-    protected function _getPricing($cod = null) {
+    public function _getPricing($cod = null) {
 
     }
 

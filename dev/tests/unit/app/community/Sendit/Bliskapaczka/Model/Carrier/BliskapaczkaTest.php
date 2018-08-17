@@ -8,7 +8,7 @@ use Bliskapaczka\ApiClient;
 
 class BliskapaczkaTest extends TestCase
 {
-    protected $shippingCode = 'sendit_bliskapaczka';
+    protected $shippingCodes = array('DPD', 'RUCH', 'POCZTA', 'INPOST');
     protected $request;
 
     protected function setUp()
@@ -57,6 +57,48 @@ class BliskapaczkaTest extends TestCase
         $allowedShippingMethods = $bp->getAllowedMethods();
 
         $this->assertTrue(is_array($allowedShippingMethods));
-        $this->assertTrue(array_key_exists($this->shippingCode, $allowedShippingMethods));
+
+        $bp =$this->getMockBuilder(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::class)
+            ->setMethods(array('_getPricing'))
+            ->getMock();
+
+        $obj = new StdClass();
+        $obj->operatorName ='sendit_bliskapaczka';
+        $obj->operatorFullName = 'sendit_bliskapaczka';
+        $bp->expects($this->once())
+            ->method('_getPricing')
+            ->willReturn($this->getPricing());
+
+        $allowedShippingMethods = $bp->getAllowedMethods();
+        foreach ($this->shippingCodes as $shippingCode) {
+            $this->assertTrue(array_key_exists($shippingCode, $allowedShippingMethods));
+        }
+
+    }
+
+    protected function getPricing()
+    {
+        $dpd = new StdClass();
+        $dpd->operatorName = 'DPD';
+        $dpd->operatorFullName = 'DPD';
+
+        $ruch = new StdClass();
+        $ruch->operatorName = 'RUCH';
+        $ruch->operatorFullName = 'Ruch';
+
+        $poczta = new StdClass();
+        $poczta->operatorName = 'POCZTA';
+        $poczta->operatorFullName ='Poczta Polska';
+
+        $inpost = new StdClass();
+        $inpost->operatorName = 'INPOST';
+        $inpost->operatorFullName ='Inpost';
+
+        return array(
+            $dpd,
+            $ruch,
+            $poczta,
+            $inpost
+        );
     }
 }

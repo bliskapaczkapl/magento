@@ -122,7 +122,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      *
      * @param array $priceList
      * @param string $carrierName
-     * @return float
+     * @return float|false
      */
     public function getPriceForCarrier($priceList, $carrierName)
     {
@@ -132,6 +132,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
             }
 
         }
+
+        return false;
     }
 
     /**
@@ -139,7 +141,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      *
      * @param boot $cod
      *
-     * @return string
+     * @return array
      */
     public function getPriceList($cod = null)
     {
@@ -173,14 +175,25 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getOperatorsForWidget($priceList = null, $priceFromCarrier = null, $cod = null)
     {
-        $priceListFromApi = $this->getPriceList($cod);
+        $priceListFromMagento = array();
+        $priceListFromApi = array();
         $operators = array();
+        if (!is_null($priceList)) {
+           $priceListFromMagento = $priceList;
+        }
+        $priceListFromApi = $this->getPriceList($cod);
+        if (empty($priceListFromApi) && empty($priceListFromMagento)) {
+            return array();
+        }
 
-        if (!empty($priceListFromApi)) {
-            foreach ($priceListFromApi as $operator) {
-                $priceFromMagento = $this->getPriceForCarrier($priceList, $operator->operatorName);
+//
+
+        if (!empty($priceListFromMagento)) {
+            foreach ($priceListFromMagento as $operator) {
+                $priceFromApi = $this->getPriceForCarrier($priceListFromApi, $operator->operatorName);
                 $price = $operator->price->gross;
-                $price = $price < $priceFromMagento ? $price : $priceFromMagento;
+                $price = $price > $priceFromApi ? $price : $priceFromApi;
+
                 if ($operator->availabilityStatus != false) {
                     if ($priceFromCarrier <= 0.0001) {
                         $price = 0;

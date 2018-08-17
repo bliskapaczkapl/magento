@@ -182,9 +182,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
            $priceListFromMagento = $priceList;
         }
         $priceListFromApi = $this->getPriceList($cod);
-        if (empty($priceListFromApi) && empty($priceListFromMagento)) {
-            return array();
-        }
 
 //
 

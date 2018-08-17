@@ -82,20 +82,8 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'index'     => 'increment_id',
         ]);
 
-        $this->addColumn('firstname', [
-            'header'    => $this->__('first name'),
-            'type'      => 'text',
-            'align'     => 'right',
-            'index'     => 'firstname',
-        ]);
 
-        $this->addColumn('lastname', [
-            'header'    => $this->__('last name'),
-            'type'      => 'text',
-            'align'     => 'right',
-            'index'     => 'lastname',
-        ]);
-
+        $this->prepareFirstAndLastNameColumns();
         $this->addColumn('number', [
             'header'    => $this->__('number'),
             'type'      => 'text',
@@ -219,5 +207,25 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
     public function getGridUrl()
     {
         return $this->getUrl('*/*/grid', array('_current'=>true));
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function prepareFirstAndLastNameColumns()
+    {
+        $this->addColumn('firstname', [
+            'header'    => $this->__('first name'),
+            'type'      => 'text',
+            'align'     => 'right',
+            'index'     => 'firstname',
+        ]);
+
+        $this->addColumn('lastname', [
+            'header'    => $this->__('last name'),
+            'type'      => 'text',
+            'align'     => 'right',
+            'index'     => 'lastname',
+        ]);
     }
 }

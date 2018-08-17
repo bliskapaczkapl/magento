@@ -53,23 +53,16 @@ class BliskapaczkaTest extends TestCase
 
     public function testGetAllowedMethods()
     {
-        $bp = new Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka();
-        $allowedShippingMethods = $bp->getAllowedMethods();
-
-        $this->assertTrue(is_array($allowedShippingMethods));
-
         $bp =$this->getMockBuilder(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::class)
             ->setMethods(array('_getPricing'))
             ->getMock();
 
-        $obj = new StdClass();
-        $obj->operatorName ='sendit_bliskapaczka';
-        $obj->operatorFullName = 'sendit_bliskapaczka';
         $bp->expects($this->once())
             ->method('_getPricing')
             ->willReturn($this->getPricing());
 
         $allowedShippingMethods = $bp->getAllowedMethods();
+        $this->assertTrue(is_array($allowedShippingMethods));
         foreach ($this->shippingCodes as $shippingCode) {
             $this->assertTrue(array_key_exists($shippingCode, $allowedShippingMethods));
         }

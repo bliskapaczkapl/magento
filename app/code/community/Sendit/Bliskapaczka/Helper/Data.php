@@ -175,21 +175,15 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getOperatorsForWidget($priceList = null, $priceFromCarrier = null, $cod = null)
     {
-        $priceListFromMagento = array();
-        $priceListFromApi = array();
-        $operators = array();
-        if (!is_null($priceList)) {
-           $priceListFromMagento = $priceList;
-        }
+        $priceListFromMagento = $priceList;
         $priceListFromApi = $this->getPriceList($cod);
+        $operators = array();
 
-//
-
-        if (!empty($priceListFromMagento)) {
-            foreach ($priceListFromMagento as $operator) {
-                $priceFromApi = $this->getPriceForCarrier($priceListFromApi, $operator->operatorName);
+        if (!empty($priceListFromApi)) {
+            foreach ($priceListFromApi as $operator) {
+                $priceFromMagento = $this->getPriceForCarrier($priceListFromMagento, $operator->operatorName);
                 $price = $operator->price->gross;
-                $price = $price > $priceFromApi ? $price : $priceFromApi;
+                $price = $priceFromMagento < $price ? $priceFromMagento : $price;
 
                 if ($operator->availabilityStatus != false) {
                     if ($priceFromCarrier <= 0.0001) {
@@ -203,7 +197,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 }
             }
         }
-
         return json_encode($operators);
     }
 

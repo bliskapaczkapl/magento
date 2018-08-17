@@ -238,14 +238,56 @@ class DataTest extends TestCase
                 }
             }]';
 
-        $helper = new Sendit_Bliskapaczka_Helper_Data();
 
+
+        $helper = $this->getPriceListMock();
         $this->assertEquals(
             '[{"operator":"INPOST","price":10.27},{"operator":"RUCH","price":5.99}]',
             $helper->getOperatorsForWidget(json_decode($priceList), 0.1)
         );
     }
 
+    protected function getPriceListMock()
+    {
+        $helper =$this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
+            ->setMethods(array('getPriceList'))
+            ->getMock();
+
+        $helper->expects($this->once())
+            ->method('getPriceList')
+            ->willReturn($this->getPricing());
+
+        return $helper;
+    }
+    protected function getPricing()
+    {
+        $price = new StdClass();
+        $price->gross = 20;
+
+        $inpost = new StdClass();
+        $inpost->operatorName = 'INPOST';
+        $inpost->operatorFullName ='Inpost';
+        $inpost->availabilityStatus = true;
+        $inpost->price = $price;
+
+        $ruch = new StdClass();
+        $ruch->operatorName = 'RUCH';
+        $ruch->operatorFullName = 'Ruch';
+        $ruch->availabilityStatus = true;
+        $ruch->price = $price;
+
+        $poczta = new StdClass();
+        $poczta->operatorName = 'POCZTA';
+        $poczta->operatorFullName ='Poczta Polska';
+        $poczta->availabilityStatus = false;
+        $poczta->price = $price;
+
+        return array(
+            $inpost,
+            $ruch,
+            $poczta
+        );
+    }
     public function testGetOperatorsForWidgetWithFreeShipping()
     {
         $priceList = '[
@@ -275,7 +317,7 @@ class DataTest extends TestCase
                 }
             }]';
 
-        $helper = new Sendit_Bliskapaczka_Helper_Data();
+        $helper = $this->getPriceListMock();
 
         $this->assertEquals(
             '[{"operator":"INPOST","price":0},{"operator":"RUCH","price":0}]',

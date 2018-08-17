@@ -96,6 +96,7 @@ $bliskapaczkaCodCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_
                                     $priceList = array_map(function ($val){
                                         $obj = new StdClass();
                                         $obj->operatorName = $val->getMethod();
+                                        $obj->availabilityStatus = $val->getAvailabilityStatus();
                                         $price = new StdClass();
                                         $price->gross = (float)$val->getPrice();
                                         $obj->price = $price;

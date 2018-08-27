@@ -259,6 +259,7 @@ class DataTest extends TestCase
 
         return $helper;
     }
+
     protected function getPricing()
     {
         $price = new StdClass();
@@ -288,6 +289,7 @@ class DataTest extends TestCase
             $poczta
         );
     }
+
     public function testGetOperatorsForWidgetWithFreeShipping()
     {
         $priceList = '[

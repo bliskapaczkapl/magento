@@ -178,28 +178,28 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
         // Get Quote
         $quote = false;
         $firstItem = false;
-        foreach ($request->getAllItems() as $item){
+        foreach ($request->getAllItems() as $item) {
             $quote = $item->getQuote();
             $firstItem = $item;
             break;
         }
 
-        $rules =  Mage::getModel('salesrule/rule')
+        $rules = Mage::getModel('salesrule/rule')
             ->getCollection()
             ->addFieldToFilter('simple_free_shipping', array('eq' => Mage_SalesRule_Model_Rule::FREE_SHIPPING_ADDRESS))
-            ->addFieldToFilter('conditions_serialized', array('like' => '%'. $operator->operatorName . '%'));
+            ->addFieldToFilter('conditions_serialized', array('like' => '%' . $operator->operatorName . '%'));
 
         foreach ($rules as $index => $rule) {
-           $newRule  = clone  $rule;
-           $conditions = unserialize($newRule->getConditionsSerialized());
+            $newRule = clone  $rule;
+            $conditions = unserialize($newRule->getConditionsSerialized());
             foreach ($conditions['conditions'] as $index => $condition) {
                 if ($condition['value'] == $this->_code . '_' . $operator->operatorName) {
                     unset($conditions['conditions'][$index]);
                 }
-           }
-           $newRule->setConditionsSerialized(serialize($conditions));
+            }
+            $newRule->setConditionsSerialized(serialize($conditions));
             if ($newRule->getConditions()->validate($firstItem) === true || $request->getPackageQty() == $this->getFreeBoxes()) {
-                return  '0.00';
+                return '0.00';
             }
         }
 

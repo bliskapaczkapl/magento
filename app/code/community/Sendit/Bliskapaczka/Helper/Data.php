@@ -175,13 +175,12 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getOperatorsForWidget($priceList = null, $priceFromCarrier = null, $cod = null)
     {
-        $priceListFromMagento = $priceList;
         $priceListFromApi = $this->getPriceList($cod);
         $operators = array();
 
         if (!empty($priceListFromApi)) {
             foreach ($priceListFromApi as $operator) {
-                $priceFromMagento = $this->getPriceForCarrier($priceListFromMagento, $operator->operatorName);
+                $priceFromMagento = $this->getPriceForCarrier($priceList, $operator->operatorName);
                 $price = $operator->price->gross;
                 $price = $priceFromMagento < $price ? $priceFromMagento : $price;
 

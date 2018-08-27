@@ -182,6 +182,9 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
             foreach ($priceListFromApi as $operator) {
                 $priceFromMagento = $this->getPriceForCarrier($priceList, $operator->operatorName);
                 $price = $operator->price->gross;
+                if ($priceFromMagento === false) {
+                    $priceFromMagento = $price;
+                }
                 $price = $priceFromMagento < $price ? $priceFromMagento : $price;
 
                 if ($operator->availabilityStatus != false) {

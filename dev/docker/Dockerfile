@@ -71,7 +71,7 @@ RUN curl -L https://github.com/SnowdogApps/Magento-Translation-pl_PL/archive/mas
 
 # Install cron file
 COPY dev/docker/magento/crontab /tmp/crontab
-RUN crontab /tmp/crontab
+RUN crontab -u www-data /tmp/crontab
 
 # Fix privileges
 RUN find ${magento_path} -type d -exec chmod 770 {} \; && find ${magento_path} -type f -exec chmod 660 {} \; \

@@ -486,16 +486,12 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
             $bliskaOrderCollection->addFieldToFilter('entity_id', array('in' => $entityIds));
         }
 
-        $numbers = '';
+        $numbers = [];
         foreach ($bliskaOrderCollection as $bliskaOrder) {
-            if ($numbers && $bliskaOrder->getNumber()) {
-                $numbers .= ',' . $bliskaOrder->getNumber();
-            } else {
-                $numbers = $bliskaOrder->getNumber();
-            }
+            $numbers[] = $bliskaOrder->getNumber();
         }
 
-        return $numbers;
+        return implode(',', $numbers);
     }
 
     /**

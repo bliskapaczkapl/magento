@@ -418,14 +418,12 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiClientForOrderMethodName($method, $autoAdvice)
     {
+        $type = 'Todoor';
         switch ($method) {
             case 'bliskapaczka_sendit_bliskapaczka':
             case 'bliskapaczka_sendit_bliskapaczka_COD':
                 $type = 'Order';
                 break;
-
-            default:
-                $type = 'Todoor';
         }
 
         $methodName = 'getApiClient' . $type;
@@ -462,15 +460,11 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiMode($configValue = null)
     {
-        $mode = '';
+        $mode = 'prod';
 
         switch ($configValue) {
             case '1':
                 $mode = 'test';
-                break;
-
-            default:
-                $mode = 'prod';
                 break;
         }
 

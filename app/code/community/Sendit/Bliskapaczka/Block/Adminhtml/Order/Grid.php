@@ -49,6 +49,13 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             array('increment_id' => 'increment_id')
         );
 
+        $collection->getSelect()->joinLeft(
+            'sales_flat_order_address',
+            'sales_flat_order.entity_id = sales_flat_order_address.parent_id AND
+             sales_flat_order_address.address_type ="shipping"',
+            array('firstname' => 'firstname', 'lastname' => 'lastname')
+        );
+
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -75,6 +82,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'index'     => 'increment_id',
         ]);
 
+        $this->_prepareFirstAndLastNameColumns();
         $this->addColumn('number', [
             'header'    => $this->__('number'),
             'type'      => 'text',
@@ -198,5 +206,25 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
     public function getGridUrl()
     {
         return $this->getUrl('*/*/grid', array('_current'=>true));
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function _prepareFirstAndLastNameColumns()
+    {
+        $this->addColumn('firstname', [
+            'header'    => $this->__('First Name'),
+            'type'      => 'text',
+            'align'     => 'right',
+            'index'     => 'firstname'
+        ]);
+
+        $this->addColumn('lastname', [
+            'header'    => $this->__('Last Name'),
+            'type'      => 'text',
+            'align'     => 'right',
+            'index'     => 'lastname'
+        ]);
     }
 }

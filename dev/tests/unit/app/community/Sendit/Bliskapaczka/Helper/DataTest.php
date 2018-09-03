@@ -336,7 +336,41 @@ class DataTest extends TestCase
             ['bliskapaczka_sendit_bliskapaczka_COD', '0', 'getApiClientOrder'],
             ['bliskapaczka_sendit_bliskapaczka_COD', '1', 'getApiClientOrderAdvice'],
             ['bliskapaczka_courier_sendit_bliskapaczka_courier', '0', 'getApiClientTodoor'],
-            ['bliskapaczka_courier_sendit_bliskapaczka_courier', '1', 'getApiClientTodoorAdvice'],
+            ['bliskapaczka_courier_sendit_bliskapaczka_courier', '1', 'getApiClientTodoorAdvice']
+        ];
+    }
+
+    /**
+     * @dataProvider courierShippingMethods
+     */
+    public function testIsCourier($method)
+    {
+        $hepler = new Sendit_Bliskapaczka_Helper_Data();
+        $this->assertTrue($hepler->isCourier($method));
+    }
+
+    public function courierShippingMethods()
+    {
+        return [
+            ['bliskapaczka_courier_sendit_bliskapaczka_courier'],
+            ['bliskapaczka_courier_DPD']
+        ];
+    }
+
+    /**
+     * @dataProvider pointShippingMethods
+     */
+    public function testIsPoint($method)
+    {
+        $hepler = new Sendit_Bliskapaczka_Helper_Data();
+        $this->assertTrue($hepler->isPoint($method));
+    }
+
+    public function pointShippingMethods()
+    {
+        return [
+            ['bliskapaczka_sendit_bliskapaczka'],
+            ['bliskapaczka_sendit_bliskapaczka_COD']
         ];
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-use Bliskapaczka\ApiClient;
 use Neodynamic\SDK\Web\WebClientPrint;
 use Neodynamic\SDK\Web\DefaultPrinter;
 use Neodynamic\SDK\Web\InstalledPrinter;

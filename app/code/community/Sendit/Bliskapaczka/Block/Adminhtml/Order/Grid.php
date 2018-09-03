@@ -49,13 +49,6 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             array('increment_id' => 'increment_id')
         );
 
-        $collection->getSelect()->joinLeft(
-            'sales_flat_order_address',
-            'sales_flat_order.entity_id = sales_flat_order_address.parent_id AND
-             sales_flat_order_address.address_type ="shipping"',
-            array('firstname' => 'firstname', 'lastname' => 'lastname')
-        );
-
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -80,20 +73,6 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'type'      => 'number',
             'align'     => 'right',
             'index'     => 'increment_id',
-        ]);
-
-        $this->addColumn('firstname', [
-            'header'    => $this->__('first name'),
-            'type'      => 'text',
-            'align'     => 'right',
-            'index'     => 'firstname',
-        ]);
-
-        $this->addColumn('lastname', [
-            'header'    => $this->__('last name'),
-            'type'      => 'text',
-            'align'     => 'right',
-            'index'     => 'lastname',
         ]);
 
         $this->addColumn('number', [

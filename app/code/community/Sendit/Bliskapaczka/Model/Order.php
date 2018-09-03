@@ -227,7 +227,10 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
             $bliskaOrder->setPosOperator($decodedResponse->operatorName);
 
             // Get information about point
-            $apiClient = $senditHelper->getApiClientPos();
+            /* @var $senditHelper Sendit_Bliskapaczka_Helper_Api */
+            $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
+
+            $apiClient = $senditApiHelper->getApiClientPos($senditHelper);
             $apiClient->setPointCode($decodedResponse->destinationCode);
             $apiClient->setOperator($decodedResponse->operatorName);
             $posInfo = json_decode($apiClient->get());

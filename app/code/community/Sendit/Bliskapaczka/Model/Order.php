@@ -323,7 +323,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         $mapper = $this->getMapper($method);
 
         $data      = $mapper->getData($order, $senditHelper);
-        $apiClient = $senditHelper->getApiClientForAdvice($method);
+        $apiClient = $senditHelper->getApiClientForOrder($method, true);
 
         $apiClient->setOrderId($this->getNumber());
 

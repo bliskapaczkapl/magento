@@ -108,7 +108,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
      */
     public function reportAction()
     {
-        $numbers = Mage::helper('sendit_bliskapaczka')->prepareDataForMassActionReport();
+        $numbers = Mage::helper('sendit_bliskapaczka/api')->prepareDataForMassActionReport();
 
         $senditHelper = Mage::helper('sendit_bliskapaczka');
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */

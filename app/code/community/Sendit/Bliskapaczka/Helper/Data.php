@@ -1,12 +1,7 @@
 <?php
 
 use Bliskapaczka\ApiClient;
-use Neodynamic\SDK\Web\WebClientPrint;
-use Neodynamic\SDK\Web\DefaultPrinter;
-use Neodynamic\SDK\Web\InstalledPrinter;
-use Neodynamic\SDK\Web\PrintFile;
-use Neodynamic\SDK\Web\PrintFilePDF;
-use Neodynamic\SDK\Web\ClientPrintJob;
+
 /**
  * Bliskapaczka helper
  *
@@ -31,16 +26,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const SENDER_FLAT_NUMBER = 'carriers/sendit_bliskapaczka/sender_flat_number';
     const SENDER_POST_CODE = 'carriers/sendit_bliskapaczka/sender_post_code';
     const SENDER_CITY = 'carriers/sendit_bliskapaczka/sender_city';
-
-    const TODOOR_SENDER_EMAIL = 'carriers/sendit_bliskapaczka_courier/sender_email';
-    const TODOOR_SENDER_FIRST_NAME = 'carriers/sendit_bliskapaczka_courier/sender_first_name';
-    const TODOOR_SENDER_LAST_NAME = 'carriers/sendit_bliskapaczka_courier/sender_last_name';
-    const TODOOR_SENDER_PHONE_NUMBER = 'carriers/sendit_bliskapaczka_courier/sender_phone_number';
-    const TODOOR_SENDER_STREET = 'carriers/sendit_bliskapaczka_courier/sender_street';
-    const TODOOR_SENDER_BUILDING_NUMBER = 'carriers/sendit_bliskapaczka_courier/sender_building_number';
-    const TODOOR_SENDER_FLAT_NUMBER = 'carriers/sendit_bliskapaczka_courier/sender_flat_number';
-    const TODOOR_SENDER_POST_CODE = 'carriers/sendit_bliskapaczka_courier/sender_post_code';
-    const TODOOR_SENDER_CITY = 'carriers/sendit_bliskapaczka_courier/sender_city';
 
     const API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/bliskapaczkaapikey';
     const API_TEST_MODE_XML_PATH = 'carriers/sendit_bliskapaczka/test_mode';
@@ -365,41 +350,16 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     /**
      * Get Bliskapaczka API Client
      *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientPos()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pos(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
      * @param string $method
+     * @param bool $advice
      * @return mixed
      */
-    public function getApiClientForOrder($method) {
-        $autoAdvice = Mage::getStoreConfig(self::API_AUTO_ADVICE_XML_PATH);
+    public function getApiClientForOrder($method, $advice = false) {
+        if (!$advice) {
+            $advice = Mage::getStoreConfig(self::API_AUTO_ADVICE_XML_PATH);
+        }
 
-        $methodName = $this->getApiClientForOrderMethodName($method, $autoAdvice);
-
-        return $this->{$methodName}();
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @param string $method
-     * @return mixed
-     */
-    public function getApiClientForAdvice($method)
-    {
-        $methodName = $this->getApiClientForAdviceMethodName($method, '1');
+        $methodName = $this->getApiClientForOrderMethodName($method, $advice);
 
         return $this->{$methodName}();
     }
@@ -413,14 +373,10 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiClientForOrderMethodName($method, $autoAdvice)
     {
-        switch ($method) {
-            case 'bliskapaczka_sendit_bliskapaczka':
-            case 'bliskapaczka_sendit_bliskapaczka_COD':
-                $type = 'Order';
-                break;
+        $type = 'Todoor';
 
-            default:
-                $type = 'Todoor';
+        if ($this->isPoint($method)) {
+            $type = 'Order';
         }
 
         $methodName = 'getApiClient' . $type;
@@ -473,30 +429,37 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
-     * For choosen orders create string with order numbers to get data from API
+     * Check if shipping method is courier
+     *
+     * @param string $method
      * @return string
      */
-    public function prepareDataForMassActionReport()
+    public function isCourier($method)
     {
-        $entityIds = $this->_getRequest()->getParam('entity_id');
+        $shortMethodName = $this->_getShortMethodName($method);
 
-        $bliskaOrderCollection = Mage::getModel('sendit_bliskapaczka/order')->getCollection();
-
-        if ($entityIds) {
-            $bliskaOrderCollection->addFieldToSelect('*');
-            $bliskaOrderCollection->addFieldToFilter('entity_id', array('in' => $entityIds));
+        if ($shortMethodName == 'courier') {
+            return true;
         }
 
-        $numbers = '';
-        foreach ($bliskaOrderCollection as $bliskaOrder) {
-            if ($numbers && $bliskaOrder->getNumber()) {
-                $numbers .= ',' . $bliskaOrder->getNumber();
-            } else {
-                $numbers = $bliskaOrder->getNumber();
-            }
+        return false;
+    }
+
+    /**
+     * Check if shipping method is to point
+     *
+     * @param string $method
+     * @return string
+     */
+    public function isPoint($method)
+    {
+        $shortMethodName = $this->_getShortMethodName($method);
+
+        if ($shortMethodName == 'point') {
+            return true;
         }
 
-        return $numbers;
+        return false;
     }
 
     /**
@@ -515,5 +478,26 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     {
         $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
         $bliskaOrder->advice();
+    }
+
+    /**
+     * Short name for shipping method
+     *
+     * @param string $method
+     * @return string
+     */
+    protected function _getShortMethodName($method)
+    {
+        switch ($method) {
+            case 'bliskapaczka_sendit_bliskapaczka':
+            case 'bliskapaczka_sendit_bliskapaczka_COD':
+                $shortMethod = 'point';
+                break;
+
+            default:
+                $shortMethod = 'courier';
+        }
+
+        return $shortMethod;
     }
 }

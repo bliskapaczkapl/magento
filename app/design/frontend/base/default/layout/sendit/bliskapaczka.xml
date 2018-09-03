@@ -23,7 +23,6 @@
                 </action>
             </block>
             <action method="addJs"><script>sendit/bliskapaczka.js</script></action>
-            <action method="addJs"><script>sendit/bliskapaczkaObserveShowMapButton.js</script></action>
             <action method="addCss"><script>css/bliskapaczka.css</script></action>
         </reference>
     </checkout_bliskapaczka>

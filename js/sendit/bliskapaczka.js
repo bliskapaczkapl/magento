@@ -95,3 +95,27 @@ Bliskapaczka.updatePrice = function (posOperator, operators, rateCode) {
     }
 
 }
+
+Bliskapaczka.observe = function () {
+    Event.observe(document, 'click', function (e) {
+        if ($(e.element()).getAttribute(Bliskapaczka.showMapButtonAttributeName) == Bliskapaczka.showMapButtonAttributeValue) {
+            var checkboxElement = Bliskapaczka.getCheckboxElementByShowMapElement(e.element());
+            checkboxElement.click();
+        }
+    });
+}
+
+Bliskapaczka.getCheckboxElementByShowMapElement = function(element) {
+    var deliveryContainer = element.parentNode;
+    deliveryContainer = deliveryContainer.parentNode;
+
+    return deliveryContainer.querySelector('input.radio');
+}
+
+Bliskapaczka.init = function () {
+    this.showMapButtonAttributeName = 'data-title';
+    this.showMapButtonAttributeValue = 'show_map';
+    Bliskapaczka.observe();
+}
+
+Bliskapaczka.init();

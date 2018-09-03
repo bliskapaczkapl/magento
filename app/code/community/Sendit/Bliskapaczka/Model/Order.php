@@ -222,6 +222,23 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
             $bliskaOrder->setNumber($coreHelper->stripTags($decodedResponse->number));
             $bliskaOrder->setStatus($coreHelper->stripTags($decodedResponse->status));
             $bliskaOrder->setDeliveryType($coreHelper->stripTags($decodedResponse->deliveryType));
+
+            $bliskaOrder->setPosCode($decodedResponse->destinationCode);
+            $bliskaOrder->setPosOperator($decodedResponse->operatorName);
+
+            // Get information about point
+            $apiClient = $senditHelper->getApiClientPos();
+            $apiClient->setPointCode($decodedResponse->destinationCode);
+            $apiClient->setOperator($decodedResponse->operatorName);
+            $posInfo = json_decode($apiClient->get());
+
+            $destination = $posInfo->operator . '</br>' .
+                (($posInfo->description) ? $posInfo->description . '</br>': '') .
+                $posInfo->street . '</br>' .
+                (($posInfo->postalCode) ? $posInfo->postalCode . ' ': '') . $posInfo->city;
+
+            $bliskaOrder->setPosCodeDescription($destination);
+
             $bliskaOrder->setCreationDate($coreHelper->stripTags($decodedResponse->creationDate));
             $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));
             $bliskaOrder->setTrackingNumber($coreHelper->stripTags($decodedResponse->trackingNumber));
@@ -323,7 +340,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         $mapper = $this->getMapper($method);
 
         $data      = $mapper->getData($order, $senditHelper);
-        $apiClient = $senditHelper->getApiClientForAdvice($method);
+        $apiClient = $senditHelper->getApiClientForOrder($method, true);
 
         $apiClient->setOrderId($this->getNumber());
 

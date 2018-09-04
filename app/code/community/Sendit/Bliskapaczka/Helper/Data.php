@@ -519,7 +519,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function preparePriceList($rates)
     {
         $priceList = array_map(function ($val){
-            var_dump($val);
             $obj = new StdClass();
             $obj->operatorName = $val->getMethod();
             $obj->availabilityStatus = $val->getAvailabilityStatus();

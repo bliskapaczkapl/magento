@@ -30,6 +30,7 @@
 $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
 $bliskapaczkaCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE;
 $bliskapaczkaCodCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD;
+$priceList = null;
 ?>
 
 <?php $_shippingRateGroups = $this->getShippingRates(); ?>
@@ -39,6 +40,9 @@ $bliskapaczkaCodCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_
     <dl class="sp-methods">
     <?php $shippingCodePrice = array(); ?>
     <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
+        <?php if (strrpos($bliskapaczkaCode, $code) !== false || strrpos($bliskapaczkaCodCode, $code) !== false): ?>
+            <?php $priceList = $senditHelper->preparePriceList($_rates)?>
+        <?php endif; ?>
         <dt><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
         <dd>
             <ul>
@@ -92,17 +96,6 @@ $bliskapaczkaCodCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_
                             <?php endif; ?>
 
                             <?php if ($_rate->getCode() == $bliskapaczkaCode || $_rate->getCode() == $bliskapaczkaCodCode) { ?>
-                                <?php
-                                    $priceList = array_map(function ($val){
-                                        $obj = new StdClass();
-                                        $obj->operatorName = $val->getMethod();
-                                        $obj->availabilityStatus = $val->getAvailabilityStatus();
-                                        $price = new StdClass();
-                                        $price->gross = (float)$val->getPrice();
-                                        $obj->price = $price;
-                                        return $obj;
-                                    }, $_rates)
-                                ?>
                                 <a
                                     onclick='Bliskapaczka.showMap(
                                         <?php echo $senditHelper->getOperatorsForWidget($priceList, $_rate->getPrice(), ($_rate->getCode() == $bliskapaczkaCodCode) ? true : false) ?>,

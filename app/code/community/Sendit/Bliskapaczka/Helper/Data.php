@@ -511,4 +511,24 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
         $bliskaOrder->advice();
     }
+
+    /**
+     * @param array $rates
+     * @return array
+     */
+    public function preparePriceList($rates)
+    {
+        $priceList = array_map(function ($val){
+            var_dump($val);
+            $obj = new StdClass();
+            $obj->operatorName = $val->getMethod();
+            $obj->availabilityStatus = $val->getAvailabilityStatus();
+            $price = new StdClass();
+            $price->gross = (float)$val->getPrice();
+            $obj->price = $price;
+            return $obj;
+        }, $rates);
+
+        return $priceList;
+    }
 }

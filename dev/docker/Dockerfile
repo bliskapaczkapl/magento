@@ -20,8 +20,10 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php5-mcrypt \
     php5-curl \
     php5-gd \
+    php5-xdebug \
     cron \
     nano \
+    mc \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -34,6 +36,17 @@ RUN  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 COPY dev/docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY dev/docker/nginx/magento.conf /etc/nginx/sites-available/magento.conf
 RUN (cd /etc/nginx/sites-enabled && ln -s ../sites-available/magento.conf magento.conf && rm -rf default)
+
+#Xdebug
+RUN echo "xdebug.remote_port=9000" >> /etc/php5/cli/conf.d/20-xdebug.ini
+RUN echo "xdebug.remote_enable=1" >> /etc/php5/cli/conf.d/20-xdebug.ini
+RUN echo "xdebug.remote_connect_back=1" >> /etc/php5/cli/conf.d/20-xdebug.ini
+RUN echo "xdebug.remote_autostart=1" >> /etc/php5/cli/conf.d/20-xdebug.ini
+
+RUN echo "xdebug.remote_port=9000" >> /etc/php5/fpm/conf.d/20-xdebug.ini
+RUN echo "xdebug.remote_enable=1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
+RUN echo "xdebug.remote_connect_back=1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
+RUN echo "xdebug.remote_autostart=1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
 
 # Magento
 RUN curl https://codeload.github.com/OpenMage/magento-mirror/tar.gz/$MAGENTO_VERSION -o /tmp/$MAGENTO_VERSION.tar.gz \

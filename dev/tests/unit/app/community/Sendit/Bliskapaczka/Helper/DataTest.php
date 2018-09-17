@@ -99,6 +99,21 @@ class DataTest extends TestCase
 
     public function testGetLowestPrice()
     {
+        $ratesInpost = new class {
+            public function getCode() { return 'sendit_bliskapaczka_INPOST'; }
+            public function getPrice() { return 10.27; }
+        };
+
+        $ratesRuch = new class {
+            public function getCode() { return 'sendit_bliskapaczka_RUCH'; }
+            public function getPrice() { return 10.27; }
+        };
+
+        $ratesPoczta = new class {
+            public function getCode() { return 'sendit_bliskapaczka_POCZTA'; }
+            public function getPrice() { return 8.99; }
+        };
+
         $priceListEachOther = '[
             {
                 "operatorName":"INPOST",
@@ -118,6 +133,7 @@ class DataTest extends TestCase
                 "price":{"net":7.31,"vat":1.68,"gross":8.99},
                 "unavailabilityReason":null
             }]';
+
         $priceListOneTheSame = '[
             {
                 "operatorName":"INPOST",
@@ -166,14 +182,34 @@ class DataTest extends TestCase
 
         $hepler = new Sendit_Bliskapaczka_Helper_Data();
 
-        $lowestPrice = $hepler->getLowestPrice(json_decode($priceListEachOther));
+        $lowestPrice = $hepler->getLowestPrice(
+            json_decode($priceListEachOther),
+            array($ratesInpost, $ratesRuch, $ratesPoczta)
+        );
         $this->assertEquals(5.99, $lowestPrice);
 
-        $lowestPrice = $hepler->getLowestPrice(json_decode($priceListOneTheSame));
+        $lowestPrice = $hepler->getLowestPrice(
+            json_decode($priceListOneTheSame),
+            array($ratesInpost, $ratesRuch, $ratesPoczta)
+        );
         $this->assertEquals(8.99, $lowestPrice);
 
-        $lowestPrice = $hepler->getLowestPrice(json_decode($priceListOnlyOne));
+        $lowestPrice = $hepler->getLowestPrice(
+            json_decode($priceListOnlyOne),
+            array($ratesInpost, $ratesRuch, $ratesPoczta)
+        );
         $this->assertEquals(10.27, $lowestPrice);
+
+        $ratesPocztaFreeShipping = new class {
+            public function getCode() { return 'sendit_bliskapaczka_POCZTA'; }
+            public function getPrice() { return 0.00; }
+        };
+
+        $lowestPrice = $hepler->getLowestPrice(
+            json_decode($priceListOneTheSame),
+            array($ratesInpost, $ratesRuch, $ratesPocztaFreeShipping)
+        );
+        $this->assertEquals(0.00, $lowestPrice);
     }
 
     public function testGetPriceForCarrier()
@@ -249,7 +285,7 @@ class DataTest extends TestCase
 
     protected function getPriceListMock()
     {
-        $helper =$this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
+        $helper = $this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
             ->setMethods(array('getPriceList'))
             ->getMock();
 

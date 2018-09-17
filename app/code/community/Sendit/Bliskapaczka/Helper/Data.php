@@ -98,19 +98,29 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * Get lowest price from pricing list
      *
      * @param array $priceList
+     * @param array $allRates
      * @return float
      */
-    public function getLowestPrice($priceList)
+    public function getLowestPrice($priceList, $allRates)
     {
         $lowestPrice = null;
+
+        $rates = array();
+        foreach ($allRates as $rate) {
+            $rates[$rate->getCode()] = $rate;
+        }
 
         foreach ($priceList as $carrier) {
             if ($carrier->availabilityStatus == false) {
                 continue;
             }
 
-            if ($lowestPrice == null || $lowestPrice > $carrier->price->gross) {
-                $lowestPrice = $carrier->price->gross;
+            $price = $carrier->price->gross;
+            $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName]->getPrice();
+            $price = $priceFromMagento < $price ? $priceFromMagento : $price;
+
+            if ($lowestPrice == null || $lowestPrice > $price) {
+                $lowestPrice = $price;
             }
         }
 

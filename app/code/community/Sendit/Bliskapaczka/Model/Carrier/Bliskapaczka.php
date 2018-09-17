@@ -108,13 +108,20 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
         if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
             $shippingPrice = '0.00';
         } else {
+            $shippingAddress = $quote->getShippingAddress();
+
+            $rates = array();
+            foreach ($shippingAddress->getShippingRatesCollection() as $rate) {
+                $rates[] = $rate;
+            }
+
             // Get shipping price by Bliskapaczka API
-            if ($quote && $quote->getShippingAddress()->getPosOperator()) {
-                $posOperator = $quote->getShippingAddress()->getPosOperator();
+            if ($quote && $shippingAddress->getPosOperator()) {
+                $posOperator = $shippingAddress->getPosOperator();
                 $shippingPrice = round($senditHelper->getPriceForCarrier($priceList, $posOperator), 2);
             } else {
                 // Get lowest price by Bliskapaczka API because we don't know which carrier will be chosen
-                $shippingPrice = round($senditHelper->getLowestPrice($priceList), 2);
+                $shippingPrice = round($senditHelper->getLowestPrice($priceList, $rates), 2);
             }
         }
 

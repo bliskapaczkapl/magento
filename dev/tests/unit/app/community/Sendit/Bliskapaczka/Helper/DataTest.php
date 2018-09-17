@@ -326,43 +326,6 @@ class DataTest extends TestCase
         );
     }
 
-    public function testGetOperatorsForWidgetWithFreeShipping()
-    {
-        $priceList = '[
-            {
-                "operatorName":"INPOST",
-                "availabilityStatus":true,
-                "price":{"net":8.35,"vat":1.92,"gross":10.27},
-                "unavailabilityReason":null
-            },
-            {
-                "operatorName":"RUCH",
-                "availabilityStatus":true,
-                "price":{"net":4.87,"vat":1.12,"gross":5.99},
-                "unavailabilityReason":null
-            },
-            {
-                "operatorName":"POCZTA",
-                "availabilityStatus":false,
-                "price":null,
-                "unavailabilityReason": {
-                    "errors": {
-                        "messageCode": "ppo.api.error.pricing.algorithm.constraints.dimensionsTooSmall",
-                        "message": "Allowed parcel dimensions too small. Min dimensions: 16x10x1 cm",
-                        "field": null,
-                        "value": null
-                    }
-                }
-            }]';
-
-        $helper = $this->getPriceListMock();
-
-        $this->assertEquals(
-            '[{"operator":"INPOST","price":0},{"operator":"RUCH","price":0}]',
-            $helper->getOperatorsForWidget(json_decode($priceList), 0.00)
-        );
-    }
-
     /**
      * @dataProvider phpneNumbers
      */
@@ -397,27 +360,6 @@ class DataTest extends TestCase
 
         $mode = $hepler->getApiMode();
         $this->assertEquals('prod', $mode);
-    }
-
-    /**
-     * @dataProvider shippingMethodAndAdive
-     */
-    public function testGetApiClientForOrderMethodName($method, $autoAdvice, $result)
-    {
-        $hepler = new Sendit_Bliskapaczka_Helper_Data();
-        $this->assertEquals($result, $hepler->getApiClientForOrderMethodName($method, $autoAdvice));
-    }
-
-    public function shippingMethodAndAdive()
-    {
-        return [
-            ['bliskapaczka_sendit_bliskapaczka', '0', 'getApiClientOrder'],
-            ['bliskapaczka_sendit_bliskapaczka', '1', 'getApiClientOrderAdvice'],
-            ['bliskapaczka_sendit_bliskapaczka_COD', '0', 'getApiClientOrder'],
-            ['bliskapaczka_sendit_bliskapaczka_COD', '1', 'getApiClientOrderAdvice'],
-            ['bliskapaczka_courier_sendit_bliskapaczka_courier', '0', 'getApiClientTodoor'],
-            ['bliskapaczka_courier_sendit_bliskapaczka_courier', '1', 'getApiClientTodoorAdvice']
-        ];
     }
 
     /**

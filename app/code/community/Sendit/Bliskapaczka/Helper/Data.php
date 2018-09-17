@@ -163,12 +163,11 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * Get widget configuration
      *
      * @param array $priceList
-     * @param float $priceFromCarrier
      * @param boot $cod
      *
      * @return array
      */
-    public function getOperatorsForWidget($priceList = null, $priceFromCarrier = null, $cod = null)
+    public function getOperatorsForWidget($priceList = null, $cod = null)
     {
         $priceListFromApi = $this->getPriceList($cod);
         $operators = array();
@@ -183,10 +182,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 $price = $priceFromMagento < $price ? $priceFromMagento : $price;
 
                 if ($operator->availabilityStatus != false) {
-                    if ($priceFromCarrier <= 0.0001) {
-                        $price = 0;
-                    }
-
                     $operators[] = array(
                         "operator" => $operator->operatorName,
                         "price"    => $price
@@ -194,6 +189,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 }
             }
         }
+
         return json_encode($operators);
     }
 
@@ -360,47 +356,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         );
 
         return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @param string $method
-     * @param bool $advice
-     * @return mixed
-     */
-    public function getApiClientForOrder($method, $advice = false) {
-        if (!$advice) {
-            $advice = Mage::getStoreConfig(self::API_AUTO_ADVICE_XML_PATH);
-        }
-
-        $methodName = $this->getApiClientForOrderMethodName($method, $advice);
-
-        return $this->{$methodName}();
-    }
-
-    /**
-     * Get method name to bliskapaczka api client create order action
-     *
-     * @param string $method
-     * @param string $autoAdvice
-     * @return string
-     */
-    public function getApiClientForOrderMethodName($method, $autoAdvice)
-    {
-        $type = 'Todoor';
-
-        if ($this->isPoint($method)) {
-            $type = 'Order';
-        }
-
-        $methodName = 'getApiClient' . $type;
-
-        if ($autoAdvice) {
-            $methodName .= 'Advice';
-        }
-
-        return $methodName;
     }
 
     /**

@@ -52,4 +52,47 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
 
         return $apiClient;
     }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param string $method
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @param bool $advice
+     * @return mixed
+     */
+    public function getApiClientForOrder($method, $senditHelper, $advice = false) {
+        if (!$advice) {
+            $advice = Mage::getStoreConfig(self::API_AUTO_ADVICE_XML_PATH);
+        }
+
+        $methodName = $this->getApiClientForOrderMethodName($method, $advice, $senditHelper);
+
+        return $this->{$methodName}();
+    }
+
+    /**
+     * Get method name to bliskapaczka api client create order action
+     *
+     * @param string $method
+     * @param string $autoAdvice
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return string
+     */
+    public function getApiClientForOrderMethodName($method, $autoAdvice, $senditHelper)
+    {
+        $type = 'Todoor';
+
+        if ($senditHelper->isPoint($method)) {
+            $type = 'Order';
+        }
+
+        $methodName = 'getApiClient' . $type;
+
+        if ($autoAdvice) {
+            $methodName .= 'Advice';
+        }
+
+        return $methodName;
+    }
 }

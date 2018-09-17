@@ -98,7 +98,7 @@ $priceList = null;
                             <?php if ($_rate->getCode() == $bliskapaczkaCode || $_rate->getCode() == $bliskapaczkaCodCode) { ?>
                                 <a
                                     onclick='Bliskapaczka.showMap(
-                                        <?php echo $senditHelper->getOperatorsForWidget($priceList, $_rate->getPrice(), ($_rate->getCode() == $bliskapaczkaCodCode) ? true : false) ?>,
+                                        <?php echo $senditHelper->getOperatorsForWidget($priceList, ($_rate->getCode() == $bliskapaczkaCodCode) ? true : false) ?>,
                                         "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
                                         <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>,
                                         "<?php echo $_rate->getCode() ?>",

@@ -20,44 +20,65 @@ class BliskapaczkaXmlTest extends TestCase
 
     public function testWidgetInHeader()
     {
-        $css = false;
-        $cssHttps = false;
-        $cssV2 = false;
-        $js = false;
-        $jsHttps = false;
-        $jsV2 = false;
+        $widgetCss = false;
+        $widgetCssHttps = false;
+        $widgetCssV2 = false;
+        $widgetJs = false;
+        $widgetJsHttps = false;
+        $widgetJsV2 = false;
+        $moduleJs = false;
+        $moduleCss = false;
+
 
         $blocks = $this->layout->checkout_bliskapaczka->reference->block;
 
         foreach ($blocks as $block) {
             if ($block->attributes()->name == 'styles_for_widget.bliskapaczka.pl') {
-                $css = true;
+                $widgetCss = true;
                 if (strpos((string)$block->action->text, 'https://') !== false) {
-                    $cssHttps = true;
+                    $widgetCssHttps = true;
                 }
 
                 if (strpos((string)$block->action->text, 'v5') !== false) {
-                    $cssV2 = true;
+                    $widgetCssV2 = true;
                 }
             }
 
             if ($block->attributes()->name == 'widget.bliskapaczka.pl') {
-                $js = true;
+                $widgetJs = true;
                 if (strpos((string)$block->action->text, 'https://') !== false) {
-                    $jsHttps = true;
+                    $widgetJsHttps = true;
                 }
 
                 if (strpos((string)$block->action->text, 'v5') !== false) {
-                    $jsV2 = true;
+                    $widgetJsV2 = true;
                 }
             }
         }
 
-        $this->assertTrue($css);
-        $this->assertTrue($cssHttps);
-        $this->assertTrue($cssV2);
-        $this->assertTrue($js);
-        $this->assertTrue($jsHttps);
-        $this->assertTrue($jsV2);
+        $actions = $this->layout->checkout_bliskapaczka->reference->action;
+
+        foreach ($actions as $action) {
+            if ($action->attributes()->method == 'addJs') {
+                if (strpos((string)$action->script, 'sendit/bliskapaczka.js') !== false) {
+                    $moduleJs = true;
+                }
+            }
+
+            if ($action->attributes()->method == 'addCss') {
+                if (strpos((string)$action->script, 'css/bliskapaczka.css') !== false) {
+                    $moduleCss = true;
+                }
+            }
+        }
+
+        $this->assertTrue($widgetCss);
+        $this->assertTrue($widgetCssHttps);
+        $this->assertTrue($widgetCssV2);
+        $this->assertTrue($widgetJs);
+        $this->assertTrue($widgetJsHttps);
+        $this->assertTrue($widgetJsV2);
+        $this->assertTrue($moduleJs);
+        $this->assertTrue($moduleCss);
     }
 }

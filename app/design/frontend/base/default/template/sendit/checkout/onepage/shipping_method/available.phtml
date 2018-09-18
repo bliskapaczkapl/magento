@@ -30,7 +30,6 @@
 $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
 $bliskapaczkaCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE;
 $bliskapaczkaCodCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD;
-$priceList = null;
 ?>
 
 <?php $_shippingRateGroups = $this->getShippingRates(); ?>
@@ -40,9 +39,6 @@ $priceList = null;
     <dl class="sp-methods">
     <?php $shippingCodePrice = array(); ?>
     <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
-        <?php if (strrpos($bliskapaczkaCode, $code) !== false || strrpos($bliskapaczkaCodCode, $code) !== false): ?>
-            <?php $priceList = $senditHelper->preparePriceList($_rates)?>
-        <?php endif; ?>
         <dt><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
         <dd>
             <ul>
@@ -98,7 +94,7 @@ $priceList = null;
                             <?php if ($_rate->getCode() == $bliskapaczkaCode || $_rate->getCode() == $bliskapaczkaCodCode) { ?>
                                 <a
                                     onclick='Bliskapaczka.showMap(
-                                        <?php echo $senditHelper->getOperatorsForWidget($priceList, ($_rate->getCode() == $bliskapaczkaCodCode) ? true : false) ?>,
+                                        <?php echo $senditHelper->getOperatorsForWidget($_rates, null, ($_rate->getCode() == $bliskapaczkaCodCode) ? true : false) ?>,
                                         "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
                                         <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>,
                                         "<?php echo $_rate->getCode() ?>",

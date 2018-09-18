@@ -201,12 +201,14 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
     {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Api */
+        $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
 
         /** @var $coreHelper Mage_Core_Helper_Data */
         $coreHelper = Mage::helper('core');
 
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Order */
-        $apiClient = $senditHelper->getApiClientOrder();
+        $apiClient = $senditApiHelper->getApiClientOrder($senditHelper);
 
         $apiClient->setOrderId($this->getNumber());
 
@@ -227,9 +229,6 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
             $bliskaOrder->setPosOperator($decodedResponse->operatorName);
 
             // Get information about point
-            /* @var $senditHelper Sendit_Bliskapaczka_Helper_Api */
-            $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
-
             $apiClient = $senditApiHelper->getApiClientPos($senditHelper);
             $apiClient->setPointCode($decodedResponse->destinationCode);
             $apiClient->setOperator($decodedResponse->operatorName);

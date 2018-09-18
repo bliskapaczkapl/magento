@@ -72,14 +72,14 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
 
         $priceList = $this->_getPricing();
         if (!empty($priceList)) {
-            $shippingPrice = $this->_shippingPriceForAgregated($senditHelper, $request, $priceList);
+            $shippingPrice = $this->_shippingPriceForAgregated($senditHelper, $request, $priceList, false);
             $this->_addShippingMethod($result, $operator, false, $senditHelper, $shippingPrice);
         }
 
         if (Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH)) {
             $priceList = $this->_getPricing(true);
             if (!empty($priceList)) {
-                $shippingPrice = $this->_shippingPriceForAgregated($senditHelper, $request, $priceList);
+                $shippingPrice = $this->_shippingPriceForAgregated($senditHelper, $request, $priceList, true);
                 $this->_addShippingMethod($result, $operator, true, $senditHelper, $shippingPrice);
             }
         }
@@ -93,10 +93,11 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
      * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
      * @param Mage_Shipping_Model_Rate_Request $request
      * @param json $priceList
+     * @param bool $cod
      *
      * @return float
      */
-    protected function _shippingPriceForAgregated($senditHelper, $request, $priceList)
+    protected function _shippingPriceForAgregated($senditHelper, $request, $priceList, $cod)
     {
         // Get Quote
         $quote = false;
@@ -118,10 +119,10 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
             // Get shipping price by Bliskapaczka API
             if ($quote && $shippingAddress->getPosOperator()) {
                 $posOperator = $shippingAddress->getPosOperator();
-                $shippingPrice = round($senditHelper->getPriceForCarrier($priceList, $posOperator), 2);
+                $shippingPrice = round($senditHelper->getPriceForCarrier($priceList, $rates, $posOperator, $cod), 2);
             } else {
                 // Get lowest price by Bliskapaczka API because we don't know which carrier will be chosen
-                $shippingPrice = round($senditHelper->getLowestPrice($priceList, $rates), 2);
+                $shippingPrice = round($senditHelper->getLowestPrice($priceList, $rates, $cod), 2);
             }
         }
 

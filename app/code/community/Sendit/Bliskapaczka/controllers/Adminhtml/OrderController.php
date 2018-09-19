@@ -110,9 +110,12 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     {
         $numbers = Mage::helper('sendit_bliskapaczka/api')->prepareDataForMassActionReport();
 
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = Mage::helper('sendit_bliskapaczka');
+        /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
+        $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
-        $apiClient = $senditHelper->getApiClientReport();
+        $apiClient = $senditApiHelper->getApiClientReport($senditHelper);
         $apiClient->setNumbers($numbers);
 
         try {
@@ -203,9 +206,12 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     public function confirmAction()
     {
         try {
+            /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
             $senditHelper = Mage::helper('sendit_bliskapaczka');
+            /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
+            $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
             /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
-            $apiClient = $senditHelper->getApiClientConfirm();
+            $apiClient = $senditApiHelper->getApiClientConfirm($senditHelper);
             $apiClient->setOperator('POCZTA');
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());

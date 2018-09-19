@@ -141,9 +141,11 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
     {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+        /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
+        $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
 
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
-        $apiClient = $senditHelper->getApiClientWaybill();
+        $apiClient = $senditApiHelper->getApiClientWaybill($senditHelper);
 
         $apiClient->setOrderId($this->getNumber());
 
@@ -201,7 +203,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
     {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
-        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Api */
+        /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
         $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
 
         /** @var $coreHelper Mage_Core_Helper_Data */

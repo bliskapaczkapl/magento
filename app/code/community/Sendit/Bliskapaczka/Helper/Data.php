@@ -249,36 +249,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      *
      * @return \Bliskapaczka\ApiClient\Bliskapaczka
      */
-    public function getApiClientWaybill()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientConfirm()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Confirm(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
     public function getApiClientPricing()
     {
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing(
@@ -297,21 +267,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function getApiClientPricingTodoor()
     {
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing\Todoor(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientReport()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Report(
             Mage::getStoreConfig(self::API_KEY_XML_PATH),
             $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
         );

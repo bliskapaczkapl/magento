@@ -4,6 +4,26 @@ require $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Helper/Data.p
 
 use PHPUnit\Framework\TestCase;
 
+class MockRateInpost {
+    public function getCode() { return 'sendit_bliskapaczka_INPOST'; }
+    public function getPrice() { return 10.27; }
+}
+
+class MockRateRuch {
+    public function getCode() { return 'sendit_bliskapaczka_RUCH'; }
+    public function getPrice() { return 10.27; }
+}
+
+class MockRatePoczta {
+    public function getCode() { return 'sendit_bliskapaczka_POCZTA'; }
+    public function getPrice() { return 8.99; }
+};
+
+class MockRatePocztaFreeShipping {
+    public function getCode() { return 'sendit_bliskapaczka_POCZTA'; }
+    public function getPrice() { return 0.00; }
+};
+
 class DataTest extends TestCase
 {
     public function testClassExists()
@@ -99,21 +119,6 @@ class DataTest extends TestCase
 
     public function testGetLowestPrice()
     {
-        $ratesInpost = new class {
-            public function getCode() { return 'sendit_bliskapaczka_INPOST'; }
-            public function getPrice() { return 10.27; }
-        };
-
-        $ratesRuch = new class {
-            public function getCode() { return 'sendit_bliskapaczka_RUCH'; }
-            public function getPrice() { return 10.27; }
-        };
-
-        $ratesPoczta = new class {
-            public function getCode() { return 'sendit_bliskapaczka_POCZTA'; }
-            public function getPrice() { return 8.99; }
-        };
-
         $priceListEachOther = '[
             {
                 "operatorName":"INPOST",
@@ -184,51 +189,31 @@ class DataTest extends TestCase
 
         $lowestPrice = $helper->getLowestPrice(
             json_decode($priceListEachOther),
-            array($ratesInpost, $ratesRuch, $ratesPoczta)
+            array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta())
         );
         $this->assertEquals(5.99, $lowestPrice);
 
         $lowestPrice = $helper->getLowestPrice(
             json_decode($priceListOneTheSame),
-            array($ratesInpost, $ratesRuch, $ratesPoczta)
+            array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta())
         );
         $this->assertEquals(8.99, $lowestPrice);
 
         $lowestPrice = $helper->getLowestPrice(
             json_decode($priceListOnlyOne),
-            array($ratesInpost, $ratesRuch, $ratesPoczta)
+            array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta())
         );
         $this->assertEquals(10.27, $lowestPrice);
 
-        $ratesPocztaFreeShipping = new class {
-            public function getCode() { return 'sendit_bliskapaczka_POCZTA'; }
-            public function getPrice() { return 0.00; }
-        };
-
         $lowestPrice = $helper->getLowestPrice(
             json_decode($priceListOneTheSame),
-            array($ratesInpost, $ratesRuch, $ratesPocztaFreeShipping)
+            array(new MockRateInpost(), new MockRateRuch(), new MockRatePocztaFreeShipping())
         );
         $this->assertEquals(0.00, $lowestPrice);
     }
 
     public function testGetPriceForCarrier()
     {
-        $ratesInpost = new class {
-            public function getCode() { return 'sendit_bliskapaczka_INPOST'; }
-            public function getPrice() { return 10.27; }
-        };
-
-        $ratesRuch = new class {
-            public function getCode() { return 'sendit_bliskapaczka_RUCH'; }
-            public function getPrice() { return 10.27; }
-        };
-
-        $ratesPoczta = new class {
-            public function getCode() { return 'sendit_bliskapaczka_POCZTA'; }
-            public function getPrice() { return 8.99; }
-        };
-
         $priceList = '[
             {
                 "operatorName":"INPOST",
@@ -252,28 +237,28 @@ class DataTest extends TestCase
 
         $price = $helper->getPriceForCarrier(
             json_decode($priceList),
-            array($ratesInpost, $ratesRuch, $ratesPoczta),
+            array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta()),
             'INPOST'
         );
         $this->assertEquals(10.27, $price);
 
         $price = $helper->getPriceForCarrier(
             json_decode($priceList),
-            array($ratesInpost, $ratesRuch, $ratesPoczta),
+            array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta()),
             'RUCH'
         );
         $this->assertEquals(5.99, $price);
 
         $price = $helper->getPriceForCarrier(
             json_decode($priceList),
-            array($ratesInpost, $ratesRuch, $ratesPoczta),
+            array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta()),
             'POCZTA'
         );
         $this->assertEquals(8.99, $price);
 
         $price = $helper->getPriceForCarrier(
             json_decode($priceList),
-            array($ratesInpost, $ratesRuch, $ratesPoczta),
+            array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta()),
             'POCZTA'
         );
         $this->assertEquals(8.99, $price);
@@ -281,21 +266,6 @@ class DataTest extends TestCase
 
     public function testGetOperatorsForWidget()
     {
-        $ratesInpost = new class {
-            public function getCode() { return 'sendit_bliskapaczka_INPOST'; }
-            public function getPrice() { return 10.27; }
-        };
-
-        $ratesRuch = new class {
-            public function getCode() { return 'sendit_bliskapaczka_RUCH'; }
-            public function getPrice() { return 5.99; }
-        };
-
-        $ratesPoczta = new class {
-            public function getCode() { return 'sendit_bliskapaczka_POCZTA'; }
-            public function getPrice() { return 8.99; }
-        };
-
         $priceList = '[
             {
                 "operatorName":"INPOST",
@@ -327,7 +297,7 @@ class DataTest extends TestCase
         $this->assertEquals(
             '[{"operator":"INPOST","price":10.27},{"operator":"RUCH","price":5.99}]',
             $helper->getOperatorsForWidget(
-                array($ratesInpost, $ratesRuch, $ratesPoczta),
+                array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta()),
                 json_decode($priceList),
                 false
             )

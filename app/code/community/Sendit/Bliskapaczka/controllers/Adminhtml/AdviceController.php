@@ -39,7 +39,7 @@ class Sendit_Bliskapaczka_Adminhtml_AdviceController extends Sendit_Bliskapaczka
     public function massadviceAction()
     {
         $bliskaOrderIds = $this->getRequest()->getParam('entity_id');
-        if(!is_array($bliskaOrderIds)) {
+        if (!is_array($bliskaOrderIds)) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select order(s).'));
         } else {
             try {

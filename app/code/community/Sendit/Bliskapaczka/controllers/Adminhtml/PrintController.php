@@ -19,7 +19,8 @@ class Sendit_Bliskapaczka_Adminhtml_PrintController extends Sendit_Bliskapaczka_
     /**
      * Waybill print action
      */
-    public function waybillprintAction(){
+    public function waybillprintAction()
+    {
         // @codingStandardsIgnoreStart
         include 'lib/Neodinamic/SDK/Web/WebClientPrint.php';
         // @codingStandardsIgnoreEnd
@@ -45,7 +46,6 @@ class Sendit_Bliskapaczka_Adminhtml_PrintController extends Sendit_Bliskapaczka_
 
         list($order, $bliskaOrder) = $this->_initOrder();
         if ($order) {
-
             $isActionsNotPermitted = $order->getActionFlag(
                 Mage_Sales_Model_Order::ACTION_FLAG_PRODUCTS_PERMISSION_DENIED
             );
@@ -96,7 +96,6 @@ class Sendit_Bliskapaczka_Adminhtml_PrintController extends Sendit_Bliskapaczka_
         $printerName       = $this->getRequest()->getParam('printerName');
 
         if (isset($clientPrint) && isset($useDefaultPrinter) && isset($printerName)) {
-
             if ($bliskaOrder = $this->_initBliskaOrder()) {
                 try {
                     $url = $bliskaOrder->waybill();

@@ -60,7 +60,6 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
 
         list($order, $bliskaOrder) = $this->_initOrder();
         if ($order) {
-
             $isActionsNotPermitted = $order->getActionFlag(
                 Mage_Sales_Model_Order::ACTION_FLAG_PRODUCTS_PERMISSION_DENIED
             );
@@ -148,7 +147,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     public function masscancelAction()
     {
         $bliskaOrderIds = $this->getRequest()->getParam('entity_id');
-        if(!is_array($bliskaOrderIds)) {
+        if (!is_array($bliskaOrderIds)) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select order(s).'));
         } else {
             try {

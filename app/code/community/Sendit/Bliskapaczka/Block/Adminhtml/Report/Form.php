@@ -57,7 +57,6 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Report_Form extends Mage_Adminhtml_Blo
 
         if (!empty($operators)) {
             foreach ($operators as $operator) {
-
                 $fieldset = $form->addFieldset(
                     $operator,
                     [

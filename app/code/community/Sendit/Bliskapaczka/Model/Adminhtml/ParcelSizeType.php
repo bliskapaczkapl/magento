@@ -6,16 +6,15 @@
  */
 class Sendit_Bliskapaczka_Model_Adminhtml_ParcelSizeType
 {
-	/**
-	 * Array with options to select in admin page module configuration
-	 *
-	 * @return array
-	 */
+    /**
+     * Array with options to select in admin page module configuration
+     *
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(
-            array('value' => 1, 'label' => Mage::helper('core')->__('Fixed')),                     
+            array('value' => 1, 'label' => Mage::helper('core')->__('Fixed')),
         );
     }
-
 }

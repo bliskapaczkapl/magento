@@ -3,7 +3,7 @@
 /**
  * Abstract class mappers
  */
-abstract class  Sendit_Bliskapaczka_Model_Mapper_Abstract
+abstract class Sendit_Bliskapaczka_Model_Mapper_Abstract
 {
 
     /**
@@ -15,7 +15,6 @@ abstract class  Sendit_Bliskapaczka_Model_Mapper_Abstract
      */
     public function getData(Mage_Sales_Model_Order $order, Sendit_Bliskapaczka_Helper_Data $helper)
     {
-
     }
 
     /**

@@ -72,7 +72,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     {
         $googleApiKey = self::DEFAULT_GOOGLE_API_KEY;
 
-        if (Mage::getStoreConfig(self::GOOGLE_MAP_API_KEY_XML_PATH)){
+        if (Mage::getStoreConfig(self::GOOGLE_MAP_API_KEY_XML_PATH)) {
             $googleApiKey = Mage::getStoreConfig(self::GOOGLE_MAP_API_KEY_XML_PATH);
         }
 
@@ -98,14 +98,12 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
         foreach ($priceList as $carrier) {
             if ($carrier->availabilityStatus == false
-                || !$rates['sendit_bliskapaczka_' . $carrierName . ($cod ? '_COD' : '')]
+                || !$rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]
             ) {
                 continue;
             }
 
-            $price = $carrier->price->gross;
-            $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]->getPrice();
-            $price = $priceFromMagento < $price ? $priceFromMagento : $price;
+            $price = $this->_getPriceWithCartRules($carrier, $rates, $cod);
 
             if ($lowestPrice == null || $lowestPrice > $price) {
                 $lowestPrice = $price;
@@ -132,19 +130,31 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         foreach ($priceList as $carrier) {
-            if (
-                $carrier->operatorName == $carrierName 
+            if ($carrier->operatorName == $carrierName
                 && $rates['sendit_bliskapaczka_' . $carrierName . ($cod ? '_COD' : '')]
             ) {
-                $price = $carrier->price->gross;
-                $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrierName . ($cod ? '_COD' : '')]->getPrice();
-                $price = $priceFromMagento < $price ? $priceFromMagento : $price;
-
-                return $price;
+                return $this->_getPriceWithCartRules($carrier, $rates, $cod);
             }
         }
 
         return false;
+    }
+
+    /**
+     * Get price with applied cart rules
+     *
+     * @param sdtClass $carrier
+     * @param array $rates
+     * @param boot $cod
+     * @return float
+     */
+    protected function _getPriceWithCartRules($carrier, $rates, $cod)
+    {
+        $price = $carrier->price->gross;
+        $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]->getPrice();
+        $price = $priceFromMagento < $price ? $priceFromMagento : $price;
+
+        return $price;
     }
 
     /**
@@ -196,16 +206,13 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         foreach ($priceList as $carrier) {
-            if (
-                $carrier->availabilityStatus == false
+            if ($carrier->availabilityStatus == false
                 || !$rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]
             ) {
                 continue;
             }
 
-            $price = $carrier->price->gross;
-            $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]->getPrice();
-            $price = $priceFromMagento < $price ? $priceFromMagento : $price;
+            $price = $this->_getPriceWithCartRules($carrier, $rates, $cod);
 
             $operators[] = array(
                 "operator" => $carrier->operatorName,
@@ -296,7 +303,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     /**
      * Get API mode
      *
-     * @param string $configValue 
+     * @param string $configValue
      * @return string
      */
     public function getApiMode($configValue = null)
@@ -387,24 +394,5 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         return $shortMethod;
-    }
-
-    /**
-     * @param array $rates
-     * @return array
-     */
-    public function preparePriceList($rates)
-    {
-        $priceList = array_map(function ($val){
-            $obj = new StdClass();
-            $obj->operatorName = $val->getMethod();
-            $obj->availabilityStatus = $val->getAvailabilityStatus();
-            $price = new StdClass();
-            $price->gross = (float)$val->getPrice();
-            $obj->price = $price;
-            return $obj;
-        }, $rates);
-
-        return $priceList;
     }
 }

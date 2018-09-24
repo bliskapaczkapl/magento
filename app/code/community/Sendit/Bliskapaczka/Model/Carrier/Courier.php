@@ -7,9 +7,8 @@ use Bliskapaczka\ApiClient;
  *
  * @author Mateusz Koszutowski (mkoszutowski@divante.pl)
  */
-class Sendit_Bliskapaczka_Model_Carrier_Courier
-    extends Sendit_Bliskapaczka_Model_Carrier_Abstract
-    implements Mage_Shipping_Model_Carrier_Interface
+class Sendit_Bliskapaczka_Model_Carrier_Courier extends Sendit_Bliskapaczka_Model_Carrier_Abstract
+implements Mage_Shipping_Model_Carrier_Interface
 {
     const SHIPPING_CODE     = 'sendit_bliskapaczka_courier';
 
@@ -20,7 +19,7 @@ class Sendit_Bliskapaczka_Model_Carrier_Courier
      */
     protected $_code = self::SHIPPING_CODE;
 
-	/**
+    /**
      * Get price list for carrier
      *
      * @param boot $cod
@@ -48,5 +47,4 @@ class Sendit_Bliskapaczka_Model_Carrier_Courier
 
         return json_decode($priceList);
     }
-
 }

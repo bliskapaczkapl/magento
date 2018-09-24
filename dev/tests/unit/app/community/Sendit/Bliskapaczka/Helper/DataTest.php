@@ -189,25 +189,25 @@ class DataTest extends TestCase
 
         $lowestPrice = $helper->getLowestPrice(
             json_decode($priceListEachOther),
-            array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta())
+            array(new MockRateInpost(), new MockRatePoczta(), new MockRateRuch())
         );
         $this->assertEquals(5.99, $lowestPrice);
 
         $lowestPrice = $helper->getLowestPrice(
             json_decode($priceListOneTheSame),
-            array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta())
+            array(new MockRateInpost(), new MockRatePoczta(), new MockRateRuch())
         );
         $this->assertEquals(8.99, $lowestPrice);
 
         $lowestPrice = $helper->getLowestPrice(
             json_decode($priceListOnlyOne),
-            array(new MockRateInpost(), new MockRateRuch(), new MockRatePoczta())
+            array(new MockRateInpost(), new MockRatePoczta(), new MockRateRuch())
         );
         $this->assertEquals(10.27, $lowestPrice);
 
         $lowestPrice = $helper->getLowestPrice(
             json_decode($priceListOneTheSame),
-            array(new MockRateInpost(), new MockRateRuch(), new MockRatePocztaFreeShipping())
+            array(new MockRateInpost(), new MockRatePocztaFreeShipping(), new MockRateRuch())
         );
         $this->assertEquals(0.00, $lowestPrice);
     }

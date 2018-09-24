@@ -8,8 +8,8 @@ use Bliskapaczka\ApiClient;
  * @author Mateusz Koszutowski (mkoszutowski@divante.pl)
  */
 abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
-    extends Mage_Shipping_Model_Carrier_Abstract
-    implements Mage_Shipping_Model_Carrier_Interface
+extends Mage_Shipping_Model_Carrier_Abstract
+implements Mage_Shipping_Model_Carrier_Interface
 {
     const SHIPPING_CODE = '';
 
@@ -39,9 +39,12 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
     {
         $priceList = $this->_getPricing();
         $allowedShippingMethod = array();
-        foreach ($priceList as $k) {
-            $allowedShippingMethod[$k->operatorName] = $k->operatorFullName;
+        foreach ($priceList as $operator) {
+            $allowedShippingMethod[$operator->operatorName] = $operator->operatorFullName;
         }
+
+        $allowedShippingMethod['sendit_bliskapaczka'] = 'zupa';
+
         return $allowedShippingMethod;
     }
 
@@ -58,7 +61,6 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
         $freeBoxes = 0;
         if ($request->getAllItems()) {
             foreach ($request->getAllItems() as $item) {
-
                 if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
                     continue;
                 }
@@ -85,8 +87,8 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
      *
      * @return json
      */
-    public function _getPricing($cod = null) {
-
+    public function _getPricing($cod = null)
+    {
     }
 
     /**
@@ -104,7 +106,7 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
 
         $priceList = $this->_getPricing();
-        if(!empty($priceList)) {
+        if (!empty($priceList)) {
             foreach ($priceList as $operator) {
                 if ($operator->availabilityStatus != false) {
                     $shippingPrice = $this->_shippingPrice($operator, $request);
@@ -116,7 +118,7 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
         if (Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH)) {
             $priceListCod = $this->_getPricing(true);
 
-            if(!empty($priceListCod)) {
+            if (!empty($priceListCod)) {
                 foreach ($priceListCod as $operator) {
                     if ($operator->availabilityStatus != false) {
                         $shippingPrice = $this->_shippingPrice($operator, $request);
@@ -149,7 +151,7 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
 
         if ($cod) {
             $methodName .= '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD;
-            $methodTitle .= (($methodTitle) ? ' - ' : '') . $senditHelper->__('Cash on Delivery' );
+            $methodTitle .= (($methodTitle) ? ' - ' : '') . $senditHelper->__('Cash on Delivery');
         }
 
         $method = Mage::getModel('shipping/rate_result_method');
@@ -198,12 +200,13 @@ abstract class Sendit_Bliskapaczka_Model_Carrier_Abstract
                 }
             }
             $newRule->setConditionsSerialized(serialize($conditions));
-            if ($newRule->getConditions()->validate($firstItem) === true || $request->getPackageQty() == $this->getFreeBoxes()) {
-                return '0.00';
+            if ($newRule->getConditions()->validate($firstItem) === true
+                || $request->getPackageQty() == $this->getFreeBoxes()
+            ) {
+                return 0.00;
             }
         }
 
         return $operator->price->gross;
     }
-
 }

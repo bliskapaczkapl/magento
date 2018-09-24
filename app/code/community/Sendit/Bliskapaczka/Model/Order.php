@@ -157,7 +157,6 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
 
         //checking reposponce
         if ($response && $properResponse) {
-
             return $decodedResponse->url;
         } else {
             $message = ($decodedResponse ? current($decodedResponse->errors)->message : '');
@@ -270,8 +269,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         $order = Mage::getModel('sales/order')->load($this->getOrderId());
 
         //if there is no shipment yet
-        if (
-            in_array($status, $this->_sentStatuses)
+        if (in_array($status, $this->_sentStatuses)
             && !$order->getShipmentsCollection()->setPageSize(1, 1)->getLastItem()->getId()
         ) {
             $shipmentApi2 = Mage::getModel('sales/order_shipment_api_v2');
@@ -331,8 +329,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
 
         list($order, $method) = $this->getMethod();
 
-        if (
-            $method != 'bliskapaczka_sendit_bliskapaczka'
+        if ($method != 'bliskapaczka_sendit_bliskapaczka'
             && $method != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
         ) {
             return $this;

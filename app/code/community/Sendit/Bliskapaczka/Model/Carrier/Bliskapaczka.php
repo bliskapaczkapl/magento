@@ -8,8 +8,8 @@ use Bliskapaczka\ApiClient;
  * @author Mateusz Koszutowski (mkoszutowski@divante.pl)
  */
 class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
-    extends Sendit_Bliskapaczka_Model_Carrier_Abstract
-    implements Mage_Shipping_Model_Carrier_Interface
+extends Sendit_Bliskapaczka_Model_Carrier_Abstract
+implements Mage_Shipping_Model_Carrier_Interface
 {
     const SHIPPING_CODE            = 'sendit_bliskapaczka';
     const COD                      = 'COD';
@@ -101,13 +101,13 @@ class Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka
     {
         // Get Quote
         $quote = false;
-        foreach ($request->getAllItems() as $item){
+        foreach ($request->getAllItems() as $item) {
             $quote = $item->getQuote();
             break;
         }
 
         if ($request->getFreeShipping() === true || $request->getPackageQty() == $this->getFreeBoxes()) {
-            $shippingPrice = '0.00';
+            $shippingPrice = 0.00;
         } else {
             $shippingAddress = $quote->getShippingAddress();
 

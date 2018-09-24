@@ -125,7 +125,8 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
      * @param bool $advice
      * @return mixed
      */
-    public function getApiClientForOrder($method, $senditHelper, $advice = false) {
+    public function getApiClientForOrder($method, $senditHelper, $advice = false)
+    {
         if (!$advice) {
             $advice = Mage::getStoreConfig($senditHelper::API_AUTO_ADVICE_XML_PATH);
         }

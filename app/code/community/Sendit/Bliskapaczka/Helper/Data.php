@@ -97,7 +97,9 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         foreach ($priceList as $carrier) {
-            if ($carrier->availabilityStatus == false) {
+            if ($carrier->availabilityStatus == false
+                || !$rates['sendit_bliskapaczka_' . $carrierName . ($cod ? '_COD' : '')]
+            ) {
                 continue;
             }
 

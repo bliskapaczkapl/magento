@@ -81,6 +81,17 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
     }
 
     /**
+     * Check whether is allowed action
+     *
+     * @param string $action
+     * @return bool
+     */
+    protected function _isAllowedAction($action)
+    {
+        return Mage::getSingleton('admin/session')->isAllowed('sales/sendit_bliskapaczka/order/actions/' . $action);
+    }
+
+    /**
      * Retrieve Bliskapaczka order model object
      *
      * @return Sendit_Bliskapaczka_Model_Order

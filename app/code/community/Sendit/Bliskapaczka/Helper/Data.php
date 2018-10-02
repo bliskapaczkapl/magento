@@ -174,15 +174,21 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         try {
-            $priceList = $apiClient->get($data);
+            $priceList = json_decode($apiClient->get($data));
+            $priceListCleared = array();
+            foreach ($priceList as $carrier) {
+                if ($carrier->availabilityStatus == false) {
+                    continue;
+                }
+
+                $priceListCleared[] = $carrier;
+            }
         } catch (Exception $e) {
-            $priceList = '{}';
+            $priceListCleared = array();
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
         }
 
-        $priceList = json_decode($priceList);
-
-        return $priceList;
+        return $priceListCleared;
     }
 
     /**
@@ -192,14 +198,15 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * @param array $priceList
      * @param boot $cod
      *
-     * @return array
+     * @return string
      */
     public function getOperatorsForWidget($allRates, $priceList = null, $cod = null)
     {
         if ($priceList == null) {
             $priceList = $this->getPriceList($cod);
         }
-        
+
+        $operators = array();
         $rates = array();
         foreach ($allRates as $rate) {
             $rates[$rate->getCode()] = $rate;

@@ -41,9 +41,10 @@ implements Mage_Shipping_Model_Carrier_Interface
         $allowedShippingMethod = array();
         foreach ($priceList as $operator) {
             $allowedShippingMethod[$operator->operatorName] = $operator->operatorFullName;
+            $allowedShippingMethod[$operator->operatorName . '_COD'] = $operator->operatorFullName . ' COD';
         }
 
-        $allowedShippingMethod['sendit_bliskapaczka'] = 'zupa';
+        $allowedShippingMethod['sendit_bliskapaczka'] = 'bliskapaczka.pl';
 
         return $allowedShippingMethod;
     }
@@ -109,7 +110,7 @@ implements Mage_Shipping_Model_Carrier_Interface
         if (!empty($priceList)) {
             foreach ($priceList as $operator) {
                 if ($operator->availabilityStatus != false) {
-                    $shippingPrice = $this->_shippingPrice($operator, $request);
+                    $shippingPrice = $this->_shippingPrice($operator, $request, false);
                     $this->_addShippingMethod($result, $operator, false, $senditHelper, $shippingPrice);
                 }
             }
@@ -121,7 +122,7 @@ implements Mage_Shipping_Model_Carrier_Interface
             if (!empty($priceListCod)) {
                 foreach ($priceListCod as $operator) {
                     if ($operator->availabilityStatus != false) {
-                        $shippingPrice = $this->_shippingPrice($operator, $request);
+                        $shippingPrice = $this->_shippingPrice($operator, $request, true);
                         $this->_addShippingMethod($result, $operator, true, $senditHelper, $shippingPrice);
                     }
                 }
@@ -172,10 +173,11 @@ implements Mage_Shipping_Model_Carrier_Interface
      *
      * @param stdClass $operator
      * @param Mage_Shipping_Model_Rate_Request $request
+     * @param bool $cod
      *
      * @return float
      */
-    protected function _shippingPrice($operator, $request)
+    protected function _shippingPrice($operator, $request, $cod = false)
     {
         // Get Quote
         $quote = false;
@@ -189,13 +191,16 @@ implements Mage_Shipping_Model_Carrier_Interface
         $rules = Mage::getModel('salesrule/rule')
             ->getCollection()
             ->addFieldToFilter('simple_free_shipping', array('eq' => Mage_SalesRule_Model_Rule::FREE_SHIPPING_ADDRESS))
-            ->addFieldToFilter('conditions_serialized', array('like' => '%' . $operator->operatorName . '%'));
+            ->addFieldToFilter(
+                'conditions_serialized',
+                array('like' => '%"' . $this->_code . '_' . $operator->operatorName . ($cod ? '_COD' : '') . '"%')
+            );
 
         foreach ($rules as $index => $rule) {
             $newRule = clone  $rule;
             $conditions = unserialize($newRule->getConditionsSerialized());
             foreach ($conditions['conditions'] as $index => $condition) {
-                if ($condition['value'] == $this->_code . '_' . $operator->operatorName) {
+                if ($condition['value'] == $this->_code . '_' . $operator->operatorName . ($cod ? '_COD' : '')) {
                     unset($conditions['conditions'][$index]);
                 }
             }

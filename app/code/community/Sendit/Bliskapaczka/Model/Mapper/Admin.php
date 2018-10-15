@@ -20,7 +20,7 @@ class Sendit_Bliskapaczka_Model_Mapper_Admin
         $data['senderFirstName'] = $postData['fields']['sender_first_name']['value'];
         $data['senderLastName'] = $postData['fields']['sender_last_name']['value'];
         $data['senderPhoneNumber'] = $helper
-        								->telephoneNumberCleaning($postData['fields']['sender_phone_number']['value']);
+                                        ->telephoneNumberCleaning($postData['fields']['sender_phone_number']['value']);
         $data['senderStreet'] = $postData['fields']['sender_street']['value'];
         $data['senderBuildingNumber'] = $postData['fields']['sender_building_number']['value'];
         $data['senderFlatNumber'] = $postData['fields']['sender_flat_number']['value'];

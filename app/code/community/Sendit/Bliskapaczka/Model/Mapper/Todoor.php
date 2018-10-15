@@ -20,7 +20,7 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
         $shippingAddress = $order->getShippingAddress();
 
         $fullStreet = $shippingAddress->getStreet()[0];
-        $street = preg_split("/\s+(?=\S*+$)/" , $fullStreet);
+        $street = preg_split("/\s+(?=\S*+$)/", $fullStreet);
 
         $data['receiverFirstName'] = $shippingAddress->getFirstname();
         $data['receiverLastName'] = $shippingAddress->getLastname();
@@ -32,7 +32,8 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
         $data['receiverPostCode'] = $shippingAddress->getPostcode();
         $data['receiverCity'] = $shippingAddress->getCity();
 
-        $data['operatorName'] = $shippingAddress->getPosOperator();
+        $operatorName = str_replace('_COD', '', $shippingAddress->getPosOperator());
+        $data['operatorName'] = $operatorName;
 
         $data['parcel'] = [
             'dimensions' => $this->_getParcelDimensions($helper)

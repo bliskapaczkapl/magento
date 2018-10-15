@@ -40,6 +40,11 @@ abstract class AbstractBliskapaczka
     const API_TIMEOUT = 2;
 
     /**
+     * Timeout for API
+     */
+    const SANDBOX_API_TIMEOUT = 10;
+
+    /**
      * @var ApiCaller
     */
     private $apiCaller;
@@ -53,6 +58,7 @@ abstract class AbstractBliskapaczka
     public function __construct($bearer, $mode = 'prod')
     {
         $this->bearer = (string)$bearer;
+        $this->mode = (string)$mode;
         $this->setApiUrl((string)$this->getApiUrlForMode($mode));
         $this->logger = new Logger();
     }
@@ -99,6 +105,16 @@ abstract class AbstractBliskapaczka
      *
      * @return string
      */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * Return API url
+     *
+     * @return string
+     */
     public function getApiUrl()
     {
         return $this->apiUrl;
@@ -127,7 +143,13 @@ abstract class AbstractBliskapaczka
      */
     public function getApiTimeout()
     {
-        return static::API_TIMEOUT;
+        $timeout = static::API_TIMEOUT;
+
+        if ($this->mode == 'test') {
+            $timeout = static::SANDBOX_API_TIMEOUT;
+        }
+
+        return $timeout;
     }
 
     /**
@@ -165,7 +187,7 @@ abstract class AbstractBliskapaczka
 
         // set options
         $options[CURLOPT_URL] = $this->apiUrl . '/v1/' . $url;
-        $options[CURLOPT_TIMEOUT] = static::API_TIMEOUT;
+        $options[CURLOPT_TIMEOUT] = $this->getApiTimeout();
         $options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
         $options[CURLOPT_HTTPHEADER] = $headers;
         

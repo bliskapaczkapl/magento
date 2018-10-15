@@ -72,7 +72,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     {
         $googleApiKey = self::DEFAULT_GOOGLE_API_KEY;
 
-        if (Mage::getStoreConfig(self::GOOGLE_MAP_API_KEY_XML_PATH)){
+        if (Mage::getStoreConfig(self::GOOGLE_MAP_API_KEY_XML_PATH)) {
             $googleApiKey = Mage::getStoreConfig(self::GOOGLE_MAP_API_KEY_XML_PATH);
         }
 
@@ -83,19 +83,30 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * Get lowest price from pricing list
      *
      * @param array $priceList
+     * @param array $allRates
+     * @param boot $cod
      * @return float
      */
-    public function getLowestPrice($priceList)
+    public function getLowestPrice($priceList, $allRates, $cod = false)
     {
         $lowestPrice = null;
 
+        $rates = array();
+        foreach ($allRates as $rate) {
+            $rates[$rate->getCode()] = $rate;
+        }
+
         foreach ($priceList as $carrier) {
-            if ($carrier->availabilityStatus == false) {
+            if ($carrier->availabilityStatus == false
+                || !$rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]
+            ) {
                 continue;
             }
 
-            if ($lowestPrice == null || $lowestPrice > $carrier->price->gross) {
-                $lowestPrice = $carrier->price->gross;
+            $price = $this->_getPriceWithCartRules($carrier, $rates, $cod);
+
+            if ($lowestPrice == null || $lowestPrice > $price) {
+                $lowestPrice = $price;
             }
         }
 
@@ -106,17 +117,44 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * Get price for specific carrier
      *
      * @param array $priceList
+     * @param array $allRates
      * @param string $carrierName
+     * @param boot $cod
+     * @return float|false
+     */
+    public function getPriceForCarrier($priceList, $allRates, $carrierName, $cod = false)
+    {
+        $rates = array();
+        foreach ($allRates as $rate) {
+            $rates[$rate->getCode()] = $rate;
+        }
+
+        foreach ($priceList as $carrier) {
+            if ($carrier->operatorName == $carrierName
+                && $rates['sendit_bliskapaczka_' . $carrierName . ($cod ? '_COD' : '')]
+            ) {
+                return $this->_getPriceWithCartRules($carrier, $rates, $cod);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get price with applied cart rules
+     *
+     * @param sdtClass $carrier
+     * @param array $rates
+     * @param boot $cod
      * @return float
      */
-    public function getPriceForCarrier($priceList, $carrierName)
+    protected function _getPriceWithCartRules($carrier, $rates, $cod)
     {
-        foreach ($priceList as $carrier) {
-            if ($carrier->operatorName == $carrierName) {
-                return $carrier->price->gross;
-            }
+        $price = $carrier->price->gross;
+        $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]->getPrice();
+        $price = $priceFromMagento < $price ? $priceFromMagento : $price;
 
-        }
+        return $price;
     }
 
     /**
@@ -124,7 +162,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      *
      * @param boot $cod
      *
-     * @return string
+     * @return array
      */
     public function getPriceList($cod = null)
     {
@@ -136,80 +174,60 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         try {
-            $priceList = $apiClient->get($data);
+            $priceList = json_decode($apiClient->get($data));
+            $priceListCleared = array();
+            foreach ($priceList as $carrier) {
+                if ($carrier->availabilityStatus == false) {
+                    continue;
+                }
+
+                $priceListCleared[] = $carrier;
+            }
         } catch (Exception $e) {
-            $priceList = '{}';
+            $priceListCleared = array();
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
         }
 
-        $priceList = json_decode($priceList);
-
-        return $priceList;
+        return $priceListCleared;
     }
 
     /**
      * Get widget configuration
      *
+     * @param array $allRates
      * @param array $priceList
-     * @param float $priceFromCarrier
      * @param boot $cod
      *
-     * @return array
+     * @return string
      */
-    public function getOperatorsForWidget($priceList = null, $priceFromCarrier = null, $cod = null)
+    public function getOperatorsForWidget($allRates, $priceList = null, $cod = null)
     {
-        if (!$priceList) {
+        if ($priceList == null) {
             $priceList = $this->getPriceList($cod);
         }
+
         $operators = array();
+        $rates = array();
+        foreach ($allRates as $rate) {
+            $rates[$rate->getCode()] = $rate;
+        }
 
-        if (!empty($priceList)) {
-            foreach ($priceList as $operator) {
-                $price = $operator->price->gross;
-                if ($operator->availabilityStatus != false) {
-                    if ($priceFromCarrier <= 0.0001) {
-                        $price = 0;
-                    }
-
-                    $operators[] = array(
-                        "operator" => $operator->operatorName,
-                        "price"    => $price
-                    );
-                }
+        foreach ($priceList as $carrier) {
+            if ($carrier->availabilityStatus == false
+                || !$rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]
+            ) {
+                continue;
             }
+
+            $price = $this->_getPriceWithCartRules($carrier, $rates, $cod);
+
+            $operators[] = array(
+                "operator" => $carrier->operatorName,
+                "price"    => $price
+            );
         }
 
         return json_encode($operators);
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientOrder()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientOrderAdvice()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
     }
 
     /**
@@ -235,36 +253,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function getApiClientGet()
     {
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Get(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientWaybill()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientConfirm()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Confirm(
             Mage::getStoreConfig(self::API_KEY_XML_PATH),
             $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
         );
@@ -303,92 +291,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientTodoor()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientTodoorAdvice()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientReport()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Report(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @param string $method
-     * @param bool $advice
-     * @return mixed
-     */
-    public function getApiClientForOrder($method, $advice = false) {
-        if (!$advice) {
-            $advice = Mage::getStoreConfig(self::API_AUTO_ADVICE_XML_PATH);
-        }
-
-        $methodName = $this->getApiClientForOrderMethodName($method, $advice);
-
-        return $this->{$methodName}();
-    }
-
-    /**
-     * Get method name to bliskapaczka api client create order action
-     *
-     * @param string $method
-     * @param string $autoAdvice
-     * @return string
-     */
-    public function getApiClientForOrderMethodName($method, $autoAdvice)
-    {
-        $type = 'Todoor';
-
-        if ($this->isPoint($method)) {
-            $type = 'Order';
-        }
-
-        $methodName = 'getApiClient' . $type;
-
-        if ($autoAdvice) {
-            $methodName .= 'Advice';
-        }
-
-        return $methodName;
-    }
-
-    /**
      * Remove all non numeric chars from phone number
      *
      * @param string $phoneNumber
@@ -408,7 +310,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     /**
      * Get API mode
      *
-     * @param string $configValue 
+     * @param string $configValue
      * @return string
      */
     public function getApiMode($configValue = null)

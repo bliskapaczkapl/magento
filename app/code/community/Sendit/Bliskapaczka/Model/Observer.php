@@ -87,8 +87,7 @@ class Sendit_Bliskapaczka_Model_Observer
         $shippingAddress = $quote->getShippingAddress();
 
         $operatorName = $data['posOperator'];
-        if (
-            !$operatorName
+        if (!$operatorName
             && strpos(
                 $quote->getShippingAddress()->getShippingMethod(),
                 Sendit_Bliskapaczka_Model_Carrier_Courier::SHIPPING_CODE
@@ -138,8 +137,7 @@ class Sendit_Bliskapaczka_Model_Observer
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = Mage::helper('sendit_bliskapaczka');
 
-        if (
-            $method == 'bliskapaczka_sendit_bliskapaczka'
+        if ($method == 'bliskapaczka_sendit_bliskapaczka'
             || $method == 'bliskapaczka_sendit_bliskapaczka_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
         ) {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
@@ -150,7 +148,9 @@ class Sendit_Bliskapaczka_Model_Observer
         }
 
         $data = $mapper->getData($order, $senditHelper);
-        $apiClient = $senditHelper->getApiClientForOrder($method);
+        /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
+        $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
+        $apiClient = $senditApiHelper->getApiClientForOrder($method, $senditHelper);
 
         try {
             $response = $apiClient->create($data);
@@ -176,7 +176,6 @@ class Sendit_Bliskapaczka_Model_Observer
 
         //checking reposponce
         if ($response && $decodedResponse instanceof stdClass && empty($decodedResponse->errors)) {
-
             $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order');
             $bliskaOrder->setOrderId($order->getId());
             $bliskaOrder->setNumber($coreHelper->stripTags($decodedResponse->number));
@@ -194,7 +193,7 @@ class Sendit_Bliskapaczka_Model_Observer
             if ($senditHelper->isPoint($method)) {
                 $bliskaOrder->setPosCode($decodedResponse->destinationCode);
 
-                /* @var $senditHelper Sendit_Bliskapaczka_Helper_Api */
+                /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
                 $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
                 $apiClient = $senditApiHelper->getApiClientPos($senditHelper);
                 $apiClient->setPointCode($decodedResponse->destinationCode);
@@ -274,9 +273,9 @@ class Sendit_Bliskapaczka_Model_Observer
         $bliskaOrderCollection->addFieldToFilter('status', array('in' => $fastStatuses));
 
         foreach ($bliskaOrderCollection as $bliskaOrder) {
-            try{
+            try {
                 $bliskaOrder->get();
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             }
         }
@@ -299,9 +298,9 @@ class Sendit_Bliskapaczka_Model_Observer
         $bliskaOrderCollection->addFieldToFilter('status', array('in' => $slowStatuses));
 
         foreach ($bliskaOrderCollection as $bliskaOrder) {
-            try{
+            try {
                 $bliskaOrder->get();
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             }
         }

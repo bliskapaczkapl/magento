@@ -36,15 +36,36 @@
                                     <order translate="title" module="sendit_bliskapaczka">
                                         <title>Orders</title>
                                         <children>
-                                            <create translate="title"><title>Create</title></create>
-                                            <view translate="title"><title>View</title></view>
+                                            <actions translate="title">
+                                                <title>Actions</title>
+                                                <children>
+                                                    <create translate="title"><title>Create</title></create>
+                                                    <view translate="title"><title>View</title></view>
+                                                    <waybill translate="title">
+                                                        <title>Waybill</title>
+                                                        <action>admin/sales/order/actions/waybill</action>
+                                                    </waybill>
+                                                    <cancel translate="title"><title>Cancel</title></cancel>
+                                                    <get translate="title"><title>Update</title></get>
+                                                    <advice translate="title"><title>Advice</title></advice>
+                                                </children>
+                                            </actions>
                                         </children>
                                     </order>
                                     <report translate="title" module="sendit_bliskapaczka">
                                         <title>Reports</title>
                                         <children>
-                                            <create translate="title"><title>Create</title></create>
-                                            <view translate="title"><title>View</title></view>
+                                            <actions translate="title">
+                                                <title>Actions</title>
+                                                <children>
+                                                    <create translate="title"><title>Create</title></create>
+                                                    <view translate="title"><title>View</title></view>
+                                                    <waybill translate="title"><title>Waybill</title></waybill>
+                                                    <cancel translate="title"><title>Cancel</title></cancel>
+                                                    <get translate="title"><title>Update</title></get>
+                                                    <advice translate="title"><title>Advice</title></advice>
+                                                </children>
+                                            </actions>
                                         </children>
                                     </report>
                                 </children>

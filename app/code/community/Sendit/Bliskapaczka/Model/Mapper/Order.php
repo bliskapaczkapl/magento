@@ -24,7 +24,9 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
         $data['receiverPhoneNumber'] = $helper->telephoneNumberCleaning($shippingAddress->getTelephone());
         $data['receiverEmail'] = $shippingAddress->getEmail();
 
-        $data['operatorName'] = $shippingAddress->getPosOperator();
+        $operatorName = str_replace('_COD', '', $shippingAddress->getPosOperator());
+        $data['operatorName'] = $operatorName;
+
         $data['destinationCode'] = $shippingAddress->getPosCode();
 
         $data['additionalInformation'] = $order->getIncrementId();

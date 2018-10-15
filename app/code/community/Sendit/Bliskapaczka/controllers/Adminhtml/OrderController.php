@@ -60,7 +60,6 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
 
         list($order, $bliskaOrder) = $this->_initOrder();
         if ($order) {
-
             $isActionsNotPermitted = $order->getActionFlag(
                 Mage_Sales_Model_Order::ACTION_FLAG_PRODUCTS_PERMISSION_DENIED
             );
@@ -110,9 +109,12 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     {
         $numbers = Mage::helper('sendit_bliskapaczka/api')->prepareDataForMassActionReport();
 
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = Mage::helper('sendit_bliskapaczka');
+        /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
+        $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
-        $apiClient = $senditHelper->getApiClientReport();
+        $apiClient = $senditApiHelper->getApiClientReport($senditHelper);
         $apiClient->setNumbers($numbers);
 
         try {
@@ -145,7 +147,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     public function masscancelAction()
     {
         $bliskaOrderIds = $this->getRequest()->getParam('entity_id');
-        if(!is_array($bliskaOrderIds)) {
+        if (!is_array($bliskaOrderIds)) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select order(s).'));
         } else {
             try {
@@ -203,9 +205,12 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
     public function confirmAction()
     {
         try {
+            /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
             $senditHelper = Mage::helper('sendit_bliskapaczka');
+            /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
+            $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
             /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
-            $apiClient = $senditHelper->getApiClientConfirm();
+            $apiClient = $senditApiHelper->getApiClientConfirm($senditHelper);
             $apiClient->setOperator('POCZTA');
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());

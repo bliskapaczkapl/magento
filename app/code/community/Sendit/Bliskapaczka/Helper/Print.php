@@ -6,6 +6,7 @@ use Neodynamic\SDK\Web\InstalledPrinter;
 use Neodynamic\SDK\Web\PrintFile;
 use Neodynamic\SDK\Web\PrintFilePDF;
 use Neodynamic\SDK\Web\ClientPrintJob;
+
 /**
  * Bliskapaczka helper
  *

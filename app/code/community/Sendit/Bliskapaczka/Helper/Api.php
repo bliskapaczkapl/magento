@@ -52,4 +52,160 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
 
         return $apiClient;
     }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientOrder($senditHelper)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientOrderAdvice($senditHelper)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Advice(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientTodoor($senditHelper)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientTodoorAdvice($senditHelper)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Advice(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param string $method
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @param bool $advice
+     * @return mixed
+     */
+    public function getApiClientForOrder($method, $senditHelper, $advice = false)
+    {
+        if (!$advice) {
+            $advice = Mage::getStoreConfig($senditHelper::API_AUTO_ADVICE_XML_PATH);
+        }
+
+        $methodName = $this->getApiClientForOrderMethodName($method, $advice, $senditHelper);
+
+        return $this->{$methodName}($senditHelper);
+    }
+
+    /**
+     * Get method name to bliskapaczka api client create order action
+     *
+     * @param string $method
+     * @param string $autoAdvice
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return string
+     */
+    public function getApiClientForOrderMethodName($method, $autoAdvice, $senditHelper)
+    {
+        $type = 'Todoor';
+
+        if ($senditHelper->isPoint($method)) {
+            $type = 'Order';
+        }
+
+        $methodName = 'getApiClient' . $type;
+
+        if ($autoAdvice) {
+            $methodName .= 'Advice';
+        }
+
+        return $methodName;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientReport($senditHelper)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Report(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientWaybill($senditHelper)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Waybill(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientConfirm($senditHelper)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Confirm(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
 }

@@ -43,5 +43,5 @@ foreach ($attributes as $attributeCode) {
             'frontend_input' => 'varchar',
             'comment' => str_replace('_', ' ', $attributeCode)
         )
-    ); 
+    );
 }

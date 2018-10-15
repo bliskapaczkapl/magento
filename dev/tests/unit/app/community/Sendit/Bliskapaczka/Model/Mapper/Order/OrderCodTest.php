@@ -5,7 +5,7 @@ require_once $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Ma
 
 use PHPUnit\Framework\TestCase;
 
-class OrderTest extends TestCase
+class OrderCodTest extends TestCase
 {
 
     protected function setUp()
@@ -38,7 +38,7 @@ class OrderTest extends TestCase
         $this->addressMock->method('getLastname')->will($this->returnValue($this->receiverLastName));
         $this->addressMock->method('getTelephone')->will($this->returnValue($this->receiverPhoneNumber));
         $this->addressMock->method('getEmail')->will($this->returnValue($this->receiverEmail));
-        $this->addressMock->method('getPosOperator')->will($this->returnValue($this->operatorName));
+        $this->addressMock->method('getPosOperator')->will($this->returnValue($this->operatorName . '_COD'));
         $this->addressMock->method('getPosCode')->will($this->returnValue($this->destinationCode));
 
         $this->incrementId = '000000000001191';
@@ -85,86 +85,11 @@ class OrderTest extends TestCase
             ->will($this->returnValue('504445665'));
     }
 
-    public function testClassExists()
-    {
-        $this->assertTrue(class_exists('Sendit_Bliskapaczka_Model_Mapper_Order'));
-    }
-
-    public function testClassHasMethods()
-    {
-        $this->assertTrue(method_exists('Sendit_Bliskapaczka_Model_Mapper_Order', 'getData'));
-    }
-
-    public function testTypeOfReturnedData()
-    {
-        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
-
-        $this->assertTrue(is_array($data));
-    }
-
-    public function testMapperForReceiverFirstName()
-    {
-        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
-
-        $this->assertEquals($this->receiverFirstName, $data['receiverFirstName']);
-    }
-
-    public function testMapperForReceiverLastName()
-    {
-        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
-
-        $this->assertEquals($this->receiverLastName, $data['receiverLastName']);
-    }
-
-    public function testMapperForReceiverPhoneNumber()
-    {
-        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
-
-        $this->assertEquals('504445665', $data['receiverPhoneNumber']);
-    }
-
-    public function testMapperForReceiverEmail()
-    {
-        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
-
-        $this->assertEquals($this->receiverEmail, $data['receiverEmail']);
-    }
-
     public function testMapperForOperatorName()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
         $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertEquals($this->operatorName, $data['operatorName']);
-    }
-
-    public function testMapperForDestinationCode()
-    {
-        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
-
-        $this->assertEquals($this->destinationCode, $data['destinationCode']);
-    }
-
-    public function testMapperForParcel()
-    {
-        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
-
-        $this->assertTrue(is_array($data['parcel']));
-    }
-
-
-    public function testMapperForAdditionalInformation()
-    {
-        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
-
-        $this->assertEquals($this->incrementId, $data['additionalInformation']);
     }
 }

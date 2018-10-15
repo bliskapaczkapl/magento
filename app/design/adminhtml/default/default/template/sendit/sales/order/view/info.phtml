@@ -28,11 +28,11 @@ $_order = $this->getBliskaOrder();
             </tr>
             <tr>
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Operator Name') ?></label></td>
-                <td class="value"><strong><?php echo ($_order->getPosCode() ?: '-') ?></strong></td>
+                <td class="value"><strong><?php echo ($_order->getPosOperator() ?: '-') ?></strong></td>
             </tr>
             <tr>
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Destination Code') ?></label></td>
-                <td class="value"><strong><?php echo ($_order->getPosOperator() ?: '-') ?></strong></td>
+                <td class="value"><strong><?php echo ($_order->getPosCode() ?: '-') ?></strong></td>
             </tr>
             <tr>
                 <td class="label">

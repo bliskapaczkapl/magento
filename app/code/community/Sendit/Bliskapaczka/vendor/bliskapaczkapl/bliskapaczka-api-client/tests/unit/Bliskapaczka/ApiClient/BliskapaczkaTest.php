@@ -48,11 +48,32 @@ class BliskapaczkaTest extends TestCase
         $apiClient->getValidator();
     }
 
-    public function testTimeout()
+    public function testMode()
+    {
+        $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order($apiKey);
+
+        $this->assertEquals('prod', $apiClient->getMode());
+
+        $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order($apiKey, 'test');
+
+        $this->assertEquals('test', $apiClient->getMode());
+    }
+
+    public function testTimeoutForProd()
     {
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order($apiKey);
 
         $this->assertEquals(2, $apiClient->getApiTimeout());
+    }
+
+    public function testTimeoutForSandbox()
+    {
+        $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order($apiKey, 'test');
+
+        $this->assertEquals(10, $apiClient->getApiTimeout());
     }
 }

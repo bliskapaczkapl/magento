@@ -2,10 +2,10 @@
 
 namespace Bliskapaczka\ApiClient\Bliskapaczka\Order;
 
-use Bliskapaczka\ApiClient\Bliskapaczka\Order\Cancel;
+use Bliskapaczka\ApiClient\Bliskapaczka\Order\Retry;
 use PHPUnit\Framework\TestCase;
 
-class CancelTest extends TestCase
+class RetryTest extends TestCase
 {
     protected function setUp()
     {
@@ -13,7 +13,7 @@ class CancelTest extends TestCase
 
     public function testClassExists()
     {
-        $this->assertTrue(class_exists('Bliskapaczka\ApiClient\Bliskapaczka\Order\Cancel'));
+        $this->assertTrue(class_exists('Bliskapaczka\ApiClient\Bliskapaczka\Order\Retry'));
     }
 
     public function testGetUrl()
@@ -22,23 +22,23 @@ class CancelTest extends TestCase
         $apiUrl = 'http://localhost:1234';
         $id = '000000001P-000000002';
         
-        $apiClientOrder = new Cancel($apiKey);
+        $apiClientOrder = new Retry($apiKey);
         $apiClientOrder->setApiUrl($apiUrl);
         $apiClientOrder->setOrderId($id);
 
-        $this->assertEquals('order/' . $id . '/cancel', $apiClientOrder->getUrl());
+        $this->assertEquals('order/' . $id . '/retry', $apiClientOrder->getUrl());
     }
 
-    public function testCancel()
+    public function testRetry()
     {
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';
         $id = '000000001P-000000002';
         
-        $apiClientOrder = new Cancel($apiKey);
+        $apiClientOrder = new Retry($apiKey);
         $apiClientOrder->setApiUrl($apiUrl);
         $apiClientOrder->setOrderId($id);
 
-        $apiClientOrder->cancel();
+        $apiClientOrder->retry();
     }
 }

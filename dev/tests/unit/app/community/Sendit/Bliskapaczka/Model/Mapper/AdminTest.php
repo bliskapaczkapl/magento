@@ -4,7 +4,7 @@ require $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Mapper/
 
 use PHPUnit\Framework\TestCase;
 
-class AdminTest extends TestCase
+class MapperAdminTest extends TestCase
 {
 
     protected function setUp()

@@ -56,4 +56,27 @@ class Sendit_Bliskapaczka_Adminhtml_AdviceController extends Sendit_Bliskapaczka
 
         $this->_redirect('*/order/index');
     }
+
+    /**
+     * Retry action
+     */
+    public function retryAction()
+    {
+        if ($bliskaOrder = $this->_initBliskaOrder()) {
+            try {
+                $bliskaOrder->retry();
+
+                $this->_getSession()->addSuccess(
+                    $this->__('The order has been updated.')
+                );
+            } catch (Mage_Core_Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            } catch (Exception $e) {
+                $this->_getSession()->addError($this->__('The order has not been updated.') . ' ' . $e->getMessage());
+                Mage::logException($e);
+            }
+
+            $this->_redirect('*/order/view', array(self::BLISKA_ORDER_ID_PARAMETER => $bliskaOrder->getId()));
+        }
+    }
 }

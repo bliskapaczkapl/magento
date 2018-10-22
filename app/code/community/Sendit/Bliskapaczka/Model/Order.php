@@ -2,6 +2,8 @@
 
 /**
  * Class Sendit_Bliskapaczka_Model_Order
+ *
+ * @SuppressWarnings(PHPMD)
  */
 class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
 {
@@ -29,6 +31,13 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
     const OTHER                          = 'OTHER';
     const MARKED_FOR_CANCELLATION_STATUS = 'MARKED_FOR_CANCELLATION';
     const CANCELED                       = 'CANCELED';
+
+    const GENERIC_ADVICE_ERROR           = 'GENERIC_ADVICE_ERROR';
+    const AUTHORIZATION_ERROR            = 'AUTHORIZATION_ERROR';
+    const LABEL_GENERATION_ERROR         = 'LABEL_GENERATION_ERROR';
+    const WAYBILL_PROCESS_ERROR          = 'WAYBILL_PROCESS_ERROR';
+    const BACKEND_ERROR                  = 'BACKEND_ERROR';
+
     /**
      * Waybill NOT possible statuses
      *
@@ -46,12 +55,14 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         self::ERROR,
         self::CANCELED,
     );
+
     /**
      * Cancel possible statuses
      *
      * @var array
      */
     protected $_cancelStatuses = array(self::MARKED_FOR_CANCELLATION_STATUS);
+
     /**
      * Cancel possible statuses
      *
@@ -65,12 +76,33 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         self::DELIVERED,
         self::CANCELED
     );
+
     /**
      * Advice possible statuses
      *
      * @var array
      */
     protected $_adviceStatuses = array(self::SAVED);
+
+    /**
+     * Retry possible statuses
+     *
+     * @var array
+     */
+    protected $_retryStatuses = array(self::ERROR);
+
+    /**
+     * Retry possible statuses
+     *
+     * @var array
+     */
+    protected $_errorReasonStatuses = array(
+        self::GENERIC_ADVICE_ERROR,
+        self::AUTHORIZATION_ERROR,
+        self::LABEL_GENERATION_ERROR,
+        self::WAYBILL_PROCESS_ERROR,
+        self::BACKEND_ERROR
+    );
 
     /**
      * Model constructor
@@ -216,14 +248,16 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         $response = $apiClient->get();
 
         $decodedResponse = json_decode($response);
-
         $properResponse = $decodedResponse instanceof stdClass && empty($decodedResponse->errors);
 
         //checking reposponce
         if ($response && $properResponse) {
             $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($this->getId());
             $bliskaOrder->setNumber($coreHelper->stripTags($decodedResponse->number));
+
             $bliskaOrder->setStatus($coreHelper->stripTags($decodedResponse->status));
+            $bliskaOrder->setErrorReason($coreHelper->stripTags($decodedResponse->errorReason));
+
             $bliskaOrder->setDeliveryType($coreHelper->stripTags($decodedResponse->deliveryType));
 
             $bliskaOrder->setPosCode($decodedResponse->destinationCode);
@@ -366,6 +400,53 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
             throw new Exception(
                 Mage::helper('sendit_bliskapaczka')->__('Bliskapaczka: Error or empty API response' . ' ' . $message)
             );
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function canRetry()
+    {
+        if (!empty($this->getNumber())
+            && in_array($this->getStatus(), $this->_retryStatuses)
+            && in_array($this->getErrorReason(), $this->_errorReasonStatuses)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Advice order
+     *
+     * @return $this
+     * @throws Exception
+     */
+    public function retry()
+    {
+        list($order, $method) = $this->getMethod();
+
+        if ($method != 'bliskapaczka_sendit_bliskapaczka'
+            && $method != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
+        ) {
+            return $this;
+        }
+
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+        $senditHelper = Mage::helper('sendit_bliskapaczka');
+        /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
+        $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
+        $apiClient = $senditApiHelper->getApiClientRetry($senditHelper);
+        $apiClient->setOrderId($this->getNumber());
+
+        try {
+            $apiClient->retry();
+            $this->get();
+        } catch (Exception $e) {
+            Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
+            Mage::throwException($senditHelper->__($e->getMessage()));
         }
     }
 }

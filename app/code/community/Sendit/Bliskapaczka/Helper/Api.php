@@ -208,4 +208,20 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
 
         return $apiClient;
     }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientRetry($senditHelper)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Retry(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
 }

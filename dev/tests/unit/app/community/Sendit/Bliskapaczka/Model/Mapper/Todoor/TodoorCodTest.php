@@ -5,7 +5,7 @@ require_once $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapaczka/Model/Ma
 
 use PHPUnit\Framework\TestCase;
 
-class TodoorCodTest extends TestCase
+class MapperTodoorCodTest extends TestCase
 {
 
     protected function setUp()

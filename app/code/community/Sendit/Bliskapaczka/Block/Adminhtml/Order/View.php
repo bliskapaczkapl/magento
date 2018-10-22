@@ -2,6 +2,8 @@
 
 /**
  * Class Sendit_Bliskapaczka_Block_Adminhtml_Order_View
+ *
+ * @SuppressWarnings(PHPMD)
  */
 class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Block_Sales_Order_View
 {
@@ -64,6 +66,18 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
                 'label'      => Mage::helper('sales')->__('Get'),
                 'formtarget' => '_blank',
                 'onclick'   => 'deleteConfirm(\'' . $confirmationMessage . '\', \'' . $this->getGetUrl() . '\')',
+            ));
+        }
+
+        if ($this->_isAllowedAction('retry')) {
+            $confirmationMessage = $coreHelper->jsQuoteEscape(
+                Mage::helper('sales')->__('Are you sure you want to retry advice this order?')
+            );
+
+            $this->_addButton('order_retry', array(
+                'label'      => Mage::helper('sales')->__('Retry'),
+                'formtarget' => '_blank',
+                'onclick'   => 'deleteConfirm(\'' . $confirmationMessage . '\', \'' . $this->getRetryUrl() . '\')',
             ));
         }
 
@@ -191,6 +205,22 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
     {
         return $this->getUrl(
             '*/advice/advice',
+            array(
+                Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER =>
+                $this
+                    ->getRequest()
+                    ->getParam(Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER)
+            )
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getRetryUrl()
+    {
+        return $this->getUrl(
+            '*/advice/retry',
             array(
                 Sendit_Bliskapaczka_Adminhtml_OrderController::BLISKA_ORDER_ID_PARAMETER =>
                 $this

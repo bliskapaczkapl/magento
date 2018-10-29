@@ -176,7 +176,9 @@ implements Mage_Shipping_Model_Carrier_Interface
             ->addFieldToFilter('simple_free_shipping', array('eq' => Mage_SalesRule_Model_Rule::FREE_SHIPPING_ADDRESS))
             ->addFieldToFilter(
                 'conditions_serialized',
-                array('like' => '%"' . $code . '_' . $code . '"%')
+                array(
+                    'like' => '%"' . $code . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '"%'
+                )
             )
             ->addFieldToFilter('is_active', array('eq' => '1'));
 
@@ -242,7 +244,12 @@ implements Mage_Shipping_Model_Carrier_Interface
             $price = 0.00;
         }
 
-        $price = $this->_validateCartRule($rules['aggregated'], $this->_code . '_' . $this->_code, $price, $item);
+        $price = $this->_validateCartRule(
+            $rules['aggregated'],
+            $this->_code . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE,
+            $price,
+            $item
+        );
         $price = $this->_validateCartRule(
             $rules['single'],
             $this->_code . '_' . $operator->operatorName . ($cod ? '_COD' : ''),

@@ -123,7 +123,7 @@ class DataTest extends TestCase
     public function testGetParcelDimensions($type, $height, $length, $width, $weight)
     {
         $helper = $this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
-            ->setMethods(array('_getStoreConfigWrapper'))
+            ->setMethods(array('getStoreConfigWrapper'))
             ->getMock();
 
         if ($type == 'fixed') {
@@ -135,7 +135,7 @@ class DataTest extends TestCase
                 array('carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_weight', $weight)
             );
 
-            $helper->method('_getStoreConfigWrapper')->will($this->returnValueMap($map));
+            $helper->method('getStoreConfigWrapper')->will($this->returnValueMap($map));
         }
 
         $dimensions = $helper->getParcelDimensions($type);

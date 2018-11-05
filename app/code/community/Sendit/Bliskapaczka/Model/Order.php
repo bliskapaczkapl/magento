@@ -342,9 +342,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         if ($method == 'bliskapaczka_sendit_bliskapaczka') {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
-        }
-
-        if ($method == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {
+        } else {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_todoor');
         }
@@ -365,9 +363,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
 
         list($order, $method) = $this->getMethod();
 
-        if ($method != 'bliskapaczka_sendit_bliskapaczka'
-            && $method != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
-        ) {
+        if (strpos($method, 'bliskapaczka') === false) {
             return $this;
         }
 
@@ -379,8 +375,8 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         $data      = $mapper->getData($order, $senditHelper);
         /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
         $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
-        $apiClient = $senditApiHelper->getApiClientForOrder($method, $senditHelper, true);
 
+        $apiClient = $senditApiHelper->getApiClientForOrder($method, $senditHelper, true);
         $apiClient->setOrderId($this->getNumber());
 
         $response = $apiClient->create($data);
@@ -430,9 +426,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
     {
         list($order, $method) = $this->getMethod();
 
-        if ($method != 'bliskapaczka_sendit_bliskapaczka'
-            && $method != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
-        ) {
+        if (strpos($method, 'bliskapaczka') === false) {
             return $this;
         }
 

@@ -50,17 +50,17 @@
     },
     {
         "name": "bliskapaczkapl/bliskapaczka-api-client",
-        "version": "2.17.0",
-        "version_normalized": "2.17.0.0",
+        "version": "2.17.1",
+        "version_normalized": "2.17.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
-            "reference": "5d3b186a16ab03b9e8efcbbbca38f622f34cb199"
+            "reference": "34b919d2fcde13a479f123ae337ed08d32ab95fc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/5d3b186a16ab03b9e8efcbbbca38f622f34cb199",
-            "reference": "5d3b186a16ab03b9e8efcbbbca38f622f34cb199",
+            "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/34b919d2fcde13a479f123ae337ed08d32ab95fc",
+            "reference": "34b919d2fcde13a479f123ae337ed08d32ab95fc",
             "shasum": ""
         },
         "require": {
@@ -75,7 +75,7 @@
             "sensiolabs/security-checker": "4.*",
             "squizlabs/php_codesniffer": "2.*"
         },
-        "time": "2018-10-15 14:13:10",
+        "time": "2018-11-05 13:36:38",
         "type": "api client",
         "installation-source": "dist",
         "autoload": {
@@ -88,7 +88,7 @@
         },
         "description": "BliczkaPaczka API Client",
         "support": {
-            "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/2.17.0",
+            "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/2.17.1",
             "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
         }
     }

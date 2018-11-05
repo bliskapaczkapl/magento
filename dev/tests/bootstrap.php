@@ -9,6 +9,9 @@ $GLOBALS['VENDOR_DIR'] = $GLOBALS['APP_DIR'] . '/code/community/Sendit/Bliskapac
 
 require_once $GLOBALS['VENDOR_DIR'] . '/autoload.php';
 
+$file = $GLOBALS['VENDOR_DIR'] . '/firegento/magento/app/Mage.php';
+file_put_contents($file, str_replace('final class Mage', 'class Mage', file_get_contents($file)));
+
 //Define include path for Magento and BliskaPaczka Module
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['VENDOR_DIR'] . '/firegento/magento');
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $GLOBALS['VENDOR_DIR'] . '/firegento/magento/app');

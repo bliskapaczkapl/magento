@@ -51,7 +51,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * @param string $config
      * @return mixed
      */
-    protected function _getStoreConfigWrapper($config)
+    public function getStoreConfigWrapper($config)
     {
         return Mage::getStoreConfig($config);
     }
@@ -73,11 +73,11 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 break;
 
             default:
-                $type = $this->_getStoreConfigWrapper(self::PARCEL_SIZE_TYPE_XML_PATH);
-                $height = $this->_getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH);
-                $length = $this->_getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH);
-                $width = $this->_getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH);
-                $weight = $this->_getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH);
+                $type = $this->getStoreConfigWrapper(self::PARCEL_SIZE_TYPE_XML_PATH);
+                $height = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH);
+                $length = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH);
+                $width = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH);
+                $weight = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH);
                 break;
         }
 

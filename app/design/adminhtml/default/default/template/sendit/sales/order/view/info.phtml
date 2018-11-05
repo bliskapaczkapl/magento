@@ -1,7 +1,10 @@
 <?php
 
 $_order = $this->getBliskaOrder();
-
+/* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+$senditHelper =Mage::helper('sendit_bliskapaczka');
+/* @var $senditTrackingHelper Sendit_Bliskapaczka_Helper_Tracking */
+$senditTrackingHelper = Mage::helper('sendit_bliskapaczka/tracking');
 ?>
 
 <div class="entry-edit">
@@ -50,6 +53,12 @@ $_order = $this->getBliskaOrder();
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Tracking number') ?></label></td>
                 <td class="value"><strong><?php echo ($_order->getTrackingNumber() ?: '-') ?></strong></td>
             </tr>
+            <?php if ($_order->getTrackingNumber()): ?>
+                <tr>
+                    <td class="label"><label><?php echo Mage::helper('sales')->__('Tracking link') ?></label></td>
+                    <td class="value"><a href="<?php echo $senditTrackingHelper->getLink($_order->getTrackingNumber(), $senditHelper); ?>"><?php echo $senditTrackingHelper->getLink($_order->getTrackingNumber(), $senditHelper); ?></a></td>
+                </tr>
+            <?php endif; ?>
         </table>
     </fieldset>
 </div>

@@ -265,18 +265,22 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
             $bliskaOrder->setPosCode($decodedResponse->destinationCode);
             $bliskaOrder->setPosOperator($decodedResponse->operatorName);
 
-            // Get information about point
-            $apiClient = $senditApiHelper->getApiClientPos($senditHelper);
-            $apiClient->setPointCode($decodedResponse->destinationCode);
-            $apiClient->setOperator($decodedResponse->operatorName);
-            $posInfo = json_decode($apiClient->get());
+            list($order, $method) = $this->getMethod();
 
-            $destination = $posInfo->operator . '</br>' .
-                (($posInfo->description) ? $posInfo->description . '</br>': '') .
-                $posInfo->street . '</br>' .
-                (($posInfo->postalCode) ? $posInfo->postalCode . ' ': '') . $posInfo->city;
+            if ($senditHelper->isPoint($method)) {
+                // Get information about point
+                $apiClient = $senditApiHelper->getApiClientPos($senditHelper);
+                $apiClient->setPointCode($decodedResponse->destinationCode);
+                $apiClient->setOperator($decodedResponse->operatorName);
+                $posInfo = json_decode($apiClient->get());
 
-            $bliskaOrder->setPosCodeDescription($destination);
+                $destination = $posInfo->operator . '</br>' .
+                    (($posInfo->description) ? $posInfo->description . '</br>': '') .
+                    $posInfo->street . '</br>' .
+                    (($posInfo->postalCode) ? $posInfo->postalCode . ' ': '') . $posInfo->city;
+
+                $bliskaOrder->setPosCodeDescription($destination);
+            }
 
             $bliskaOrder->setCreationDate($coreHelper->stripTags($decodedResponse->creationDate));
             $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));

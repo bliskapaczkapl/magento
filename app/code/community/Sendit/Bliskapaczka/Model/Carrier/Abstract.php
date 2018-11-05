@@ -37,7 +37,7 @@ implements Mage_Shipping_Model_Carrier_Interface
      */
     public function getAllowedMethods()
     {
-        $priceList = $this->_getPricing();
+        $priceList = $this->_getPricing(null, 'default');
         $allowedShippingMethod = array();
         foreach ($priceList as $operator) {
             $allowedShippingMethod[$operator->operatorName] = $operator->operatorFullName;
@@ -85,10 +85,11 @@ implements Mage_Shipping_Model_Carrier_Interface
      * Get price list for carrier
      *
      * @param boot $cod
+     * @param string $type
      *
      * @return json
      */
-    public function _getPricing($cod = null)
+    public function _getPricing($cod = null, $type = 'fixed')
     {
     }
 

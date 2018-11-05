@@ -44,16 +44,6 @@ class BliskapaczkaTest extends TestCase
                                      ->setMethods(array('getParcelDimensions'))
                                      ->getMock();
         $this->helper->method('getParcelDimensions')->will($this->returnValue(''));
-
-        $this->apiClientOrder = $this->getMockBuilder(\Bliskapaczka\ApiClient\Bliskapaczka\Pricing::class)
-                                     ->disableOriginalConstructor()
-                                     ->disableOriginalClone()
-                                     ->disableArgumentCloning()
-                                     ->disallowMockingUnknownTypes()
-                                     ->setMethods(array('get'))
-                                     ->getMock();
-        $this->apiClientOrder->method('get')->will($this->returnValue(''));
-
     }
 
     public function testClassExists()
@@ -69,7 +59,7 @@ class BliskapaczkaTest extends TestCase
 
     public function testGetAllowedMethods()
     {
-        $bp =$this->getMockBuilder(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::class)
+        $bp = $this->getMockBuilder(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::class)
             ->setMethods(array('_getPricing'))
             ->getMock();
 

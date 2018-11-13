@@ -117,6 +117,49 @@ class DataTest extends TestCase
         );
     }
 
+    /**
+     * @dataProvider dimensions
+     */
+    public function testGetParcelDimensions($type, $height, $length, $width, $weight)
+    {
+        $helper = $this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
+            ->setMethods(array('getStoreConfigWrapper'))
+            ->getMock();
+
+        if ($type == 'fixed') {
+            $map = array(
+                array('carriers/sendit_bliskapaczka/parcel_size_type', 'fixed'),
+                array('carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_x', $height),
+                array('carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_y', $length),
+                array('carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_z', $width),
+                array('carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_weight', $weight)
+            );
+
+            $helper->method('getStoreConfigWrapper')->will($this->returnValueMap($map));
+        }
+
+        $dimensions = $helper->getParcelDimensions($type);
+
+        $this->assertEquals($height, $dimensions["height"]);
+        $this->assertEquals($length, $dimensions["length"]);
+        $this->assertEquals($width, $dimensions["width"]);
+        $this->assertEquals($weight, $dimensions["weight"]);
+    }
+
+    public function dimensions()
+    {
+        return [
+            ['fixed', 14, 14, 16, 1],
+            [
+                'default',
+                Sendit_Bliskapaczka_Helper_Data::PARCEL_DEFAULT_SIZE_X,
+                Sendit_Bliskapaczka_Helper_Data::PARCEL_DEFAULT_SIZE_Y,
+                Sendit_Bliskapaczka_Helper_Data::PARCEL_DEFAULT_SIZE_Z,
+                Sendit_Bliskapaczka_Helper_Data::PARCEL_DEFAULT_SIZE_WEIGHT
+            ],
+        ];
+    }
+
     public function testGetLowestPrice()
     {
         $priceListEachOther = '[
@@ -264,6 +307,125 @@ class DataTest extends TestCase
         $this->assertEquals(8.99, $price);
     }
 
+    /**
+     * @dataProvider pricings
+     */
+    public function testGetPriceList($pricing, $type, $dimensions, $expectedValue)
+    {
+        $helper = $this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
+            ->setMethods(
+                array(
+                    '_getPricing',
+                    'getApiClientPricing',
+                    'getParcelDimensions'
+                )
+            )
+            ->getMock();
+
+        $helper->method('_getPricing')->willReturn($this->getPricing());
+
+        $apiClientOrder = $this->getApiClientPricing();
+        $apiClientOrder->method('get')->will($this->returnValue($pricing));
+        $helper->method('getApiClientPricing')->willReturn($apiClientOrder);
+
+        $helper->expects($this->once())
+             ->method('getParcelDimensions')
+             ->with($type)
+             ->will($this->returnValue($dimensions));
+
+        $pricing = $helper->getPriceList(null, $type);
+        if (empty($expectedValue)) {
+            $this->assertEquals($expectedValue, $pricing);
+        } else {
+            $this->assertTrue(is_array($pricing));
+            $this->assertEquals($expectedValue->price->gross, $price->price->gross);
+        }
+    }
+
+    protected function getPricing()
+    {
+        $dpd = new StdClass();
+        $dpd->operatorName = 'DPD';
+        $dpd->operatorFullName = 'DPD';
+
+        $ruch = new StdClass();
+        $ruch->operatorName = 'RUCH';
+        $ruch->operatorFullName = 'Ruch';
+
+        $poczta = new StdClass();
+        $poczta->operatorName = 'POCZTA';
+        $poczta->operatorFullName ='Poczta Polska';
+
+        $inpost = new StdClass();
+        $inpost->operatorName = 'INPOST';
+        $inpost->operatorFullName ='Inpost';
+
+        return array(
+            $dpd,
+            $ruch,
+            $poczta,
+            $inpost
+        );
+    }
+
+    protected function getApiClientPricing()
+    {
+        $apiClientOrder = $this->getMockBuilder(\Bliskapaczka\ApiClient\Bliskapaczka\Pricing::class)
+                                     ->disableOriginalConstructor()
+                                     ->disableOriginalClone()
+                                     ->disableArgumentCloning()
+                                     ->disallowMockingUnknownTypes()
+                                     ->setMethods(array('get'))
+                                     ->getMock();
+
+        return $apiClientOrder;
+    }
+
+    public function pricings()
+    {
+        $defaultDimensions = array(
+            "height" => 12,
+            "length" => 12,
+            "width" => 16,
+            "weight" => 1
+        );
+
+        $price = new StdClass();
+        $price->gross = 5.99;
+        $price->net = 4.87;
+        $price->vat = 1.12;
+
+        $dpd = new StdClass();
+        $dpd->availabilityStatus = true;
+        $dpd->operatorName = 'DPD';
+        $dpd->operatorFullName = 'DPD';
+        $operator->price = $price;
+
+        return [
+            ['', 'fixed', $defaultDimensions, []],
+            ['[]', 'fixed', $defaultDimensions, []],
+            [
+                '[{"availabilityStatus":false, "operatorName":"DPD", "price":{"net":4.87,"vat":1.12,"gross":5.99}}]',
+                'fixed',
+                $defaultDimensions,
+                []
+            ],
+            [
+                '[{"availabilityStatus":true, "operatorName":"DPD", "price":{"net":4.87,"vat":1.12,"gross":5.99}}]',
+                'fixed',
+                $defaultDimensions,
+                [$dpd]
+            ],
+            [
+                '[{"availabilityStatus":true, "operatorName":"DPD", "price":{"net":4.87,"vat":1.12,"gross":5.99}}]',
+                'default',
+                $defaultDimensions,
+                [$dpd]
+            ]
+
+        ];
+    }
+
     public function testGetOperatorsForWidget()
     {
         $priceList = '[
@@ -305,7 +467,7 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider phpneNumbers
+     * @dataProvider phoneNumbers
      */
     public function testCleaningPhoneNumber($phoneNumber)
     {
@@ -314,7 +476,7 @@ class DataTest extends TestCase
         $this->assertEquals('606606606', $helper->telephoneNumberCleaning($phoneNumber));
     }
 
-    public function phpneNumbers()
+    public function phoneNumbers()
     {
         return [
             ['606-606-606'],

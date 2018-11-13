@@ -39,7 +39,7 @@ class Confirm extends AbstractBliskapaczka implements BliskapaczkaInterface
             throw new  Exception('Please set valid operator name', 1);
         }
 
-        $url = self::REQUEST_URL . '?operatorName=' . $this->operator;
+        $url = static::REQUEST_URL . '?operatorName=' . $this->operator;
 
         return $url;
     }

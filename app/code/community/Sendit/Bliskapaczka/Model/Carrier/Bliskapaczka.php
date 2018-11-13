@@ -29,14 +29,15 @@ implements Mage_Shipping_Model_Carrier_Interface
      * Get price list for carrier
      *
      * @param boot $cod
+     * @param string $type
      *
      * @return json
      */
-    public function _getPricing($cod = null)
+    public function _getPricing($cod = null, $type = 'fixed')
     {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
-        $priceList = $senditHelper->getPriceList($cod);
+        $priceList = $senditHelper->getPriceList($cod, $type);
 
         return $priceList;
     }

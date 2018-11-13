@@ -122,9 +122,11 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
     {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+        /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
+        $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
 
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
-        $apiClient = $senditHelper->getApiClientCancel();
+        $apiClient = $senditApiHelper->getApiClientCancel($senditHelper);
 
         $apiClient->setOrderId($this->getNumber());
 
@@ -263,18 +265,22 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
             $bliskaOrder->setPosCode($decodedResponse->destinationCode);
             $bliskaOrder->setPosOperator($decodedResponse->operatorName);
 
-            // Get information about point
-            $apiClient = $senditApiHelper->getApiClientPos($senditHelper);
-            $apiClient->setPointCode($decodedResponse->destinationCode);
-            $apiClient->setOperator($decodedResponse->operatorName);
-            $posInfo = json_decode($apiClient->get());
+            list($order, $method) = $this->getMethod();
 
-            $destination = $posInfo->operator . '</br>' .
-                (($posInfo->description) ? $posInfo->description . '</br>': '') .
-                $posInfo->street . '</br>' .
-                (($posInfo->postalCode) ? $posInfo->postalCode . ' ': '') . $posInfo->city;
+            if ($senditHelper->isPoint($method)) {
+                // Get information about point
+                $apiClient = $senditApiHelper->getApiClientPos($senditHelper);
+                $apiClient->setPointCode($decodedResponse->destinationCode);
+                $apiClient->setOperator($decodedResponse->operatorName);
+                $posInfo = json_decode($apiClient->get());
 
-            $bliskaOrder->setPosCodeDescription($destination);
+                $destination = $posInfo->operator . '</br>' .
+                    (($posInfo->description) ? $posInfo->description . '</br>': '') .
+                    $posInfo->street . '</br>' .
+                    (($posInfo->postalCode) ? $posInfo->postalCode . ' ': '') . $posInfo->city;
+
+                $bliskaOrder->setPosCodeDescription($destination);
+            }
 
             $bliskaOrder->setCreationDate($coreHelper->stripTags($decodedResponse->creationDate));
             $bliskaOrder->setAdviceDate($coreHelper->stripTags($decodedResponse->adviceDate));
@@ -340,9 +346,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         if ($method == 'bliskapaczka_sendit_bliskapaczka') {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
-        }
-
-        if ($method == 'bliskapaczka_courier_sendit_bliskapaczka_courier') {
+        } else {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_todoor');
         }
@@ -363,9 +367,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
 
         list($order, $method) = $this->getMethod();
 
-        if ($method != 'bliskapaczka_sendit_bliskapaczka'
-            && $method != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
-        ) {
+        if (strpos($method, 'bliskapaczka') === false) {
             return $this;
         }
 
@@ -377,8 +379,8 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
         $data      = $mapper->getData($order, $senditHelper);
         /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
         $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
-        $apiClient = $senditApiHelper->getApiClientForOrder($method, $senditHelper, true);
 
+        $apiClient = $senditApiHelper->getApiClientForOrder($method, $senditHelper, true);
         $apiClient->setOrderId($this->getNumber());
 
         $response = $apiClient->create($data);
@@ -428,9 +430,7 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
     {
         list($order, $method) = $this->getMethod();
 
-        if ($method != 'bliskapaczka_sendit_bliskapaczka'
-            && $method != 'bliskapaczka_courier_sendit_bliskapaczka_courier'
-        ) {
+        if (strpos($method, 'bliskapaczka') === false) {
             return $this;
         }
 

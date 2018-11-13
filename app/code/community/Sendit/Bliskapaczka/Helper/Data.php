@@ -16,6 +16,10 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_y';
     const PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_z';
     const PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH = 'carriers/sendit_bliskapaczka/parcel_size_type_fixed_size_weight';
+    const PARCEL_DEFAULT_SIZE_X = 12;
+    const PARCEL_DEFAULT_SIZE_Y = 12;
+    const PARCEL_DEFAULT_SIZE_Z = 16;
+    const PARCEL_DEFAULT_SIZE_WEIGHT = 1;
     
     const SENDER_EMAIL = 'carriers/sendit_bliskapaczka/sender_email';
     const SENDER_FIRST_NAME = 'carriers/sendit_bliskapaczka/sender_first_name';
@@ -41,17 +45,41 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const LOG_FILE = 'sendit.log';
 
     /**
+     * Wrapper on Mage::getStoreConfig
+     * We don't able to mock static method
+     *
+     * @param string $config
+     * @return mixed
+     */
+    public function getStoreConfigWrapper($config)
+    {
+        return Mage::getStoreConfig($config);
+    }
+
+    /**
      * Get parcel dimensions in format accptable by Bliskapaczka API
      *
+     * @param string $type
      * @return array
      */
-    public function getParcelDimensions()
+    public function getParcelDimensions($type = 'fixed')
     {
-        $type = Mage::getStoreConfig(self::PARCEL_SIZE_TYPE_XML_PATH);
-        $height = Mage::getStoreConfig(self::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH);
-        $length = Mage::getStoreConfig(self::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH);
-        $width = Mage::getStoreConfig(self::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH);
-        $weight = Mage::getStoreConfig(self::PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH);
+        switch ($type) {
+            case 'default':
+                $height = self::PARCEL_DEFAULT_SIZE_X;
+                $length = self::PARCEL_DEFAULT_SIZE_Y;
+                $width = self::PARCEL_DEFAULT_SIZE_Z;
+                $weight = self::PARCEL_DEFAULT_SIZE_WEIGHT;
+                break;
+
+            default:
+                $type = $this->getStoreConfigWrapper(self::PARCEL_SIZE_TYPE_XML_PATH);
+                $height = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH);
+                $length = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH);
+                $width = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH);
+                $weight = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH);
+                break;
+        }
 
         $dimensions = array(
             "height" => $height,
@@ -161,14 +189,14 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * Get operators and prices from Bliskapaczka API
      *
      * @param boot $cod
-     *
+     * @param string $type
      * @return array
      */
-    public function getPriceList($cod = null)
+    public function getPriceList($cod = null, $type = 'fixed')
     {
         $apiClient = $this->getApiClientPricing();
 
-        $data = array("parcel" => array('dimensions' => $this->getParcelDimensions()));
+        $data = array("parcel" => array('dimensions' => $this->getParcelDimensions($type)));
         if ($cod) {
             $data['codValue'] = 1;
         }
@@ -228,36 +256,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         return json_encode($operators);
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientCancel()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Cancel(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientGet()
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Get(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
     }
 
     /**

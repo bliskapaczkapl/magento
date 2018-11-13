@@ -28,6 +28,7 @@ class TodoorTest extends TestCase
             "receiverFlatNumber" => '11',
             "receiverPostCode" => "12-345",
             "receiverCity" => "Testowe",
+            "deliveryType" => "D2D",
             "operatorName" => "DPD",
             "insuranceValue" => 0,
             "additionalInformation" => "string",
@@ -196,6 +197,19 @@ class TodoorTest extends TestCase
         $todoor->validate();
 
         $this->todoorData['parcel']['dimensions']['height'] = -1;
+
+        $todoor = new Todoor();
+        $todoor->setData($this->todoorData);
+        $todoor->validate();
+    }
+
+    /**
+     * @expectedException Bliskapaczka\ApiClient\Exception
+     * @expectedExceptionMessage Invalid deliveryType
+     */
+    public function testDeliveryTypeValidation()
+    {
+        $this->todoorData['deliveryType'] = '';
 
         $todoor = new Todoor();
         $todoor->setData($this->todoorData);

@@ -12,5 +12,4 @@ use Bliskapaczka\ApiClient\AbstractBliskapaczka;
  */
 class Todoor extends Order implements BliskapaczkaInterface
 {
-    const REQUEST_URL = 'order/todoor';
 }

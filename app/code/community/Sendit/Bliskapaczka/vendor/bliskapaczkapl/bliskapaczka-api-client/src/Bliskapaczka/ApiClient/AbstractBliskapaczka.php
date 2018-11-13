@@ -17,7 +17,7 @@ abstract class AbstractBliskapaczka
     /**
      * @const Bliska paczka api version
      */
-    const API_VERSION = 'v1';
+    const API_VERSION = 'v2';
 
     /**
      * @const URL for the api
@@ -186,7 +186,7 @@ abstract class AbstractBliskapaczka
         $headers[] = 'Content-Type: application/json';
 
         // set options
-        $options[CURLOPT_URL] = $this->apiUrl . '/v1/' . $url;
+        $options[CURLOPT_URL] = $this->apiUrl . '/' . static::API_VERSION . '/' . $url;
         $options[CURLOPT_TIMEOUT] = $this->getApiTimeout();
         $options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
         $options[CURLOPT_HTTPHEADER] = $headers;

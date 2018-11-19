@@ -53,22 +53,13 @@ class OrderTest extends TestCase
         $this->assertTrue(is_a($order, 'Bliskapaczka\ApiClient\ValidatorInterface'));
     }
 
-    public function testReceiverPhoneNumberStringShorterThan30CharsValidation()
-    {
-        $this->orderData['receiverPhoneNumber'] = 'some_string';
-
-        $order = new Order();
-        $order->setData($this->orderData);
-        $this->assertTrue($order->validate());
-    }
-
     /**
      * @expectedException Bliskapaczka\ApiClient\Exception
-     * @expectedExceptionMessage Invalid receiverPhoneNumber
+     * @expectedExceptionMessage Invalid phone number
      */
-    public function testReceiverPhoneNumberLongerThan30CharsValidation()
+    public function testReceiverPhoneNumberValidation()
     {
-        $this->orderData['receiverPhoneNumber'] = 'more_than_30_chars_111111111111';
+        $this->orderData['receiverPhoneNumber'] = 'string';
 
         $order = new Order();
         $order->setData($this->orderData);

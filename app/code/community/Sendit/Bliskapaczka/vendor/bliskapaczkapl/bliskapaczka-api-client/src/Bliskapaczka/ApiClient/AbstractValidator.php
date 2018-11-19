@@ -54,6 +54,7 @@ abstract class AbstractValidator
                 self::email($this->data[$property]);
                 break;
             case 'senderPhoneNumber':
+            case 'receiverPhoneNumber':
                 self::phone($this->data[$property]);
                 break;
             case 'senderPostCode':

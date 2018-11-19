@@ -56,15 +56,15 @@ class TodoorTest extends TestCase
 
     /**
      * @expectedException Bliskapaczka\ApiClient\Exception
-     * @expectedExceptionMessage Invalid receiverPhoneNumber
+     * @expectedExceptionMessage Invalid phone number
      */
-    public function testReceiverPhoneNumberLongerThan30CharsValidation()
+    public function testReceiverPhoneNumberValidation()
     {
-        $this->todoorData['receiverPhoneNumber'] = 'more_than_30_chars_111111111111';
+        $this->todoorData['receiverPhoneNumber'] = 'string';
 
-        $todoor = new Todoor();
-        $todoor->setData($this->todoorData);
-        $todoor->validate();
+        $order = new Todoor();
+        $order->setData($this->todoorData);
+        $order->validate();
     }
 
     /**

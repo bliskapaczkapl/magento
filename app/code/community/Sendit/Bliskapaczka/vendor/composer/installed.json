@@ -50,17 +50,17 @@
     },
     {
         "name": "bliskapaczkapl/bliskapaczka-api-client",
-        "version": "dev-feature/WTYC-146_klient_api_przejsc_na_api_w_wersji_2",
-        "version_normalized": "dev-feature/WTYC-146_klient_api_przejsc_na_api_w_wersji_2",
+        "version": "3.0.0",
+        "version_normalized": "3.0.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
-            "reference": "2cc112026e8b883750dc92ff7b7e5d14f9c22781"
+            "reference": "f9ba0cdd949027290dddf3fed8ce2a2fe441dc22"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/2cc112026e8b883750dc92ff7b7e5d14f9c22781",
-            "reference": "2cc112026e8b883750dc92ff7b7e5d14f9c22781",
+            "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/f9ba0cdd949027290dddf3fed8ce2a2fe441dc22",
+            "reference": "f9ba0cdd949027290dddf3fed8ce2a2fe441dc22",
             "shasum": ""
         },
         "require": {
@@ -75,7 +75,7 @@
             "sensiolabs/security-checker": "4.*",
             "squizlabs/php_codesniffer": "2.*"
         },
-        "time": "2018-11-13 13:31:58",
+        "time": "2018-11-19 12:40:55",
         "type": "api client",
         "installation-source": "source",
         "autoload": {
@@ -88,7 +88,7 @@
         },
         "description": "BliczkaPaczka API Client",
         "support": {
-            "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/feature/WTYC-146_klient_api_przejsc_na_api_w_wersji_2",
+            "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/3.0.0",
             "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
         }
     }

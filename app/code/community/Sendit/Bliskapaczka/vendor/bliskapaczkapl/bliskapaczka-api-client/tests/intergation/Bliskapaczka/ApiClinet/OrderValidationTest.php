@@ -43,11 +43,11 @@ class OrderValidationTest extends TestCase
 
     /**
      * @expectedException Bliskapaczka\ApiClient\Exception
-     * @expectedExceptionMessage Invalid phone number
+     * @expectedExceptionMessage Invalid receiverPhoneNumber
      */
-    public function testReceiverPhoneNumberValidation()
+    public function testReceiverPhoneNumberLongerThan30CharsValidation()
     {
-        $this->orderData['receiverPhoneNumber'] = 'string';
+        $this->orderData['receiverPhoneNumber'] = 'more_than_30_chars_111111111111';
 
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';

@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e1f1a8a15505ba88b3c6955291eb8e83",
-    "content-hash": "c7d4ce8bc2801bfb5ce93aed0c559134",
+    "hash": "25603d4bad5bb1a4617d5a326b95c9c0",
+    "content-hash": "5ca637930ecc411640261b852af4d19b",
     "packages": [
         {
             "name": "bliskapaczkapl/bliskapaczka-api-client",
-            "version": "dev-feature/WTYC-146_klient_api_przejsc_na_api_w_wersji_2",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
-                "reference": "2cc112026e8b883750dc92ff7b7e5d14f9c22781"
+                "reference": "f9ba0cdd949027290dddf3fed8ce2a2fe441dc22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/2cc112026e8b883750dc92ff7b7e5d14f9c22781",
-                "reference": "2cc112026e8b883750dc92ff7b7e5d14f9c22781",
+                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/f9ba0cdd949027290dddf3fed8ce2a2fe441dc22",
+                "reference": "f9ba0cdd949027290dddf3fed8ce2a2fe441dc22",
                 "shasum": ""
             },
             "require": {
@@ -44,10 +44,10 @@
             },
             "description": "BliczkaPaczka API Client",
             "support": {
-                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/feature/WTYC-146_klient_api_przejsc_na_api_w_wersji_2",
+                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/3.0.0",
                 "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
             },
-            "time": "2018-11-13 13:31:58"
+            "time": "2018-11-19 12:40:55"
         },
         {
             "name": "psr/log",
@@ -2619,9 +2619,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "bliskapaczkapl/bliskapaczka-api-client": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

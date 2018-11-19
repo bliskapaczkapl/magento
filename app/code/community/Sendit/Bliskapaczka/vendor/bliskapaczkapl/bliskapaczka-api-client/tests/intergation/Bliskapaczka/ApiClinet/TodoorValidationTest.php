@@ -45,11 +45,11 @@ class TodoorValidationTest extends TestCase
 
     /**
      * @expectedException Bliskapaczka\ApiClient\Exception
-     * @expectedExceptionMessage Invalid receiverPhoneNumber
+     * @expectedExceptionMessage Invalid phone number
      */
-    public function testReceiverPhoneNumberLongerThan30CharsValidation()
+    public function testReceiverPhoneNumberValidation()
     {
-        $this->todoorData['receiverPhoneNumber'] = 'more_than_30_chars_111111111111';
+        $this->todoorData['receiverPhoneNumber'] = 'string';
 
         $apiKey = '6061914b-47d3-42de-96bf-0004a57f1dba';
         $apiUrl = 'http://localhost:1234';

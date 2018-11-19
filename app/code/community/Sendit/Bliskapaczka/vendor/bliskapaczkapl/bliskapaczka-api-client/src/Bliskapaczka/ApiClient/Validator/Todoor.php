@@ -17,7 +17,7 @@ class Todoor extends AbstractValidator implements ValidatorInterface
         'senderEmail' => ['maxlength' => 60, 'notblank' => true],
         'receiverEmail' => ['maxlength' => 60],
         'senderPhoneNumber' => ['notblank' => true],
-        'receiverPhoneNumber' => ['notblank' => true],
+        'receiverPhoneNumber' => ['maxlength' => 30, 'notblank' => true],
         'senderPostCode' => ['notblank' => true],
         'senderLastName' => ['maxlength' => 30, 'notblank' => true],
         'senderStreet' => ['maxlength' => 30, 'notblank' => true],
@@ -57,8 +57,8 @@ class Todoor extends AbstractValidator implements ValidatorInterface
         @NotBlank
         @Size(max = 30)
         private String senderLastName;
-        @NotBlank
-        @PhoneNumber
+        @NotEmpty
+        @PolishPhoneNumber
         private String senderPhoneNumber;
         @NotBlank
         @Email
@@ -85,8 +85,8 @@ class Todoor extends AbstractValidator implements ValidatorInterface
         @NotBlank
         @Size(max = 30)
         private String receiverLastName;
-        @NotBlank
-        @PhoneNumber
+        @NotEmpty
+        @Size(max = 30)
         private String receiverPhoneNumber;
         @NotBlank
         @Email

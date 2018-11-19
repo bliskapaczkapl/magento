@@ -13,7 +13,7 @@ class AdviceTest extends TestCase
         $this->orderData = [
             "senderFirstName" => "string",
             "senderLastName" => "string",
-            "senderPhoneNumber" => "606555433",
+            "senderPhoneNumber" => "111111111",
             "senderEmail" => "bob@example.com",
             "senderStreet" => "string",
             "senderBuildingNumber" => "string",
@@ -22,7 +22,7 @@ class AdviceTest extends TestCase
             "senderCity" => "string",
             "receiverFirstName" => "string",
             "receiverLastName" => "string",
-            "receiverPhoneNumber" => "600555432",
+            "receiverPhoneNumber" => "111111111",
             "receiverEmail" => "eva@example.com",
             "deliveryType" => "P2P",
             "operatorName" => "INPOST",
@@ -91,6 +91,19 @@ class AdviceTest extends TestCase
     public function testSenderPhoneNumberShouldBeSetted()
     {
         unset($this->orderData['senderPhoneNumber']);
+
+        $order = new Advice();
+        $order->setData($this->orderData);
+        $order->validate();
+    }
+
+    /**
+     * @expectedException Bliskapaczka\ApiClient\Exception
+     * @expectedExceptionMessage Invalid phone number
+     */
+    public function testSenderPhoneNumberLongerThan30CharsValidation()
+    {
+        $this->orderData['senderPhoneNumber'] = 'more_than_30_chars_111111111111';
 
         $order = new Advice();
         $order->setData($this->orderData);

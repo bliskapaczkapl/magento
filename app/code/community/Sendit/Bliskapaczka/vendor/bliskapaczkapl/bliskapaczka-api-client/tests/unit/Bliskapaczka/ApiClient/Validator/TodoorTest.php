@@ -12,7 +12,7 @@ class TodoorTest extends TestCase
         $this->todoorData = [
             "senderFirstName" => "string",
             "senderLastName" => "string",
-            "senderPhoneNumber" => "606555433",
+            "senderPhoneNumber" => "111111111",
             "senderEmail" => "bob@example.com",
             "senderStreet" => "string",
             "senderBuildingNumber" => "string",
@@ -21,7 +21,7 @@ class TodoorTest extends TestCase
             "senderCity" => "string",
             "receiverFirstName" => "string",
             "receiverLastName" => "string",
-            "receiverPhoneNumber" => "600555432",
+            "receiverPhoneNumber" => "111111111",
             "receiverEmail" => "eva@example.com",
             "receiverStreet" => "Testowa",
             "receiverBuildingNumber" => "1",
@@ -56,11 +56,11 @@ class TodoorTest extends TestCase
 
     /**
      * @expectedException Bliskapaczka\ApiClient\Exception
-     * @expectedExceptionMessage Invalid phone number
+     * @expectedExceptionMessage Invalid receiverPhoneNumber
      */
-    public function testReceiverPhoneNumberValidation()
+    public function testReceiverPhoneNumberLongerThan30CharsValidation()
     {
-        $this->todoorData['receiverPhoneNumber'] = 'string';
+        $this->todoorData['receiverPhoneNumber'] = 'more_than_30_chars_111111111111';
 
         $todoor = new Todoor();
         $todoor->setData($this->todoorData);

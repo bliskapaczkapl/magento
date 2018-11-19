@@ -13,7 +13,7 @@ use Bliskapaczka\ApiClient\Exception;
  */
 abstract class AbstractValidator
 {
-    const PHONE_NUMBER_PATTERN = '/^(5[0137]|6[069]|7[2389]|88)\d{7}$/';
+    const PHONE_NUMBER_PATTERN = '/^\\d{9}$/';
 
     /**
      * Set data to validata
@@ -54,7 +54,6 @@ abstract class AbstractValidator
                 self::email($this->data[$property]);
                 break;
             case 'senderPhoneNumber':
-            case 'receiverPhoneNumber':
                 self::phone($this->data[$property]);
                 break;
             case 'senderPostCode':

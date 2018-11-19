@@ -37,6 +37,9 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
         $operatorName = str_replace('_COD', '', $shippingAddress->getPosOperator());
         $data['operatorName'] = $operatorName;
 
+        $data['additionalInformation'] = $order->getIncrementId();
+        $data['reference'] = $order->getIncrementId();
+
         $data['parcel'] = [
             'dimensions' => $this->_getParcelDimensions($helper)
         ];

@@ -159,12 +159,19 @@ class MapperOrderTest extends TestCase
         $this->assertTrue(is_array($data['parcel']));
     }
 
-
     public function testMapperForAdditionalInformation()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
         $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertEquals($this->incrementId, $data['additionalInformation']);
+    }
+
+    public function testMapperForReference()
+    {
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
+        $data = $mapper->getData($this->orderMock, $this->helperMock);
+
+        $this->assertEquals($this->incrementId, $data['reference']);
     }
 }

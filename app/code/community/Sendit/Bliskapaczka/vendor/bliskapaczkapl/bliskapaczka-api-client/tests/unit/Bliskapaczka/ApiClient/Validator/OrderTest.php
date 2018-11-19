@@ -24,6 +24,7 @@ class OrderTest extends TestCase
             "receiverLastName" => "string",
             "receiverPhoneNumber" => "600555432",
             "receiverEmail" => "eva@example.com",
+            "deliveryType" => "P2P",
             "operatorName" => "INPOST",
             "destinationCode" => "KRA010",
             "postingCode" => "KRA011",
@@ -173,5 +174,18 @@ class OrderTest extends TestCase
         $order = new Order();
         $order->setData($this->orderData);
         $order->validate();
+    }
+
+    /**
+     * @expectedException Bliskapaczka\ApiClient\Exception
+     * @expectedExceptionMessage Invalid deliveryType
+     */
+    public function testDeliveryTypeValidation()
+    {
+        $this->todoorData['deliveryType'] = '';
+
+        $todoor = new Todoor();
+        $todoor->setData($this->todoorData);
+        $todoor->validate();
     }
 }

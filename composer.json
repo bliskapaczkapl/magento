@@ -22,6 +22,6 @@
         }
     ],
     "require": {
-        "bliskapaczkapl/bliskapaczka-api-client": "^2.0"
+        "bliskapaczkapl/bliskapaczka-api-client": "dev-feature/WTYC-146_klient_api_przejsc_na_api_w_wersji_2"
     }
 }

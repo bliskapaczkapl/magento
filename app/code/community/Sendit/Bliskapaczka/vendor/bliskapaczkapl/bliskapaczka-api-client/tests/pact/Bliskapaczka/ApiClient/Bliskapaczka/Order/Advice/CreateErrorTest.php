@@ -102,7 +102,7 @@ class CreateErrorTest extends TestCase
   "provider_state": "Order not created",
   "request": {
     "method": "post",
-    "path": "/v1/order/advice"
+    "path": "/v2/order/advice"
   },
   "response": {
     "status": 200,

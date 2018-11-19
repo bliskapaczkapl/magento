@@ -27,6 +27,7 @@ class Order extends AbstractValidator implements ValidatorInterface
         'senderCity' => ['maxlength' => 30, 'notblank' => true],
         'receiverFirstName' => ['maxlength' => 30, 'notblank' => true],
         'receiverLastName' => ['maxlength' => 30, 'notblank' => true],
+        'deliveryType' => ['notblank' => true],
         'operatorName' => ['notblank' => true],
         'destinationCode' => ['notblank' => true],
         'postingCode' => [],

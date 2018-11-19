@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "842e9626885eb8b81a73349fb5c2dbd4",
-    "content-hash": "7e5075d3f4af480fffc2dae435bbdf5f",
+    "hash": "e1f1a8a15505ba88b3c6955291eb8e83",
+    "content-hash": "c7d4ce8bc2801bfb5ce93aed0c559134",
     "packages": [
         {
             "name": "bliskapaczkapl/bliskapaczka-api-client",
-            "version": "2.17.1",
+            "version": "dev-feature/WTYC-146_klient_api_przejsc_na_api_w_wersji_2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
-                "reference": "34b919d2fcde13a479f123ae337ed08d32ab95fc"
+                "reference": "2cc112026e8b883750dc92ff7b7e5d14f9c22781"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/34b919d2fcde13a479f123ae337ed08d32ab95fc",
-                "reference": "34b919d2fcde13a479f123ae337ed08d32ab95fc",
+                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/2cc112026e8b883750dc92ff7b7e5d14f9c22781",
+                "reference": "2cc112026e8b883750dc92ff7b7e5d14f9c22781",
                 "shasum": ""
             },
             "require": {
@@ -44,10 +44,10 @@
             },
             "description": "BliczkaPaczka API Client",
             "support": {
-                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/2.17.1",
+                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/feature/WTYC-146_klient_api_przejsc_na_api_w_wersji_2",
                 "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
             },
-            "time": "2018-11-05 13:36:38"
+            "time": "2018-11-13 13:31:58"
         },
         {
             "name": "psr/log",
@@ -1915,16 +1915,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.9.1",
+            "version": "2.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "dcbed1074f8244661eecddfc2a675430d8d33f62"
+                "reference": "2acf168de78487db620ab4bc524135a13cfe6745"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/dcbed1074f8244661eecddfc2a675430d8d33f62",
-                "reference": "dcbed1074f8244661eecddfc2a675430d8d33f62",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/2acf168de78487db620ab4bc524135a13cfe6745",
+                "reference": "2acf168de78487db620ab4bc524135a13cfe6745",
                 "shasum": ""
             },
             "require": {
@@ -1989,7 +1989,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-05-22 02:43:20"
+            "time": "2018-11-07 22:31:41"
         },
         {
             "name": "symfony/config",
@@ -2619,7 +2619,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "bliskapaczkapl/bliskapaczka-api-client": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

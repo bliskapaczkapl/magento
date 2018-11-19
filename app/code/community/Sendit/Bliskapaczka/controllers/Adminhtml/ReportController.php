@@ -70,7 +70,7 @@ class Sendit_Bliskapaczka_Adminhtml_ReportController extends Mage_Adminhtml_Cont
                 Mage::helper('sendit_bliskapaczka')->__('The report file has not been downloaded.') .
                 ' ' . $e->getMessage()
             );
-            Mage::logException($e);
+            Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
         }
         if (isset($content)) {
             $this->_getSession()->addSuccess(

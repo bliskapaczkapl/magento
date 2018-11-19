@@ -193,11 +193,9 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
 
         $decodedResponse = json_decode($response);
 
-        $properResponse = $decodedResponse instanceof stdClass && empty($decodedResponse->errors);
-
         //checking reposponce
-        if ($response && $properResponse) {
-            return $decodedResponse->url;
+        if ($response && empty($decodedResponse->errors)) {
+            return $decodedResponse[0]->url;
         } else {
             $message = ($decodedResponse ? current($decodedResponse->errors)->message : '');
 

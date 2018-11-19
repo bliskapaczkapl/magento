@@ -89,7 +89,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
                 $this->_getSession()->addError($e->getMessage());
             } catch (Exception $e) {
                 $this->_getSession()->addError($this->__('The order has not been cancelled.') . ' ' . $e->getMessage());
-                Mage::logException($e);
+                Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             }
             $this->_redirect('*/*/view', array(self::BLISKA_ORDER_ID_PARAMETER => $bliskaOrder->getId()));
         }
@@ -118,7 +118,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             $this->_getSession()->addError(
                 $this->__('The report file has not been downloaded.') . ' ' . $e->getMessage()
             );
-            Mage::logException($e);
+            Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
         }
 
         if ($content) {
@@ -152,6 +152,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
                 );
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             }
         }
 
@@ -178,7 +179,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
                 $this->_getSession()->addError(
                     $this->__('The order has not been downloaded.') . ' ' . $e->getMessage()
                 );
-                Mage::logException($e);
+                Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             }
 
             if ($url) {
@@ -211,7 +212,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             $this->_getSession()->addError(
                 $this->__('The confirmation has not been sent.') . ' ' . $e->getMessage()
             );
-            Mage::logException($e);
+            Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
         }
 
         $this->_redirect('*/*/index');
@@ -233,7 +234,7 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
                 $this->_getSession()->addError($e->getMessage());
             } catch (Exception $e) {
                 $this->_getSession()->addError($this->__('The order has not been updated.') . ' ' . $e->getMessage());
-                Mage::logException($e);
+                Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             }
 
             $this->_redirect('*/*/view', array(self::BLISKA_ORDER_ID_PARAMETER => $bliskaOrder->getId()));

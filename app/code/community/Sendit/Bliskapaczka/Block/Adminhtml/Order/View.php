@@ -69,9 +69,9 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_View extends Mage_Adminhtml_Bloc
             ));
         }
 
-        if ($this->_isAllowedAction('retry')) {
+        if ($this->_isAllowedAction('retry') && $bliskaOrder->canRetry()) {
             $confirmationMessage = $coreHelper->jsQuoteEscape(
-                Mage::helper('sales')->__('Are you sure you want to retry advice this order?')
+                Mage::helper('sales')->__('Are you sure you want to re-advice this order?')
             );
 
             $this->_addButton('order_retry', array(

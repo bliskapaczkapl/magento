@@ -61,7 +61,15 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
      *
      * @var array
      */
-    protected $_cancelStatuses = array(self::MARKED_FOR_CANCELLATION_STATUS);
+    protected $_cancelStatuses = array(
+        self::SAVED,
+        self::WAITING_FOR_PAYMENT,
+        self::PAYMENT_CONFIRMED,
+        self::PAYMENT_REJECTED,
+        self::PROCESSING,
+        self::READY_TO_SEND,
+        self::ERROR
+    );
 
     /**
      * Cancel possible statuses

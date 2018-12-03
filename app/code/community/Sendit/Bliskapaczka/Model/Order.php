@@ -38,6 +38,12 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
     const WAYBILL_PROCESS_ERROR          = 'WAYBILL_PROCESS_ERROR';
     const BACKEND_ERROR                  = 'BACKEND_ERROR';
 
+    const GENERIC_ADVICE_ERROR_FOR_HUMANS = "Error (Operator's advising)";
+    const LABEL_GENERATION_ERROR_FOR_HUMANS = "Error (Label generating)";
+    const WAYBILL_PROCESS_ERROR_FOR_HUMANS = "Error (Label processing)";
+    const AUTHORIZATION_ERROR_FOR_HUMANS = "Error (Access data)";
+    const BACKEND_ERROR_FOR_HUMANS = "Error (Unrecognized)";
+
     /**
      * Waybill NOT possible statuses
      *

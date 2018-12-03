@@ -55,8 +55,8 @@ class Order extends AbstractValidator implements ValidatorInterface
         @NotBlank
         @Size(max = 30)
         private String senderLastName;
-        @NotBlank
-        @PhoneNumber
+        @NotEmpty
+        @PolishPhoneNumber
         private String senderPhoneNumber;
         @NotBlank
         @Email
@@ -83,8 +83,8 @@ class Order extends AbstractValidator implements ValidatorInterface
         @NotBlank
         @Size(max = 30)
         private String receiverLastName;
-        @NotBlank
-        @PhoneNumber
+        @NotEmpty
+        @PolishPhoneNumber
         private String receiverPhoneNumber;
         @NotBlank
         @Email

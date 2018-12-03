@@ -21,6 +21,20 @@ $senditTrackingHelper = Mage::helper('sendit_bliskapaczka/tracking');
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Status') ?></label></td>
                 <td class="value"><strong><?php echo ($_order->getStatus() ?: '-') ?></strong></td>
             </tr>
+            <?php if ($_order->getStatus() == 'ERROR' && $_order->getErrorReason()): ?>
+                <tr>
+                    <td class="label"><label><?php echo Mage::helper('sales')->__('Error Reason') ?></label></td>
+                    <td class="value">
+                        <strong>
+                            <?php if ($_order->getErrorReason()): ?>
+                            <?php echo $_order->getErrorReason() ?> - <?php echo Mage::helper('sales')->__(constant(get_class($_order) . '::'. $_order->getErrorReason() . "_FOR_HUMANS")); ?>
+                            <?php else: ?>
+                                -
+                            <?php endif; ?>
+                        </strong>
+                    </td>
+                </tr>
+            <?php endif; ?>
             <tr>
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Delivery type') ?></label></td>
                 <td class="value"><strong><?php echo ($_order->getDeliveryType() ?: '-') ?></strong></td>

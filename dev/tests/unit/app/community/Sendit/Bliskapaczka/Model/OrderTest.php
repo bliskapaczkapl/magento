@@ -113,5 +113,18 @@ class OrderTest extends TestCase
              ->will($this->returnValue('some_other_reason'));
 
         $this->assertEquals(false, $mock->canRetry());
+
+        $mock = $this->getMockBuilder(Sendit_Bliskapaczka_Model_Order::class)
+                        ->setMethods(array('getNumber', 'getStatus', 'getErrorReason'))
+                        ->getMock();
+
+        $mock->expects($this->once())
+             ->method('getNumber')
+             ->will($this->returnValue('000000636P-000000352'));
+        $mock->expects($this->once())
+             ->method('getStatus')
+             ->will($this->returnValue('some_error'));
+
+        $this->assertEquals(false, $mock->canRetry());
     }
 }

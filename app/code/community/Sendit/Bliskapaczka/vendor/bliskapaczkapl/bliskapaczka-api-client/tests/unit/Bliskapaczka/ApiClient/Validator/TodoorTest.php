@@ -12,7 +12,7 @@ class TodoorTest extends TestCase
         $this->todoorData = [
             "senderFirstName" => "string",
             "senderLastName" => "string",
-            "senderPhoneNumber" => "606555433",
+            "senderPhoneNumber" => "111111111",
             "senderEmail" => "bob@example.com",
             "senderStreet" => "string",
             "senderBuildingNumber" => "string",
@@ -21,7 +21,7 @@ class TodoorTest extends TestCase
             "senderCity" => "string",
             "receiverFirstName" => "string",
             "receiverLastName" => "string",
-            "receiverPhoneNumber" => "600555432",
+            "receiverPhoneNumber" => "111111111",
             "receiverEmail" => "eva@example.com",
             "receiverStreet" => "Testowa",
             "receiverBuildingNumber" => "1",
@@ -62,9 +62,9 @@ class TodoorTest extends TestCase
     {
         $this->todoorData['receiverPhoneNumber'] = 'string';
 
-        $todoor = new Todoor();
-        $todoor->setData($this->todoorData);
-        $todoor->validate();
+        $order = new Todoor();
+        $order->setData($this->todoorData);
+        $order->validate();
     }
 
     /**

@@ -13,7 +13,7 @@ class OrderTest extends TestCase
         $this->orderData = [
             "senderFirstName" => "string",
             "senderLastName" => "string",
-            "senderPhoneNumber" => "606555433",
+            "senderPhoneNumber" => "111111111",
             "senderEmail" => "bob@example.com",
             "senderStreet" => "string",
             "senderBuildingNumber" => "string",
@@ -22,7 +22,7 @@ class OrderTest extends TestCase
             "senderCity" => "string",
             "receiverFirstName" => "string",
             "receiverLastName" => "string",
-            "receiverPhoneNumber" => "600555432",
+            "receiverPhoneNumber" => "111111111",
             "receiverEmail" => "eva@example.com",
             "deliveryType" => "P2P",
             "operatorName" => "INPOST",

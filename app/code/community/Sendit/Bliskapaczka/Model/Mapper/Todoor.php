@@ -33,10 +33,13 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
         $data['receiverPostCode'] = $shippingAddress->getPostcode();
         $data['receiverCity'] = $shippingAddress->getCity();
 
-        $data['deliveryType'] = 'D2D';
-
         $operatorName = str_replace('_COD', '', $shippingAddress->getPosOperator());
         $data['operatorName'] = $operatorName;
+
+        $data['deliveryType'] = 'D2D';
+        if ($operatorName == 'POCZTA_K48') {
+            $data['deliveryType'] = 'P2D';
+        }
 
         $data['additionalInformation'] = $order->getIncrementId();
         if ($reference) {

@@ -32,7 +32,9 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
         $data['destinationCode'] = $shippingAddress->getPosCode();
 
         $data['additionalInformation'] = $order->getIncrementId();
-        $data['reference'] = $order->getIncrementId();
+        if (Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::REFERENCE_SWITCH)) {
+            $data['reference'] = $order->getIncrementId();
+        }
 
         $data['parcel'] = [
             'dimensions' => $this->_getParcelDimensions($helper)

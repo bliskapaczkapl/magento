@@ -38,7 +38,9 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
         $data['operatorName'] = $operatorName;
 
         $data['additionalInformation'] = $order->getIncrementId();
-        $data['reference'] = $order->getIncrementId();
+        if (Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::REFERENCE_SWITCH)) {
+            $data['reference'] = $order->getIncrementId();
+        }
 
         $data['parcel'] = [
             'dimensions' => $this->_getParcelDimensions($helper)

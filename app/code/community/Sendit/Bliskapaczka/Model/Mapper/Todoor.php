@@ -11,9 +11,10 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
      *
      * @param Mage_Sales_Model_Order $order
      * @param Sendit_Bliskapaczka_Helper_Data $helper
+     * @param bool $reference
      * @return array
      */
-    public function getData(Mage_Sales_Model_Order $order, Sendit_Bliskapaczka_Helper_Data $helper)
+    public function getData(Mage_Sales_Model_Order $order, Sendit_Bliskapaczka_Helper_Data $helper, $reference = false)
     {
         $data = [];
 
@@ -38,7 +39,7 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
         $data['operatorName'] = $operatorName;
 
         $data['additionalInformation'] = $order->getIncrementId();
-        if (Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::REFERENCE_SWITCH)) {
+        if ($reference) {
             $data['reference'] = $order->getIncrementId();
         }
 

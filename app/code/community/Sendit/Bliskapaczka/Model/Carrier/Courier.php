@@ -39,7 +39,7 @@ implements Mage_Shipping_Model_Carrier_Interface
             "deliveryType" => "D2D"
         );
         if ($cod) {
-            $data['codValue'] = 1;
+            $D2DData['codValue'] = 1;
         }
 
         $P2DData = array(
@@ -47,19 +47,19 @@ implements Mage_Shipping_Model_Carrier_Interface
             "deliveryType" => "P2D"
         );
         if ($cod) {
-            $data['codValue'] = 1;
+            $P2DData['codValue'] = 1;
         }
 
         try {
             $D2DPriceList = $apiClient->get($D2DData);
             $P2DPriceList = $apiClient->get($P2DData);
         } catch (Exception $e) {
-            $priceList = '{}';
+            $D2DPriceList = $P2DPriceList = '{}';
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
         }
 
         $P2DPriceListArray = json_decode($P2DPriceList);
-        $P2DPriceListArray[0]->operatorName = "POCZTA_K48";
+        $P2DPriceListArray[0]->operatorName = "POCZTA_P2D";
 
         return array_merge(json_decode($D2DPriceList), $P2DPriceListArray);
     }

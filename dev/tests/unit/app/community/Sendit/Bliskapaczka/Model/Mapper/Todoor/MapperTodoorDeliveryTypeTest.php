@@ -14,7 +14,7 @@ class MapperTodoorDeliveryTypeTest extends TestCase
         $this->receiverLastName = 'Bliskopaczki';
         $this->receiverPhoneNumber = '504 445 665';
         $this->receiverEmail = 'zenek.bliskopaczki@sendit.pl';
-        $this->operatorName = 'POCZTA_K48';
+        $this->operatorName = 'POCZTA_P2D';
         $this->receiverStreet = 'Ulica Ulicowa';
         $this->receiverBuildingNumber = '11/123';
         $this->receiverFlatNumber = '';

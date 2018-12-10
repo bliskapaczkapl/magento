@@ -1,6 +1,6 @@
 VENDOR_DIR=app/code/community/Sendit/Bliskapaczka/vendor
 
-docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -v ~/.composer:/tmp/composer -e COMPOSER_HOME=/tmp/composer composer install
+docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -v ~/.composer:/tmp/composer -e COMPOSER_HOME=/tmp/composer composer/composer:php5 install
 
 $VENDOR_DIR/bin/security-checker security:check ./composer.lock
 $VENDOR_DIR/bin/phpcs -s --colors --standard=./$VENDOR_DIR/magento-ecg/coding-standard/Ecg,ruleset.xml app/ --ignore=app/code/community/Sendit/Bliskapaczka/vendor/*

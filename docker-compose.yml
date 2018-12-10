@@ -1,7 +1,7 @@
 version: "3"
 services:
   magento:
-    image: bliskapaczkapl/magento
+    image: bliskapaczkapl/magento:7.2_1.9.4.0
     depends_on:
       - db
     ports:

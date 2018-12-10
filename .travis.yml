@@ -3,7 +3,8 @@ language: php
 group: deprecated-2017Q4
 
 php:
-  - '5.6'
+  - 5.6
+  - 7.2
 
 env:
   global:
@@ -24,13 +25,17 @@ script:
   - $VENDOR_DIR/bin/phploc app/
   - $VENDOR_DIR/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
 
-after_success:
-  - docker build -t bliskapaczkapl/magento:$COMMIT -t bliskapaczkapl/magento:latest -t bliskapaczkapl/magento:develop -f dev/docker/Dockerfile .
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-  - docker push bliskapaczkapl/magento:$COMMIT
-  - if [ "$TRAVIS_BRANCH" == "master" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    docker push bliskapaczkapl/magento:latest;
-    fi
-  - if [ "$TRAVIS_BRANCH" == "develop" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    docker push bliskapaczkapl/magento:develop;
-    fi
+jobs:
+  include:
+    - stage: push
+      script:
+        - docker build -t bliskapaczkapl/magento:$COMMIT -t bliskapaczkapl/magento:latest -t bliskapaczkapl/magento:develop -f dev/docker/Dockerfile .
+        - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+        - docker push bliskapaczkapl/magento:$COMMIT
+        - if [ "$TRAVIS_BRANCH" == "master" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
+          docker push bliskapaczkapl/magento:latest;
+          fi
+        - if [ "$TRAVIS_BRANCH" == "develop" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
+          docker push bliskapaczkapl/magento:develop;
+          fi
+      php: 7.2

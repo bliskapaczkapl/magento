@@ -67,7 +67,15 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
      *
      * @var array
      */
-    protected $_cancelStatuses = array(self::MARKED_FOR_CANCELLATION_STATUS);
+    protected $_cancelStatuses = array(
+        self::SAVED,
+        self::WAITING_FOR_PAYMENT,
+        self::PAYMENT_CONFIRMED,
+        self::PAYMENT_REJECTED,
+        self::PROCESSING,
+        self::READY_TO_SEND,
+        self::ERROR
+    );
 
     /**
      * Cancel possible statuses
@@ -380,7 +388,8 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
 
         $mapper = $this->getMapper($method);
 
-        $data      = $mapper->getData($order, $senditHelper);
+        $useReference = Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::REFERENCE_SWITCH);
+        $data = $mapper->getData($order, $senditHelper, $useReference);
         /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
         $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
 

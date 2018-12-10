@@ -1,4 +1,4 @@
-FROM bliskapaczkapl/magento_base:1.9.3.3
+FROM bliskapaczkapl/magento_base:5.6_1.9.3.3
 MAINTAINER Mateusz Koszutowski <mkoszutowski@divante.pl>
 
 # Copy latest version of Bliskapaczka module

@@ -17,6 +17,7 @@ implements Mage_Shipping_Model_Carrier_Interface
     const NEODYNAMIC_LICENSE_KEY   = 'carriers/sendit_bliskapaczka/neodinamic_license_owner';
     const NEODYNAMIC_PRINT         = 'carriers/sendit_bliskapaczka/neodinamic_print';
     const COD_SWITCH               = 'carriers/sendit_bliskapaczka/cod';
+    const REFERENCE_SWITCH         = 'carriers/sendit_bliskapaczka/reference';
 
     /**
      * Carrier's code

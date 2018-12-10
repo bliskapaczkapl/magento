@@ -209,7 +209,7 @@ class MapperTodoorTest extends TestCase
 
     public function testMapperForAdditionalInformation()
     {
-        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Todoor();
         $data = $mapper->getData($this->orderMock, $this->helperMock);
 
         $this->assertEquals($this->incrementId, $data['additionalInformation']);
@@ -217,9 +217,20 @@ class MapperTodoorTest extends TestCase
 
     public function testMapperForReference()
     {
-        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Todoor();
 
+        $data = $mapper->getData($this->orderMock, $this->helperMock, true);
         $this->assertEquals($this->incrementId, $data['reference']);
+
+        $data = $mapper->getData($this->orderMock, $this->helperMock, false);
+        $this->assertEquals(null, $data['reference']);
+    }
+
+    public function testDeliveryType()
+    {
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Todoor();
+
+        $data = $mapper->getData($this->orderMock, $this->helperMock, true);
+        $this->assertEquals('D2D', $data['deliveryType']);
     }
 }

@@ -11,9 +11,10 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
      *
      * @param Mage_Sales_Model_Order $order
      * @param Sendit_Bliskapaczka_Helper_Data $helper
+     * @param bool $reference
      * @return array
      */
-    public function getData(Mage_Sales_Model_Order $order, Sendit_Bliskapaczka_Helper_Data $helper)
+    public function getData(Mage_Sales_Model_Order $order, Sendit_Bliskapaczka_Helper_Data $helper, $reference = false)
     {
         $data = [];
 
@@ -32,7 +33,9 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
         $data['destinationCode'] = $shippingAddress->getPosCode();
 
         $data['additionalInformation'] = $order->getIncrementId();
-        $data['reference'] = $order->getIncrementId();
+        if ($reference) {
+            $data['reference'] = $order->getIncrementId();
+        }
 
         $data['parcel'] = [
             'dimensions' => $this->_getParcelDimensions($helper)

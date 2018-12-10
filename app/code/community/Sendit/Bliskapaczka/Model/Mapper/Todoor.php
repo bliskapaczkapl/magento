@@ -11,9 +11,10 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
      *
      * @param Mage_Sales_Model_Order $order
      * @param Sendit_Bliskapaczka_Helper_Data $helper
+     * @param bool $reference
      * @return array
      */
-    public function getData(Mage_Sales_Model_Order $order, Sendit_Bliskapaczka_Helper_Data $helper)
+    public function getData(Mage_Sales_Model_Order $order, Sendit_Bliskapaczka_Helper_Data $helper, $reference = false)
     {
         $data = [];
 
@@ -32,13 +33,19 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
         $data['receiverPostCode'] = $shippingAddress->getPostcode();
         $data['receiverCity'] = $shippingAddress->getCity();
 
-        $data['deliveryType'] = 'D2D';
-
         $operatorName = str_replace('_COD', '', $shippingAddress->getPosOperator());
         $data['operatorName'] = $operatorName;
 
+        $data['deliveryType'] = 'D2D';
+        if ($operatorName == 'POCZTA_P2D') {
+            $data['deliveryType'] = 'P2D';
+            $data['operatorName'] = 'POCZTA';
+        }
+
         $data['additionalInformation'] = $order->getIncrementId();
-        $data['reference'] = $order->getIncrementId();
+        if ($reference) {
+            $data['reference'] = $order->getIncrementId();
+        }
 
         $data['parcel'] = [
             'dimensions' => $this->_getParcelDimensions($helper)

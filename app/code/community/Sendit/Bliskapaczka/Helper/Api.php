@@ -235,7 +235,7 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
     {
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Cancel(
             Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
         );
 
         return $apiClient;

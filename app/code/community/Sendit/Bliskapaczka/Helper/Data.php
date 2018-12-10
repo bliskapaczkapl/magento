@@ -189,14 +189,14 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * Get operators and prices from Bliskapaczka API
      *
      * @param boot $cod
-     * @param string $type
+     * @param string $parcelDimensionsType
      * @return array
      */
-    public function getPriceList($cod = null, $type = 'fixed')
+    public function getPriceList($cod = null, $parcelDimensionsType = 'fixed')
     {
         $apiClient = $this->getApiClientPricing();
 
-        $data = array("parcel" => array('dimensions' => $this->getParcelDimensions($type)));
+        $data = array("parcel" => array('dimensions' => $this->getParcelDimensions($parcelDimensionsType)));
         if ($cod) {
             $data['codValue'] = 1;
         }

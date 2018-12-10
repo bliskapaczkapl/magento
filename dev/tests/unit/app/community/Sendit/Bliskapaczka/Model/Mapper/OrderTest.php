@@ -170,8 +170,19 @@ class MapperOrderTest extends TestCase
     public function testMapperForReference()
     {
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
-        $data = $mapper->getData($this->orderMock, $this->helperMock);
 
+        $data = $mapper->getData($this->orderMock, $this->helperMock, true);
         $this->assertEquals($this->incrementId, $data['reference']);
+
+        $data = $mapper->getData($this->orderMock, $this->helperMock, false);
+        $this->assertEquals(null, $data['reference']);
+    }
+
+    public function testDeliveryType()
+    {
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
+
+        $data = $mapper->getData($this->orderMock, $this->helperMock, true);
+        $this->assertEquals('P2P', $data['deliveryType']);
     }
 }

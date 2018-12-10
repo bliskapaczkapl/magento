@@ -59,4 +59,17 @@ class SenderTest extends TestCase
         $order->setData($this->orderData);
         $order->validate();
     }
+
+    /**
+     * @expectedException Bliskapaczka\ApiClient\Exception
+     * @expectedExceptionMessageRegExp /Invalid \w+/
+     */
+    public function testSenderPhoneNumberShouldntBeString()
+    {
+        $this->orderData['senderPhoneNumber'] = 'string';
+
+        $order = new Sender();
+        $order->setData($this->orderData);
+        $order->validate();
+    }
 }

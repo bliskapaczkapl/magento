@@ -99,11 +99,11 @@ class AdviceTest extends TestCase
 
     /**
      * @expectedException Bliskapaczka\ApiClient\Exception
-     * @expectedExceptionMessage Invalid phone number
+     * @expectedExceptionMessageRegExp /Invalid \w+/
      */
-    public function testSenderPhoneNumberLongerThan30CharsValidation()
+    public function testSenderPhoneNumberShouldntBeString()
     {
-        $this->orderData['senderPhoneNumber'] = 'more_than_30_chars_111111111111';
+        $this->orderData['senderPhoneNumber'] = 'string';
 
         $order = new Advice();
         $order->setData($this->orderData);

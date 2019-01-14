@@ -20,6 +20,7 @@ class MapperTodoorTest extends TestCase
         $this->receiverFlatNumber = '';
         $this->receiverPostCode = '12-345';
         $this->receiverCity = 'Mistowe';
+        $this->grandTotals = 110.00;
 
         $this->addressMock = $this->getMockBuilder(Mage_Sales_Model_Order_Address::class)
                                     ->disableOriginalConstructor()
@@ -232,5 +233,62 @@ class MapperTodoorTest extends TestCase
 
         $data = $mapper->getData($this->orderMock, $this->helperMock, true);
         $this->assertEquals('D2D', $data['deliveryType']);
+    }
+
+    public function testCoD()
+    {
+        # Without CoD
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
+
+        $data = $mapper->getData($this->orderMock, $this->helperMock, true);
+        $this->assertEquals(null, $data['codValue']);
+
+        # With CoD
+        $addressMock = $this->getMockBuilder(Mage_Sales_Model_Order_Address::class)
+                                    ->disableOriginalConstructor()
+                                    ->disableOriginalClone()
+                                    ->disableArgumentCloning()
+                                    ->disallowMockingUnknownTypes()
+                                    ->setMethods(
+                                        array(
+                                            'getFirstname',
+                                            'getLastname',
+                                            'getTelephone',
+                                            'getEmail',
+                                            'getPosOperator',
+                                            'getPosCode'
+                                        )
+                                    )
+                                    ->getMock();
+
+        $addressMock->method('getFirstname')->will($this->returnValue($this->receiverFirstName));
+        $addressMock->method('getLastname')->will($this->returnValue($this->receiverLastName));
+        $addressMock->method('getTelephone')->will($this->returnValue($this->receiverPhoneNumber));
+        $addressMock->method('getEmail')->will($this->returnValue($this->receiverEmail));
+        $addressMock->method('getPosOperator')->will($this->returnValue('DPD_COD'));
+        $addressMock->method('getPosCode')->will($this->returnValue($this->destinationCode));
+
+        $orderMock = $this->getMockBuilder(Mage_Sales_Model_Order::class)
+                                     ->disableOriginalConstructor()
+                                     ->disableOriginalClone()
+                                     ->disableArgumentCloning()
+                                     ->disallowMockingUnknownTypes()
+                                     ->setMethods(
+                                        array(
+                                            'getShippingAddress',
+                                            'getIncrementId',
+                                            'getGrandTotal'
+                                        )
+                                    )
+                                     ->getMock();
+
+        $orderMock->method('getShippingAddress')->will($this->returnValue($addressMock));
+        $orderMock->method('getIncrementId')->will($this->returnValue($this->incrementId));
+        $orderMock->method('getGrandTotal')->will($this->returnValue($this->grandTotals));
+
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
+
+        $data = $mapper->getData($orderMock, $this->helperMock, true);
+        $this->assertEquals($this->grandTotals, $data['codValue']);
     }
 }

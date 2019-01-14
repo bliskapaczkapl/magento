@@ -219,8 +219,24 @@ class MapperOrderTest extends TestCase
         $addressMock->method('getLastname')->will($this->returnValue($this->receiverLastName));
         $addressMock->method('getTelephone')->will($this->returnValue($this->receiverPhoneNumber));
         $addressMock->method('getEmail')->will($this->returnValue($this->receiverEmail));
-        $addressMock->method('getPosOperator')->will($this->returnValue('INPOST_COD'));
+        $addressMock->method('getPosOperator')->will($this->returnValue('INPOST'));
         $addressMock->method('getPosCode')->will($this->returnValue($this->destinationCode));
+
+// $method = $order->getShippingMethod(true)->getMethod();
+
+                                     
+        $shippingMethod = $this->getMockBuilder(Varien_Object::class)
+                                 ->disableOriginalConstructor()
+                                 ->disableOriginalClone()
+                                 ->disableArgumentCloning()
+                                 ->disallowMockingUnknownTypes()
+                                 ->setMethods(
+                                     array(
+                                         'getMethod'
+                                     )
+                                 )
+                                 ->getMock();
+        $shippingMethod->method('getMethod')->will($this->returnValue('bliskapaczka_sendit_bliskapaczka_COD'));
 
         $orderMockFirst = $this->getMockBuilder(Mage_Sales_Model_Order::class)
                                      ->disableOriginalConstructor()
@@ -231,13 +247,18 @@ class MapperOrderTest extends TestCase
                                          array(
                                              'getShippingAddress',
                                              'getIncrementId',
-                                             'getGrandTotal'
+                                             'getGrandTotal',
+                                             'getShippingMethod'
                                          )
                                      )
                                      ->getMock();
 
         $orderMockFirst->method('getShippingAddress')->will($this->returnValue($addressMock));
         $orderMockFirst->method('getIncrementId')->will($this->returnValue($this->incrementId));
+        $orderMockFirst
+            ->method('getShippingMethod')
+            ->with($this->equalTo(true))
+            ->will($this->returnValue($shippingMethod));
 
         $orderMockFirst->method('getGrandTotal')->will($this->returnValue('110.0000'));
         $data = $mapper->getData($orderMockFirst, $this->helperMock, true);
@@ -252,13 +273,18 @@ class MapperOrderTest extends TestCase
                                          array(
                                              'getShippingAddress',
                                              'getIncrementId',
-                                             'getGrandTotal'
+                                             'getGrandTotal',
+                                             'getShippingMethod'
                                          )
                                      )
                                      ->getMock();
 
         $orderMockSecound->method('getShippingAddress')->will($this->returnValue($addressMock));
         $orderMockSecound->method('getIncrementId')->will($this->returnValue($this->incrementId));
+        $orderMockSecound
+            ->method('getShippingMethod')
+            ->with($this->equalTo(true))
+            ->will($this->returnValue($shippingMethod));
 
         $orderMockSecound->method('getGrandTotal')->will($this->returnValue('110.0100'));
         $data = $mapper->getData($orderMockSecound, $this->helperMock, true);

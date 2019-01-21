@@ -79,4 +79,22 @@ abstract class Sendit_Bliskapaczka_Model_Mapper_Abstract
 
         return $data;
     }
+
+    /**
+     * Prepare CoD data in fomrat accptable by Bliskapaczka API
+     *
+     * @param array $data
+     * @param Mage_Sales_Model_Order $order
+     * @return array
+     */
+    protected function _prepareCodData($data, Mage_Sales_Model_Order $order)
+    {
+        if (strpos($order->getShippingMethod(true)->getMethod(), '_COD') !== false) {
+            $grandTotal = (string)round(floatval($order->getGrandTotal()), 2);
+            $data['codValue'] = $grandTotal;
+            $data['insuranceValue'] = $grandTotal;
+        }
+
+        return $data;
+    }
 }

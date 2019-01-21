@@ -51,6 +51,19 @@ class MapperTodoorDeliveryTypeTest extends TestCase
         $this->addressMock->method('getPostcode')->will($this->returnValue($this->receiverPostCode));
         $this->addressMock->method('getCity')->will($this->returnValue($this->receiverCity));
 
+        $shippingMethod = $this->getMockBuilder(Varien_Object::class)
+                                 ->disableOriginalConstructor()
+                                 ->disableOriginalClone()
+                                 ->disableArgumentCloning()
+                                 ->disallowMockingUnknownTypes()
+                                 ->setMethods(
+                                     array(
+                                         'getMethod'
+                                     )
+                                 )
+                                 ->getMock();
+        $shippingMethod->method('getMethod')->will($this->returnValue('bliskapaczka_courier_DPD_COD'));
+
         $this->orderMock = $this->getMockBuilder(Mage_Sales_Model_Order::class)
                                      ->disableOriginalConstructor()
                                      ->disableOriginalClone()

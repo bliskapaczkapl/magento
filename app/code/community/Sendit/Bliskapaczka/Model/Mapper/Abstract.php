@@ -92,7 +92,7 @@ abstract class Sendit_Bliskapaczka_Model_Mapper_Abstract
         if (strpos($order->getShippingMethod(true)->getMethod(), '_COD') !== false) {
             $grandTotal = (string)round(floatval($order->getGrandTotal()), 2);
             $data['codValue'] = $grandTotal;
-            $data['insuranceValue'] = $grandTotal;
+            $data['parcel']['insuranceValue'] = $grandTotal;
         }
 
         return $data;

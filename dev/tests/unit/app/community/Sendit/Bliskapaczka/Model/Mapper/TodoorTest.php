@@ -260,7 +260,7 @@ class MapperTodoorTest extends TestCase
 
         $data = $mapper->getData($this->orderMock, $this->helperMock, true);
         $this->assertEquals(null, $data['codValue']);
-        $this->assertEquals(null, $data['insuranceValue']);
+        $this->assertEquals(null, $data['parcel']['insuranceValue']);
 
         # With CoD
         $shippingMethod = $this->getMockBuilder(Varien_Object::class)
@@ -325,7 +325,7 @@ class MapperTodoorTest extends TestCase
         $orderMockFirst->method('getGrandTotal')->will($this->returnValue('110.0000'));
         $data = $mapper->getData($orderMockFirst, $this->helperMock, true);
         $this->assertSame('110', $data['codValue']);
-        $this->assertSame('110', $data['insuranceValue']);
+        $this->assertSame('110', $data['parcel']['insuranceValue']);
 
         $orderMockSecound = $this->getMockBuilder(Mage_Sales_Model_Order::class)
                                      ->disableOriginalConstructor()
@@ -352,6 +352,6 @@ class MapperTodoorTest extends TestCase
         $orderMockSecound->method('getGrandTotal')->will($this->returnValue('110.0100'));
         $data = $mapper->getData($orderMockSecound, $this->helperMock, true);
         $this->assertSame('110.01', $data['codValue']);
-        $this->assertSame('110.01', $data['insuranceValue']);
+        $this->assertSame('110.01', $data['parcel']['insuranceValue']);
     }
 }

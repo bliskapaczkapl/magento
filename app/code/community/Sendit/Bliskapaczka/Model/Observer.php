@@ -149,6 +149,7 @@ class Sendit_Bliskapaczka_Model_Observer
 
         $useReference = Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::REFERENCE_SWITCH);
         $data = $mapper->getData($order, $senditHelper, $useReference);
+
         /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
         $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
         $apiClient = $senditApiHelper->getApiClientForOrder($method, $senditHelper);

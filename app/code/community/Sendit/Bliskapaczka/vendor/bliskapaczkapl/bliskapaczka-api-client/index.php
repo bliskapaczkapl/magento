@@ -61,6 +61,36 @@ $pricingData = [
             "weight" => 2
         ]
     ],
+    "deliveryType" => "P2P"
+];
+var_dump($apiClient->get($pricingData));
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey, 'test');
+
+$pricingData = [
+    "parcel" => [
+        "dimensions" => [
+            "height" => 20,
+            "length" => 20,
+            "width" => 20,
+            "weight" => 2
+        ]
+    ],
+    "deliveryType" => "P2D"
+];
+var_dump($apiClient->get($pricingData));
+
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey, 'test');
+
+$pricingData = [
+    "parcel" => [
+        "dimensions" => [
+            "height" => 20,
+            "length" => 20,
+            "width" => 20,
+            "weight" => 2
+        ]
+    ],
     'codValue' => 1
 ];
 var_dump($apiClient->get($pricingData));

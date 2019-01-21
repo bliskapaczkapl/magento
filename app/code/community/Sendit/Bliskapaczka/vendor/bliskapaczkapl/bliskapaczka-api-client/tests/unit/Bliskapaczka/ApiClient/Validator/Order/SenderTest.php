@@ -133,4 +133,26 @@ class SenderTest extends TestCase
         $order->setData($this->orderData);
         $this->assertTrue($order->validate());
     }
+
+    public function testCodPayoutBankAccountNumberShouldntBeValidated()
+    {
+        $this->orderData['codPayoutBankAccountNumber'] = '';
+
+        $order = new Sender();
+        $order->setData($this->orderData);
+        $this->assertTrue($order->validate());
+    }
+
+    /**
+     * @expectedException Bliskapaczka\ApiClient\Exception
+     * @expectedExceptionMessage Invalid CoD Payout Bank Account Number
+     */
+    public function testCodPayoutBankAccountNumber()
+    {
+        $this->orderData['codPayoutBankAccountNumber'] = '16102019120000910201486274';
+
+        $order = new Sender();
+        $order->setData($this->orderData);
+        $order->validate();
+    }
 }

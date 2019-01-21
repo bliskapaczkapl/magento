@@ -2,7 +2,8 @@
     "name": "bliskapaczkapl/bliskapaczka-api-client",
     "description": "BliczkaPaczka API Client",
     "require": {
-        "psr/log": "~1.0.0"
+        "psr/log": "~1.1.0",
+        "globalcitizen/php-iban": "^2.6"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",

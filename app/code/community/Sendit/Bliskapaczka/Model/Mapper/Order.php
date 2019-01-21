@@ -42,7 +42,7 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
         ];
 
         $data = $this->_prepareSenderData($data, $helper);
-        $data = $this->_prepareCodData($data, $order);
+        $data = $this->_prepareCodData($data, $order, $helper);
 
         return $data;
     }

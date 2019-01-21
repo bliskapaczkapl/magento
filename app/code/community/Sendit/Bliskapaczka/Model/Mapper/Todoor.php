@@ -52,7 +52,7 @@ class Sendit_Bliskapaczka_Model_Mapper_Todoor extends Sendit_Bliskapaczka_Model_
         ];
 
         $data = $this->_prepareSenderData($data, $helper);
-        $data = $this->_prepareCodData($data, $order);
+        $data = $this->_prepareCodData($data, $order, $helper);
 
         return $data;
     }

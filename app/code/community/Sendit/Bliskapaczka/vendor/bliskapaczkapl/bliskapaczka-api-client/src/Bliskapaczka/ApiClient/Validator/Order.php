@@ -32,7 +32,7 @@ class Order extends AbstractValidator implements ValidatorInterface
         'destinationCode' => ['notblank' => true],
         'postingCode' => [],
         'codValue' => [],
-        'insuranceValue' => [],
+        'codPayoutBankAccountNumber' => [],
         'additionalInformation' => [],
         'parcel' => []
     ];

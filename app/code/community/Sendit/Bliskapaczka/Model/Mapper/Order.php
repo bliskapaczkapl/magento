@@ -27,6 +27,10 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
 
         $data['deliveryType'] = 'P2P';
 
+        if (strpos($order->getShippingMethod(true)->getMethod(), '_COD') !== false) {
+            $data['codValue'] = (string)round(floatval($order->getGrandTotal()), 2);
+        }
+
         $operatorName = str_replace('_COD', '', $shippingAddress->getPosOperator());
         $data['operatorName'] = $operatorName;
 

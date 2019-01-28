@@ -355,7 +355,9 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
      */
     protected function getMapper($method)
     {
-        if ($method == 'bliskapaczka_sendit_bliskapaczka') {
+        if ($method == 'bliskapaczka_sendit_bliskapaczka'
+            || $method == 'bliskapaczka_sendit_bliskapaczka_COD'
+        ) {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
         } else {

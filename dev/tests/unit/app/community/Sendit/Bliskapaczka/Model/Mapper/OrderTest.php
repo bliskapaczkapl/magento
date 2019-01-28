@@ -16,6 +16,7 @@ class MapperOrderTest extends TestCase
         $this->receiverEmail = 'zenek.bliskopaczki@sendit.pl';
         $this->operatorName = 'INPOST';
         $this->destinationCode = 'KRA010';
+        $this->grandTotals = '110.0000';
 
         $this->addressMock = $this->getMockBuilder(Mage_Sales_Model_Order_Address::class)
                                     ->disableOriginalConstructor()
@@ -51,13 +52,15 @@ class MapperOrderTest extends TestCase
                                      ->setMethods(
                                         array(
                                             'getShippingAddress',
-                                            'getIncrementId'
+                                            'getIncrementId',
+                                            'getGrandTotal'
                                         )
                                     )
                                      ->getMock();
 
         $this->orderMock->method('getShippingAddress')->will($this->returnValue($this->addressMock));
         $this->orderMock->method('getIncrementId')->will($this->returnValue($this->incrementId));
+        $this->orderMock->method('getGrandTotal')->will($this->returnValue($this->grandTotals));
 
         $this->helperMock = $this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
                                      ->disableOriginalConstructor()
@@ -140,7 +143,7 @@ class MapperOrderTest extends TestCase
         $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
         $data = $mapper->getData($this->orderMock, $this->helperMock);
 
-        $this->assertEquals($this->operatorName, $data['operatorName']);
+        $this->assertEquals(str_replace('_COD', '', $this->operatorName), $data['operatorName']);
     }
 
     public function testMapperForDestinationCode()
@@ -184,5 +187,107 @@ class MapperOrderTest extends TestCase
 
         $data = $mapper->getData($this->orderMock, $this->helperMock, true);
         $this->assertEquals('P2P', $data['deliveryType']);
+    }
+
+    public function testCoD()
+    {
+        # Without CoD
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Order();
+
+        $data = $mapper->getData($this->orderMock, $this->helperMock, true);
+        $this->assertEquals(null, $data['codValue']);
+
+        # With CoD
+        $addressMock = $this->getMockBuilder(Mage_Sales_Model_Order_Address::class)
+                                    ->disableOriginalConstructor()
+                                    ->disableOriginalClone()
+                                    ->disableArgumentCloning()
+                                    ->disallowMockingUnknownTypes()
+                                    ->setMethods(
+                                        array(
+                                            'getFirstname',
+                                            'getLastname',
+                                            'getTelephone',
+                                            'getEmail',
+                                            'getPosOperator',
+                                            'getPosCode'
+                                        )
+                                    )
+                                    ->getMock();
+
+        $addressMock->method('getFirstname')->will($this->returnValue($this->receiverFirstName));
+        $addressMock->method('getLastname')->will($this->returnValue($this->receiverLastName));
+        $addressMock->method('getTelephone')->will($this->returnValue($this->receiverPhoneNumber));
+        $addressMock->method('getEmail')->will($this->returnValue($this->receiverEmail));
+        $addressMock->method('getPosOperator')->will($this->returnValue('INPOST'));
+        $addressMock->method('getPosCode')->will($this->returnValue($this->destinationCode));
+
+// $method = $order->getShippingMethod(true)->getMethod();
+
+                                     
+        $shippingMethod = $this->getMockBuilder(Varien_Object::class)
+                                 ->disableOriginalConstructor()
+                                 ->disableOriginalClone()
+                                 ->disableArgumentCloning()
+                                 ->disallowMockingUnknownTypes()
+                                 ->setMethods(
+                                     array(
+                                         'getMethod'
+                                     )
+                                 )
+                                 ->getMock();
+        $shippingMethod->method('getMethod')->will($this->returnValue('bliskapaczka_sendit_bliskapaczka_COD'));
+
+        $orderMockFirst = $this->getMockBuilder(Mage_Sales_Model_Order::class)
+                                     ->disableOriginalConstructor()
+                                     ->disableOriginalClone()
+                                     ->disableArgumentCloning()
+                                     ->disallowMockingUnknownTypes()
+                                     ->setMethods(
+                                         array(
+                                             'getShippingAddress',
+                                             'getIncrementId',
+                                             'getGrandTotal',
+                                             'getShippingMethod'
+                                         )
+                                     )
+                                     ->getMock();
+
+        $orderMockFirst->method('getShippingAddress')->will($this->returnValue($addressMock));
+        $orderMockFirst->method('getIncrementId')->will($this->returnValue($this->incrementId));
+        $orderMockFirst
+            ->method('getShippingMethod')
+            ->with($this->equalTo(true))
+            ->will($this->returnValue($shippingMethod));
+
+        $orderMockFirst->method('getGrandTotal')->will($this->returnValue('110.0000'));
+        $data = $mapper->getData($orderMockFirst, $this->helperMock, true);
+        $this->assertSame('110', $data['codValue']);
+
+        $orderMockSecound = $this->getMockBuilder(Mage_Sales_Model_Order::class)
+                                     ->disableOriginalConstructor()
+                                     ->disableOriginalClone()
+                                     ->disableArgumentCloning()
+                                     ->disallowMockingUnknownTypes()
+                                     ->setMethods(
+                                         array(
+                                             'getShippingAddress',
+                                             'getIncrementId',
+                                             'getGrandTotal',
+                                             'getShippingMethod'
+                                         )
+                                     )
+                                     ->getMock();
+
+        $orderMockSecound->method('getShippingAddress')->will($this->returnValue($addressMock));
+        $orderMockSecound->method('getIncrementId')->will($this->returnValue($this->incrementId));
+        $orderMockSecound
+            ->method('getShippingMethod')
+            ->with($this->equalTo(true))
+            ->will($this->returnValue($shippingMethod));
+
+        $orderMockSecound->method('getGrandTotal')->will($this->returnValue('110.0100'));
+        $data = $mapper->getData($orderMockSecound, $this->helperMock, true);
+        $this->assertSame('110.01', $data['codValue']);
     }
 }

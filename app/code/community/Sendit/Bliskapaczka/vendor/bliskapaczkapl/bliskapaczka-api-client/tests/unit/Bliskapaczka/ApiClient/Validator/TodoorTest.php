@@ -30,7 +30,6 @@ class TodoorTest extends TestCase
             "receiverCity" => "Testowe",
             "deliveryType" => "D2D",
             "operatorName" => "DPD",
-            "insuranceValue" => 0,
             "additionalInformation" => "string",
             "parcel" => [
                 "dimensions" => [
@@ -38,7 +37,8 @@ class TodoorTest extends TestCase
                     "length" => 20,
                     "width" => 20,
                     "weight" => 2
-                ]
+                ],
+                "insuranceValue" => 0
             ]
         ];
     }

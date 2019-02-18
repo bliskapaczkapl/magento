@@ -20,6 +20,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const PARCEL_DEFAULT_SIZE_Y = 12;
     const PARCEL_DEFAULT_SIZE_Z = 16;
     const PARCEL_DEFAULT_SIZE_WEIGHT = 1;
+    const COD_BANK_ACCOUNT_NUMBER = 'carriers/sendit_bliskapaczka/cod_bank_account_number';
     
     const SENDER_EMAIL = 'carriers/sendit_bliskapaczka/sender_email';
     const SENDER_FIRST_NAME = 'carriers/sendit_bliskapaczka/sender_first_name';

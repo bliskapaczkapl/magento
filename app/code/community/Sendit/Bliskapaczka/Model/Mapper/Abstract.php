@@ -79,4 +79,27 @@ abstract class Sendit_Bliskapaczka_Model_Mapper_Abstract
 
         return $data;
     }
+
+    /**
+     * Prepare CoD data in fomrat accptable by Bliskapaczka API
+     *
+     * @param array $data
+     * @param Mage_Sales_Model_Order $order
+     * @param Sendit_Bliskapaczka_Helper_Data $helper
+     * @return array
+     */
+    protected function _prepareCodData($data, Mage_Sales_Model_Order $order, Sendit_Bliskapaczka_Helper_Data $helper)
+    {
+        if (strpos($order->getShippingMethod(true)->getMethod(), '_COD') !== false) {
+            $grandTotal = (string)round(floatval($order->getGrandTotal()), 2);
+            $data['codValue'] = $grandTotal;
+            $data['parcel']['insuranceValue'] = $grandTotal;
+
+            if (Mage::getStoreConfig($helper::COD_BANK_ACCOUNT_NUMBER)) {
+                $data['codPayoutBankAccountNumber'] = Mage::getStoreConfig($helper::COD_BANK_ACCOUNT_NUMBER);
+            }
+        }
+
+        return $data;
+    }
 }

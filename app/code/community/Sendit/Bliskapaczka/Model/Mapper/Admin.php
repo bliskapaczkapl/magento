@@ -27,6 +27,8 @@ class Sendit_Bliskapaczka_Model_Mapper_Admin
         $data['senderPostCode'] = $postData['fields']['sender_post_code']['value'];
         $data['senderCity'] = $postData['fields']['sender_city']['value'];
 
+        $data['codPayoutBankAccountNumber'] = $postData['fields']['cod_bank_account_number']['value'];
+
         return $data;
     }
 }

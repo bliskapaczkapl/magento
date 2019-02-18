@@ -52,6 +52,19 @@ class MapperTodoorTest extends TestCase
         $this->addressMock->method('getPostcode')->will($this->returnValue($this->receiverPostCode));
         $this->addressMock->method('getCity')->will($this->returnValue($this->receiverCity));
 
+        $shippingMethod = $this->getMockBuilder(Varien_Object::class)
+                                 ->disableOriginalConstructor()
+                                 ->disableOriginalClone()
+                                 ->disableArgumentCloning()
+                                 ->disallowMockingUnknownTypes()
+                                 ->setMethods(
+                                     array(
+                                         'getMethod'
+                                     )
+                                 )
+                                 ->getMock();
+        $shippingMethod->method('getMethod')->will($this->returnValue('bliskapaczka_courier_DPD'));
+
         $this->orderMock = $this->getMockBuilder(Mage_Sales_Model_Order::class)
                                      ->disableOriginalConstructor()
                                      ->disableOriginalClone()
@@ -67,7 +80,10 @@ class MapperTodoorTest extends TestCase
                                      ->getMock();
 
         $this->orderMock->method('getShippingAddress')->will($this->returnValue($this->addressMock));
-        $this->orderMock->method('getShippingMethod')->will($this->returnValue($shippingMethod));
+        $this->orderMock
+            ->method('getShippingMethod')
+            ->with($this->equalTo(true))
+            ->will($this->returnValue($shippingMethod));
         $this->orderMock->method('getGrandTotal')->will($this->returnValue($this->grandTotals));
 
         $this->helperMock = $this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
@@ -244,8 +260,22 @@ class MapperTodoorTest extends TestCase
 
         $data = $mapper->getData($this->orderMock, $this->helperMock, true);
         $this->assertEquals(null, $data['codValue']);
+        $this->assertEquals(null, $data['parcel']['insuranceValue']);
 
         # With CoD
+        $shippingMethod = $this->getMockBuilder(Varien_Object::class)
+                                 ->disableOriginalConstructor()
+                                 ->disableOriginalClone()
+                                 ->disableArgumentCloning()
+                                 ->disallowMockingUnknownTypes()
+                                 ->setMethods(
+                                     array(
+                                         'getMethod'
+                                     )
+                                 )
+                                 ->getMock();
+        $shippingMethod->method('getMethod')->will($this->returnValue('bliskapaczka_courier_DPD_COD'));
+
         $addressMock = $this->getMockBuilder(Mage_Sales_Model_Order_Address::class)
                                     ->disableOriginalConstructor()
                                     ->disableOriginalClone()
@@ -279,17 +309,23 @@ class MapperTodoorTest extends TestCase
                                          array(
                                              'getShippingAddress',
                                              'getIncrementId',
-                                             'getGrandTotal'
+                                             'getGrandTotal',
+                                             'getShippingMethod'
                                          )
                                      )
                                      ->getMock();
 
         $orderMockFirst->method('getShippingAddress')->will($this->returnValue($addressMock));
         $orderMockFirst->method('getIncrementId')->will($this->returnValue($this->incrementId));
+        $orderMockFirst
+            ->method('getShippingMethod')
+            ->with($this->equalTo(true))
+            ->will($this->returnValue($shippingMethod));
 
         $orderMockFirst->method('getGrandTotal')->will($this->returnValue('110.0000'));
         $data = $mapper->getData($orderMockFirst, $this->helperMock, true);
         $this->assertSame('110', $data['codValue']);
+        $this->assertSame('110', $data['parcel']['insuranceValue']);
 
         $orderMockSecound = $this->getMockBuilder(Mage_Sales_Model_Order::class)
                                      ->disableOriginalConstructor()
@@ -300,16 +336,22 @@ class MapperTodoorTest extends TestCase
                                          array(
                                              'getShippingAddress',
                                              'getIncrementId',
-                                             'getGrandTotal'
+                                             'getGrandTotal',
+                                             'getShippingMethod'
                                          )
                                      )
                                      ->getMock();
 
         $orderMockSecound->method('getShippingAddress')->will($this->returnValue($addressMock));
         $orderMockSecound->method('getIncrementId')->will($this->returnValue($this->incrementId));
+        $orderMockSecound
+            ->method('getShippingMethod')
+            ->with($this->equalTo(true))
+            ->will($this->returnValue($shippingMethod));
 
         $orderMockSecound->method('getGrandTotal')->will($this->returnValue('110.0100'));
         $data = $mapper->getData($orderMockSecound, $this->helperMock, true);
         $this->assertSame('110.01', $data['codValue']);
+        $this->assertSame('110.01', $data['parcel']['insuranceValue']);
     }
 }

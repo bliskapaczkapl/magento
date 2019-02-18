@@ -15,12 +15,15 @@ class GetTest extends TestCase
         }
 
         $this->pricingData = [
-            "dimensions" => [
-                "height" => 20,
-                "length" => 20,
-                "width" => 20,
-                "weight" => 2
-            ]
+            "parcel" => [
+                "dimensions" => [
+                    "height" => 20,
+                    "length" => 20,
+                    "width" => 20,
+                    "weight" => 2
+                ]
+            ],
+            "deliveryType" => "P2P"
         ];
 
         $this->deleteInteractions();

@@ -18,6 +18,7 @@ class MapperAdminTest extends TestCase
         $this->senderFlatNumber = '';
         $this->senderPostCode = '77-100';
         $this->senderCity = 'Miastowe';
+        $this->bankAccont = '16102019120000910201486274';
 
         $this->postData = array(
             'fields' => array(
@@ -45,6 +46,7 @@ class MapperAdminTest extends TestCase
                 'specificcountry' => array( 'value' => '', ),
                 'showmethod' => array( 'value' => '0', ),
                 'sort_order' => array( 'value' => '10', ),
+                'cod_bank_account_number' => array( 'value' => $this->bankAccont, ),
             ),
         );
 
@@ -145,5 +147,13 @@ class MapperAdminTest extends TestCase
         $data = $mapper->getData($this->postData, $this->helperMock);
 
         $this->assertEquals($this->senderCity, $data['senderCity']);
+    }
+
+    public function testMapperForCodBankAccount()
+    {
+        $mapper = new Sendit_Bliskapaczka_Model_Mapper_Admin();
+        $data = $mapper->getData($this->postData, $this->helperMock);
+
+        $this->assertEquals($this->bankAccont, $data['codPayoutBankAccountNumber']);
     }
 }

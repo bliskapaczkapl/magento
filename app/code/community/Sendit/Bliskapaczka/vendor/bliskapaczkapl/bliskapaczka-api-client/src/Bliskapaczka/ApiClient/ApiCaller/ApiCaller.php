@@ -54,6 +54,12 @@ class ApiCaller
             throw new Exception($responseDecoded->error, 1);
         }
 
+        if (isset($responseDecoded->errors)) {
+            foreach ($responseDecoded->errors as $error) {
+                throw new Exception($error->message . ' ' . $error->field, 1);
+            }
+        }
+
         return $response;
     }
 }

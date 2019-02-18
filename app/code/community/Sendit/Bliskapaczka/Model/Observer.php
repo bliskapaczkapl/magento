@@ -29,15 +29,20 @@ class Sendit_Bliskapaczka_Model_Observer
      */
     public static function load($class)
     {
+        $vendorDir = Mage::getModuleDir('', 'Sendit_Bliskapaczka') . '/vendor/';
+
         if (preg_match('#^(Bliskapaczka\\\\ApiClient)\b#', $class)) {
-            $libDir = Mage::getModuleDir('', 'Sendit_Bliskapaczka')
-                      . '/vendor/bliskapaczkapl/bliskapaczka-api-client/src/';
+            $libDir = $vendorDir . 'bliskapaczkapl/bliskapaczka-api-client/src/';
             $phpFile = $libDir . str_replace('\\', '/', $class) . '.php';
 
             // @codingStandardsIgnoreStart
             require_once($phpFile);
             // @codingStandardsIgnoreEnd
         }
+
+        // @codingStandardsIgnoreStart
+        require_once $vendorDir . '/autoload.php';
+        // @codingStandardsIgnoreEnd
     }
 
     /**
@@ -149,6 +154,7 @@ class Sendit_Bliskapaczka_Model_Observer
 
         $useReference = Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::REFERENCE_SWITCH);
         $data = $mapper->getData($order, $senditHelper, $useReference);
+
         /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
         $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
         $apiClient = $senditApiHelper->getApiClientForOrder($method, $senditHelper);

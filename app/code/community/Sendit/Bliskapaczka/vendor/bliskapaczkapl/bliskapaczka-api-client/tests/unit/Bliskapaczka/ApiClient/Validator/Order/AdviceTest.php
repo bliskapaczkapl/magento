@@ -29,7 +29,6 @@ class AdviceTest extends TestCase
             "destinationCode" => "KRA010",
             "postingCode" => "KRA011",
             "codValue" => 0,
-            "insuranceValue" => 0,
             "additionalInformation" => "string",
             "parcel" => [
                 "dimensions" => [
@@ -37,7 +36,8 @@ class AdviceTest extends TestCase
                     "length" => 20,
                     "width" => 20,
                     "weight" => 2
-                ]
+                ],
+                "insuranceValue" => 0
             ]
         ];
     }

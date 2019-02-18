@@ -14,4 +14,4 @@ $VENDOR_DIR/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/unit/
 # cp -rf app app/code/community/Sendit/Bliskapaczka/vendor/firegento/magento/ 
 # $VENDOR_DIR/bin/phpunit --bootstrap dev/tests/bootstrap.php dev/tests/integration/
 
-docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -v ~/.composer:/tmp/composer -e COMPOSER_HOME=/tmp/composer composer/composer:php5 install --no-dev
+docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -v ~/.composer:/tmp/composer -e COMPOSER_HOME=/tmp/composer composer install --no-dev

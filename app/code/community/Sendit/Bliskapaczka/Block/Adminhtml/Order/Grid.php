@@ -97,6 +97,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
                 'align' => 'left',
                 'index' => 'status',
                 'type' => 'text',
+                'filter_index' => 'main_table.status',
             ]
         );
 

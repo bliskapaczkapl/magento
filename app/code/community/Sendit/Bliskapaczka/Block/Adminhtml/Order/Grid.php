@@ -52,7 +52,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
         $collection->getSelect()->joinLeft(
             'sales_flat_order_address',
             'sales_flat_order.entity_id = sales_flat_order_address.parent_id AND
-             sales_flat_order_address.address_type ="shipping"',
+            sales_flat_order_address.address_type ="shipping"',
             array('firstname' => 'firstname', 'lastname' => 'lastname')
         );
 
@@ -73,6 +73,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'type'      => 'number',
             'align'     => 'right',
             'index'     => 'entity_id',
+            'filter_index' => 'main_table.entity_id',
         ]);
 
         $this->addColumn('increment_id', [
@@ -83,6 +84,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
         ]);
 
         $this->_prepareFirstAndLastNameColumns();
+
         $this->addColumn('number', [
             'header'    => $this->__('number'),
             'type'      => 'text',

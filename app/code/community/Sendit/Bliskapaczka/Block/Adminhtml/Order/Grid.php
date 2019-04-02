@@ -75,14 +75,14 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'type'      => 'number',
             'align'     => 'right',
             'index'     => 'entity_id',
-            'filter_index' => 'main_table.entity_id',
+            'filter_index' => 'main_table.entity_id'
         ]);
 
         $this->addColumn('increment_id', [
             'header'    => $this->__('order id'),
             'type'      => 'number',
             'align'     => 'right',
-            'index'     => 'increment_id',
+            'index'     => 'increment_id'
         ]);
 
         $this->_prepareFirstAndLastNameColumns();
@@ -92,7 +92,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'type'      => 'text',
             'align'     => 'right',
             'index'     => 'number',
-            'filter_index' => 'main_table.number',
+            'filter_index' => 'main_table.number'
         ]);
 
         $this->addColumn(
@@ -102,7 +102,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
                 'align' => 'left',
                 'index' => 'status',
                 'type' => 'text',
-                'filter_index' => 'main_table.status',
+                'filter_index' => 'main_table.status'
             ]
         );
 
@@ -113,7 +113,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
                 'align' => 'left',
                 'index' => 'delivery_type',
                 'type' => 'text',
-                'filter_index' => 'main_table.delivery_type',
+                'filter_index' => 'main_table.delivery_type'
             ]
         );
 
@@ -122,6 +122,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'creation_date',
             'type'      =>  'datetime',
+            'filter_index' => 'main_table.creation_date'
         ]);
 
         $this->addColumn('pos_operator', [
@@ -129,7 +130,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'pos_operator',
             'type'      =>  'text',
-            'filter_index' => 'main_table.pos_operator',
+            'filter_index' => 'main_table.pos_operator'
         ]);
 
         $this->addColumn('pos_code', [
@@ -137,7 +138,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'pos_code',
             'type'      =>  'text',
-            'filter_index' => 'main_table.pos_code',
+            'filter_index' => 'main_table.pos_code'
         ]);
 
         $this->addColumn('pos_code_description', [
@@ -145,6 +146,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'pos_code_description',
             'type'      =>  'text',
+            'filter_index' => 'main_table.pos_code_description'
         ]);
 
         $this->addColumn('advice_date', [
@@ -152,6 +154,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'advice_date',
             'type'      =>  'datetime',
+            'filter_index' => 'main_table.advice_date'
         ]);
 
         $this->addColumn('tracking_number', [
@@ -159,6 +162,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'type'      => 'text',
             'align'     => 'right',
             'index'     => 'tracking_number',
+            'filter_index' => 'main_table.advice_date'
         ]);
 
         $this->addExportType('*/*/exportCsv', Mage::helper('core')->__('CSV'));

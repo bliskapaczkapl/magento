@@ -14,7 +14,7 @@
         "phploc/phploc":"^3.0",
         "sensiolabs/security-checker": "4.*"
     },
-    "type": "api client",
+    "type": "api-client",
     "autoload": {
         "files": ["src/helpers.php"],
         "psr-4": {

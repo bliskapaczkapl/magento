@@ -20,7 +20,7 @@ class ApiTest extends TestCase
     /**
      * @dataProvider shippingMethodAndAdive
      */
-    public function testGetApiClientForOrderMethodName($method, $autoAdvice, $result)
+    public function testGetApiClientForOrderMethodName($method, $autoAdvice, $receiverValidator, $result)
     {
         $this->helper = $this->getMockBuilder(Sendit_Bliskapaczka_Helper_Data::class)
                                      ->disableOriginalConstructor()
@@ -40,18 +40,23 @@ class ApiTest extends TestCase
 
 
         $hepler = new Sendit_Bliskapaczka_Helper_Api();
-        $this->assertEquals($result, $hepler->getApiClientForOrderMethodName($method, $autoAdvice, $this->helper));
+        $this->assertEquals(
+            $result,
+            $hepler->getApiClientForOrderMethodName($method, $autoAdvice, $receiverValidator, $this->helper)
+        );
     }
 
     public function shippingMethodAndAdive()
     {
         return [
-            ['bliskapaczka_sendit_bliskapaczka', '0', 'getApiClientOrder'],
-            ['bliskapaczka_sendit_bliskapaczka', '1', 'getApiClientOrderAdvice'],
-            ['bliskapaczka_sendit_bliskapaczka_COD', '0', 'getApiClientOrder'],
-            ['bliskapaczka_sendit_bliskapaczka_COD', '1', 'getApiClientOrderAdvice'],
-            ['bliskapaczka_courier_sendit_bliskapaczka_courier', '0', 'getApiClientTodoor'],
-            ['bliskapaczka_courier_sendit_bliskapaczka_courier', '1', 'getApiClientTodoorAdvice']
+            ['bliskapaczka_sendit_bliskapaczka', '0', '0', 'getApiClientOrder'],
+            ['bliskapaczka_sendit_bliskapaczka', '1', '0', 'getApiClientOrderAdvice'],
+            ['bliskapaczka_sendit_bliskapaczka_COD', '0', '0', 'getApiClientOrder'],
+            ['bliskapaczka_sendit_bliskapaczka_COD', '1', '0', 'getApiClientOrderAdvice'],
+            ['bliskapaczka_courier_sendit_bliskapaczka_courier', '0', '0', 'getApiClientTodoor'],
+            ['bliskapaczka_courier_sendit_bliskapaczka_courier', '1', '0', 'getApiClientTodoorAdvice'],
+            ['sendit_bliskapaczka_courier_GLS', '0', '1', 'getApiClientTodoorReceiverValidator'],
+            ['bliskapaczka_sendit_bliskapaczka', '0', '1', 'getApiClientOrderReceiverValidator']
         ];
     }
 }

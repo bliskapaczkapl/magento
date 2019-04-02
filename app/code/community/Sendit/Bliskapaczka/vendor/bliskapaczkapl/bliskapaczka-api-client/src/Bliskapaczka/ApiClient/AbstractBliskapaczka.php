@@ -57,6 +57,10 @@ abstract class AbstractBliskapaczka
      */
     public function __construct($bearer, $mode = 'prod')
     {
+        if (!$bearer) {
+            throw new Exception("Invalid api key", 1);
+        }
+
         $this->bearer = (string)$bearer;
         $this->mode = (string)$mode;
         $this->setApiUrl((string)$this->getApiUrlForMode($mode));

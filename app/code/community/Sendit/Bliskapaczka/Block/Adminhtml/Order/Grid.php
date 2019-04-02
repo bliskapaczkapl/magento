@@ -56,6 +56,8 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             array('firstname' => 'firstname', 'lastname' => 'lastname')
         );
 
+        $collection->getSelect()->order('entity_id DESC');
+
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -90,6 +92,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'type'      => 'text',
             'align'     => 'right',
             'index'     => 'number',
+            'filter_index' => 'main_table.number',
         ]);
 
         $this->addColumn(
@@ -110,6 +113,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
                 'align' => 'left',
                 'index' => 'delivery_type',
                 'type' => 'text',
+                'filter_index' => 'main_table.delivery_type',
             ]
         );
 
@@ -125,6 +129,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'pos_operator',
             'type'      =>  'text',
+            'filter_index' => 'main_table.pos_operator',
         ]);
 
         $this->addColumn('pos_code', [
@@ -132,6 +137,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'pos_code',
             'type'      =>  'text',
+            'filter_index' => 'main_table.pos_code',
         ]);
 
         $this->addColumn('pos_code_description', [

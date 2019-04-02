@@ -39,6 +39,11 @@
                         <class>sendit_bliskapaczka/observer</class>
                         <method>setPosData</method>
                     </sendit_bliskapaczka_set_pos_data>
+                    <sendit_bliskapaczka_validate_by_bliskapaczka_api_clinet>
+                        <type>singleton</type>
+                        <class>sendit_bliskapaczka/observer</class>
+                        <method>validateByBliskapaczkaApiClinet</method>
+                    </sendit_bliskapaczka_validate_by_bliskapaczka_api_clinet>
                 </observers>
             </checkout_controller_onepage_save_shipping_method>
             <controller_front_init_before>

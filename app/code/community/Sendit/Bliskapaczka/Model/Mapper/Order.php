@@ -20,10 +20,7 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
 
         $shippingAddress = $order->getShippingAddress();
 
-        $data['receiverFirstName'] = $shippingAddress->getFirstname();
-        $data['receiverLastName'] = $shippingAddress->getLastname();
-        $data['receiverPhoneNumber'] = $helper->telephoneNumberCleaning($shippingAddress->getTelephone());
-        $data['receiverEmail'] = $shippingAddress->getEmail();
+        $data = $this->getShippingAddressData($shippingAddress, $helper);
 
         $data['deliveryType'] = 'P2P';
 
@@ -43,6 +40,25 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
 
         $data = $this->_prepareSenderData($data, $helper);
         $data = $this->_prepareCodData($data, $order, $helper);
+
+        return $data;
+    }
+
+    /**
+     * Prepare reciver mapped data for Bliskapaczka API
+     *
+     * @param Mage_Customer_Model_Address_Abstract $shippingAddress
+     * @param Sendit_Bliskapaczka_Helper_Data $helper
+     * @return array
+     */
+    public function getShippingAddressData(
+        Mage_Customer_Model_Address_Abstract $shippingAddress,
+        Sendit_Bliskapaczka_Helper_Data $helper
+    ) {
+        $data['receiverFirstName'] = $shippingAddress->getFirstname();
+        $data['receiverLastName'] = $shippingAddress->getLastname();
+        $data['receiverPhoneNumber'] = $helper->telephoneNumberCleaning($shippingAddress->getTelephone());
+        $data['receiverEmail'] = $shippingAddress->getEmail();
 
         return $data;
     }

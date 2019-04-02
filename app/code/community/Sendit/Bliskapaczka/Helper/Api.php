@@ -194,6 +194,7 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
      *
      * @param string $shippingMethod
      * @param string $paymentMethod
+     * @param bool $advice
      * @param string $autoAdvice
      * @param boot $receiverValidator
      * @param boot $enableAutoDdviceForPayPal

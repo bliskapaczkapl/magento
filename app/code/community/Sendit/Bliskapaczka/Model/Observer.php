@@ -101,7 +101,8 @@ class Sendit_Bliskapaczka_Model_Observer
         $senditHelper = Mage::helper('sendit_bliskapaczka');
 
         if ($shippingMethod == 'bliskapaczka_sendit_bliskapaczka'
-            || $shippingMethod == 'bliskapaczka_sendit_bliskapaczka_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
+            || $shippingMethod == 'bliskapaczka_sendit_bliskapaczka_' .
+            Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
         ) {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
@@ -189,7 +190,8 @@ class Sendit_Bliskapaczka_Model_Observer
         $senditHelper = Mage::helper('sendit_bliskapaczka');
 
         if ($shippingMethod == 'bliskapaczka_sendit_bliskapaczka'
-            || $shippingMethod == 'bliskapaczka_sendit_bliskapaczka_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
+            || $shippingMethod == 'bliskapaczka_sendit_bliskapaczka_' .
+            Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
         ) {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');

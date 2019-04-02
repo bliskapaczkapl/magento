@@ -95,27 +95,21 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'filter_index' => 'main_table.number'
         ]);
 
-        $this->addColumn(
-            'status',
-            [
+        $this->addColumn('status', [
                 'header' => $this->__('status'),
                 'align' => 'left',
                 'index' => 'status',
                 'type' => 'text',
                 'filter_index' => 'main_table.status'
-            ]
-        );
+        ]);
 
-        $this->addColumn(
-            'delivery_type',
-            [
+        $this->addColumn('delivery_type', [
                 'header' => $this->__('delivery_type'),
                 'align' => 'left',
                 'index' => 'delivery_type',
                 'type' => 'text',
                 'filter_index' => 'main_table.delivery_type'
-            ]
-        );
+        ]);
 
         $this->addColumn('creation_date', [
             'header'    =>  $this->__('creation_date'),

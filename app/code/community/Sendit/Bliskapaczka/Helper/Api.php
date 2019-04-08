@@ -91,6 +91,22 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
      * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
      * @return \Bliskapaczka\ApiClient\Bliskapaczka
      */
+    public function getApiClientOrderReceiverValidator($senditHelper)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Order\Receiver(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
     public function getApiClientTodoor($senditHelper)
     {
         $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor(
@@ -120,18 +136,55 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
     /**
      * Get Bliskapaczka API Client
      *
-     * @param string $method
+     * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientTodoorReceiverValidator($senditHelper)
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Todoor\Receiver(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @param string $shippingMethod
+     * @param string $paymentMethod
      * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
      * @param bool $advice
+     * @param boot $receiverValidator
+     * @param boot $enableAutoDdviceForPayPal
      * @return mixed
      */
-    public function getApiClientForOrder($method, $senditHelper, $advice = false)
-    {
+    public function getApiClientForOrder(
+        $shippingMethod,
+        $paymentMethod,
+        $senditHelper,
+        $advice = false,
+        $receiverValidator = false,
+        $enableAutoDdviceForPayPal = false
+    ) {
         if (!$advice) {
-            $advice = Mage::getStoreConfig($senditHelper::API_AUTO_ADVICE_XML_PATH);
+            $autoAdvice = Mage::getStoreConfig($senditHelper::API_AUTO_ADVICE_XML_PATH);
         }
 
-        $methodName = $this->getApiClientForOrderMethodName($method, $advice, $senditHelper);
+        if (!$enableAutoDdviceForPayPal) {
+            $enableAutoDdviceForPayPal = Mage::getStoreConfig($senditHelper::API_AUTO_ADVICE_XML_PATH);
+        }
+
+        $methodName = $this->getApiClientForOrderMethodName(
+            $shippingMethod,
+            $paymentMethod,
+            $advice,
+            $autoAdvice,
+            $receiverValidator,
+            $enableAutoDdviceForPayPal,
+            $senditHelper
+        );
 
         return $this->{$methodName}($senditHelper);
     }
@@ -139,23 +192,41 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
     /**
      * Get method name to bliskapaczka api client create order action
      *
-     * @param string $method
+     * @param string $shippingMethod
+     * @param string $paymentMethod
+     * @param bool $advice
      * @param string $autoAdvice
+     * @param boot $receiverValidator
+     * @param boot $enableAutoDdviceForPayPal
      * @param Sendit_Bliskapaczka_Helper_Data $senditHelper
      * @return string
      */
-    public function getApiClientForOrderMethodName($method, $autoAdvice, $senditHelper)
-    {
+    public function getApiClientForOrderMethodName(
+        $shippingMethod,
+        $paymentMethod,
+        $advice,
+        $autoAdvice,
+        $receiverValidator,
+        $enableAutoDdviceForPayPal,
+        $senditHelper
+    ) {
         $type = 'Todoor';
 
-        if ($senditHelper->isPoint($method)) {
+        if ($senditHelper->isPoint($shippingMethod)) {
             $type = 'Order';
         }
 
         $methodName = 'getApiClient' . $type;
 
-        if ($autoAdvice) {
+        if ($advice ||
+            ($autoAdvice && strpos($paymentMethod, 'paypal') === false) ||
+            ($autoAdvice && is_int(strpos($paymentMethod, 'paypal')) && !$enableAutoDdviceForPayPal)
+        ) {
             $methodName .= 'Advice';
+        }
+
+        if ($receiverValidator) {
+            $methodName .= 'ReceiverValidator';
         }
 
         return $methodName;

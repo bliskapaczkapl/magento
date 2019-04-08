@@ -56,6 +56,9 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             array('firstname' => 'firstname', 'lastname' => 'lastname')
         );
 
+        $this->setDefaultSort('entity_id', 'desc');
+
+
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -73,14 +76,14 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'type'      => 'number',
             'align'     => 'right',
             'index'     => 'entity_id',
-            'filter_index' => 'main_table.entity_id',
+            'filter_index' => 'main_table.entity_id'
         ]);
 
         $this->addColumn('increment_id', [
             'header'    => $this->__('order id'),
             'type'      => 'number',
             'align'     => 'right',
-            'index'     => 'increment_id',
+            'index'     => 'increment_id'
         ]);
 
         $this->_prepareFirstAndLastNameColumns();
@@ -90,34 +93,31 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'type'      => 'text',
             'align'     => 'right',
             'index'     => 'number',
+            'filter_index' => 'main_table.number'
         ]);
 
-        $this->addColumn(
-            'status',
-            [
+        $this->addColumn('status', [
                 'header' => $this->__('status'),
                 'align' => 'left',
                 'index' => 'status',
                 'type' => 'text',
-                'filter_index' => 'main_table.status',
-            ]
-        );
+                'filter_index' => 'main_table.status'
+        ]);
 
-        $this->addColumn(
-            'delivery_type',
-            [
+        $this->addColumn('delivery_type', [
                 'header' => $this->__('delivery_type'),
                 'align' => 'left',
                 'index' => 'delivery_type',
                 'type' => 'text',
-            ]
-        );
+                'filter_index' => 'main_table.delivery_type'
+        ]);
 
         $this->addColumn('creation_date', [
             'header'    =>  $this->__('creation_date'),
             'align'     =>  'left',
             'index'     =>  'creation_date',
             'type'      =>  'datetime',
+            'filter_index' => 'main_table.creation_date'
         ]);
 
         $this->addColumn('pos_operator', [
@@ -125,6 +125,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'pos_operator',
             'type'      =>  'text',
+            'filter_index' => 'main_table.pos_operator'
         ]);
 
         $this->addColumn('pos_code', [
@@ -132,6 +133,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'pos_code',
             'type'      =>  'text',
+            'filter_index' => 'main_table.pos_code'
         ]);
 
         $this->addColumn('pos_code_description', [
@@ -139,6 +141,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'pos_code_description',
             'type'      =>  'text',
+            'filter_index' => 'main_table.pos_code_description'
         ]);
 
         $this->addColumn('advice_date', [
@@ -146,6 +149,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'align'     =>  'left',
             'index'     =>  'advice_date',
             'type'      =>  'datetime',
+            'filter_index' => 'main_table.advice_date'
         ]);
 
         $this->addColumn('tracking_number', [
@@ -153,6 +157,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             'type'      => 'text',
             'align'     => 'right',
             'index'     => 'tracking_number',
+            'filter_index' => 'main_table.advice_date'
         ]);
 
         $this->addExportType('*/*/exportCsv', Mage::helper('core')->__('CSV'));

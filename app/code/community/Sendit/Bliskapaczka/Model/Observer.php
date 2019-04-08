@@ -80,6 +80,51 @@ class Sendit_Bliskapaczka_Model_Observer
         }
     }
 
+    /**
+     * Set POS data
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function validateByBliskapaczkaApiClinet(Varien_Event_Observer $observer)
+    {
+        $allData = $observer->getEvent()->getRequest()->getParam('bliskapaczka');
+
+        $quote = $observer->getEvent()->getQuote();
+        $shippingAddress = $quote->getShippingAddress();
+        $shippingMethod = $shippingAddress->getShippingMethod();
+
+        if (strpos($shippingMethod, 'bliskapaczka') === false) {
+            return $this;
+        }
+
+        /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
+        $senditHelper = Mage::helper('sendit_bliskapaczka');
+
+        if ($shippingMethod == 'bliskapaczka_sendit_bliskapaczka'
+            || $shippingMethod == 'bliskapaczka_sendit_bliskapaczka_' .
+            Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
+        ) {
+            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
+        } else {
+            /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
+            $mapper = Mage::getModel('sendit_bliskapaczka/mapper_todoor');
+        }
+
+        $data = $mapper->getShippingAddressData($shippingAddress, $senditHelper);
+
+        /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
+        $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
+        $apiClient = $senditApiHelper->getApiClientForOrder($shippingMethod, '', $senditHelper);
+
+        try {
+            $apiClient->validate($data);
+        } catch (Exception $e) {
+            Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
+            Mage::getSingleton('checkout/session')->addError($senditHelper->__($e->getMessage()));
+            $this->_redirect('checkout/cart');
+        }
+    }
 
     /**
      * Set POS data for Quote
@@ -133,17 +178,20 @@ class Sendit_Bliskapaczka_Model_Observer
             return $this;
         }
 
-        $method = $order->getShippingMethod(true)->getMethod();
+        $shippingMethod = $order->getShippingMethod(true)->getMethod();
 
-        if (strpos($method, 'bliskapaczka') === false) {
+        if (strpos($shippingMethod, 'bliskapaczka') === false) {
             return $this;
         }
+
+        $paymentMethodCode = $order->getPayment()->getMethodInstance()->getCode();
 
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = Mage::helper('sendit_bliskapaczka');
 
-        if ($method == 'bliskapaczka_sendit_bliskapaczka'
-            || $method == 'bliskapaczka_sendit_bliskapaczka_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
+        if ($shippingMethod == 'bliskapaczka_sendit_bliskapaczka'
+            || $shippingMethod == 'bliskapaczka_sendit_bliskapaczka_' .
+            Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
         ) {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
@@ -157,7 +205,7 @@ class Sendit_Bliskapaczka_Model_Observer
 
         /* @var $senditApiHelper Sendit_Bliskapaczka_Helper_Api */
         $senditApiHelper = Mage::helper('sendit_bliskapaczka/api');
-        $apiClient = $senditApiHelper->getApiClientForOrder($method, $senditHelper);
+        $apiClient = $senditApiHelper->getApiClientForOrder($shippingMethod, $paymentMethodCode, $senditHelper);
 
         try {
             $response = $apiClient->create($data);

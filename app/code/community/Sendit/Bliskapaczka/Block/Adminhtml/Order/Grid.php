@@ -56,7 +56,8 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Bloc
             array('firstname' => 'firstname', 'lastname' => 'lastname')
         );
 
-        $collection->getSelect()->order('entity_id DESC');
+        $this->setDefaultSort('entity_id', 'desc');
+
 
         $this->setCollection($collection);
 

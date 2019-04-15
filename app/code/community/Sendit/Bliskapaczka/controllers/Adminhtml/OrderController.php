@@ -206,6 +206,11 @@ class Sendit_Bliskapaczka_Adminhtml_OrderController extends Mage_Adminhtml_Contr
             /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka\Report */
             $apiClient = $senditApiHelper->getApiClientConfirm($senditHelper);
             $apiClient->setOperator('POCZTA');
+            $apiClient->confirm();
+
+            $this->_getSession()->addSuccess(
+                $this->__('The confirmation has been sent.')
+            );
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {

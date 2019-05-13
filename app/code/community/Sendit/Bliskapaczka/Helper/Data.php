@@ -154,17 +154,18 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function getPriceForCarrier($priceList, $allRates, $carrierName, $cod = false)
     {
         $rates = array();
+        $cod = ($cod ? '_COD' : '');
         foreach ($allRates as $rate) {
             $code = $rate->getCode();
             if (is_null($code)) {
-                $code = $rate->getCarrier() .'_'. $rate->getMethod(). ($cod ? '_COD' : '');
+                $code = $rate->getCarrier() .'_'. $rate->getMethod(). $cod;
             }
             $rates[$code] = $rate;
         }
 
         foreach ($priceList as $carrier) {
             if ($carrier->operatorName == $carrierName
-                && $rates['sendit_bliskapaczka_' . $carrierName . ($cod ? '_COD' : '')]
+                && $rates['sendit_bliskapaczka_' . $carrierName . $cod]
             ) {
                 return $this->_getPriceWithCartRules($carrier, $rates, $cod);
             }
@@ -318,16 +319,10 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiMode($configValue = null)
     {
-        $mode = '';
+        $mode = 'prod';
 
-        switch ($configValue) {
-            case '1':
-                $mode = 'test';
-                break;
-
-            default:
-                $mode = 'prod';
-                break;
+        if ($configValue == '1') {
+            $mode = 'test';
         }
 
         return $mode;

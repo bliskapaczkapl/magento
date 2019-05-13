@@ -371,16 +371,10 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     protected function _getShortMethodName($method)
     {
-        switch ($method) {
-            case 'bliskapaczka_sendit_bliskapaczka':
-            case 'bliskapaczka_sendit_bliskapaczka_COD':
-                $shortMethod = 'point';
-                break;
-
-            default:
-                $shortMethod = 'courier';
+        $shortMethod = 'courier';
+        if ($method === 'bliskapaczka_sendit_bliskapaczka' || $method === 'bliskapaczka_sendit_bliskapaczka_COD') {
+            $shortMethod = 'point';
         }
-
         return $shortMethod;
     }
 }

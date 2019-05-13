@@ -319,13 +319,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiMode($configValue = null)
     {
-        $mode = 'prod';
 
-        if ($configValue == '1') {
-            $mode = 'test';
-        }
-
-        return $mode;
+        return ($configValue == '1') ? 'test' : 'prod';
     }
 
     /**
@@ -336,13 +331,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function isCourier($method)
     {
-        $shortMethodName = $this->_getShortMethodName($method);
-
-        if ($shortMethodName == 'courier') {
-            return true;
-        }
-
-        return false;
+        return ($this->_getShortMethodName($method) === 'courier') ? true : false;
     }
 
     /**
@@ -353,13 +342,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function isPoint($method)
     {
-        $shortMethodName = $this->_getShortMethodName($method);
-
-        if ($shortMethodName == 'point') {
-            return true;
-        }
-
-        return false;
+        return ($this->_getShortMethodName($method) === 'point') ? true : false;
     }
 
     /**
@@ -367,7 +350,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function cancel($bliskaOrderId)
     {
-        $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
+        $bliskaOrder = $this->_getOrderById($bliskaOrderId);
         $bliskaOrder->cancel()->save();
     }
 
@@ -376,7 +359,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function advice($bliskaOrderId)
     {
-        $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
+        $bliskaOrder = $this->_getOrderById($bliskaOrderId);
         $bliskaOrder->advice();
     }
 
@@ -399,5 +382,14 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         return $shortMethod;
+    }
+
+    /**
+     * @param $bliskaOrderId
+     * @return Mage_Core_Model_Abstract
+     */
+    protected function _getOrderById($bliskaOrderId)
+    {
+        return Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
     }
 }

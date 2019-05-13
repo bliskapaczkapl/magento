@@ -350,7 +350,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function cancel($bliskaOrderId)
     {
-        $bliskaOrder = $this->_getOrderById($bliskaOrderId);
+        $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
         $bliskaOrder->cancel()->save();
     }
 
@@ -359,7 +359,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function advice($bliskaOrderId)
     {
-        $bliskaOrder = $this->_getOrderById($bliskaOrderId);
+        $bliskaOrder = Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
         $bliskaOrder->advice();
     }
 
@@ -382,14 +382,5 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         return $shortMethod;
-    }
-
-    /**
-     * @param $bliskaOrderId
-     * @return Mage_Core_Model_Abstract
-     */
-    protected function _getOrderById($bliskaOrderId)
-    {
-        return Mage::getModel('sendit_bliskapaczka/order')->load($bliskaOrderId);
     }
 }

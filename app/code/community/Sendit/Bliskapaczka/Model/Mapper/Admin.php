@@ -15,7 +15,6 @@ class Sendit_Bliskapaczka_Model_Mapper_Admin
     public function getData(array $postData, Sendit_Bliskapaczka_Helper_Data $helper)
     {
         $data = [];
-
         $data['senderEmail'] = $postData['fields']['sender_email']['value'];
         $data['senderFirstName'] = $postData['fields']['sender_first_name']['value'];
         $data['senderLastName'] = $postData['fields']['sender_last_name']['value'];

@@ -1,6 +1,12 @@
 FROM bliskapaczkapl/magento_base:7.2_1.9.4.0
 MAINTAINER Mateusz Koszutowski <mkoszutowski@divante.pl>
 
+RUN apt-get update && apt-get install -y \
+    mc \
+    nano
+
+# Install and enable xDebug
+RUN pecl install xdebug
 # Copy latest version of Bliskapaczka module
 COPY app ${magento_path}/app
 COPY dev ${magento_path}/dev

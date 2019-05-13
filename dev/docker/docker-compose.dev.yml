@@ -19,3 +19,4 @@ services:
       - "./skin/frontend/base/default/css/bliskapaczka.css:/var/www/magento/skin/frontend/base/default/css/bliskapaczka.css"
       - "./skin/adminhtml/base/default/css/bliskapaczka.css:/var/www/magento/skin/adminhtml/base/default/css/bliskapaczka.css"
       - "./composer.json:/var/www/magento/composer.json"
+      - "./dev/docker/php/20-xdebug.ini:/etc/php/7.2/fpm/conf.d/20-xdebug.ini"

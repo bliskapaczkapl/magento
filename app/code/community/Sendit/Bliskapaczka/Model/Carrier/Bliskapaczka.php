@@ -74,14 +74,14 @@ implements Mage_Shipping_Model_Carrier_Interface
 
         $priceList = $this->_getPricing();
         if (!empty($priceList)) {
-            $shippingPrice = $this->_shippingPriceForAgregated($senditHelper, $request, $priceList, false);
+            $shippingPrice = $this->_shippingPriceForAgregated($senditHelper, $request, $priceList, false, $result);
             $this->_addShippingMethod($result, $operator, false, $senditHelper, $shippingPrice);
         }
 
         if (Mage::getStoreConfig(Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD_SWITCH)) {
             $priceList = $this->_getPricing(true);
             if (!empty($priceList)) {
-                $shippingPrice = $this->_shippingPriceForAgregated($senditHelper, $request, $priceList, true);
+                $shippingPrice = $this->_shippingPriceForAgregated($senditHelper, $request, $priceList, true, $result);
                 $this->_addShippingMethod($result, $operator, true, $senditHelper, $shippingPrice);
             }
         }
@@ -99,7 +99,7 @@ implements Mage_Shipping_Model_Carrier_Interface
      *
      * @return float
      */
-    protected function _shippingPriceForAgregated($senditHelper, $request, $priceList, $cod)
+    protected function _shippingPriceForAgregated($senditHelper, $request, $priceList, $cod, $result = null)
     {
         // Get Quote
         $quote = false;
@@ -116,6 +116,9 @@ implements Mage_Shipping_Model_Carrier_Interface
             $rates = array();
             foreach ($shippingAddress->getShippingRatesCollection() as $rate) {
                 $rates[] = $rate;
+            }
+            if (empty($rates) && !is_null($result)) {
+                $rates = $result->getAllRates();
             }
 
             // Get shipping price by Bliskapaczka API

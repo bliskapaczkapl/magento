@@ -58,10 +58,19 @@ class Sendit_Bliskapaczka_Model_Observer
         foreach (array('posCode', 'posOperator', 'posCodeDescription') as $type) {
             $data[$type] = $allData[$quote->getShippingAddress()->getShippingMethod() . '_' . $type];
         }
-
         $this->_setPos($data, $quote);
     }
 
+    public function saveReference(Varien_Event_Observer $observer )
+    {
+
+        $quote = $observer->getEvent()->getQuote();
+        foreach (array('posCode', 'posOperator', 'posCodeDescription') as $type) {
+            $data[$type] = 'cos';
+        }
+
+        $this->_setPos($data, $quote);
+    }
     /**
      * Set POS data
      *
@@ -75,11 +84,9 @@ class Sendit_Bliskapaczka_Model_Observer
             $data = $request['bliskapaczka'];
 
             $quote = $observer->getEvent()->getOrderCreateModel()->getQuote();
-
             $this->_setPos($data, $quote);
         }
     }
-
     /**
      * Set POS data
      *
@@ -137,6 +144,7 @@ class Sendit_Bliskapaczka_Model_Observer
         $shippingAddress = $quote->getShippingAddress();
 
         $operatorName = $data['posOperator'];
+        $operatorName = explode(' ', $operatorName)[0];
         if (!$operatorName
             && strpos(
                 $quote->getShippingAddress()->getShippingMethod(),

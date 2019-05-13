@@ -97,6 +97,7 @@ implements Mage_Shipping_Model_Carrier_Interface
      * @param json $priceList
      * @param bool $cod
      *
+     * @param null $result
      * @return float
      */
     protected function _shippingPriceForAgregated($senditHelper, $request, $priceList, $cod, $result = null)

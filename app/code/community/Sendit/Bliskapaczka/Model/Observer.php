@@ -61,16 +61,6 @@ class Sendit_Bliskapaczka_Model_Observer
         $this->_setPos($data, $quote);
     }
 
-    public function saveReference(Varien_Event_Observer $observer )
-    {
-
-        $quote = $observer->getEvent()->getQuote();
-        foreach (array('posCode', 'posOperator', 'posCodeDescription') as $type) {
-            $data[$type] = 'cos';
-        }
-
-        $this->_setPos($data, $quote);
-    }
     /**
      * Set POS data
      *

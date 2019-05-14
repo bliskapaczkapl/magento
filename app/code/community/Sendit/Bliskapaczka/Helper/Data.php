@@ -74,7 +74,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 break;
 
             default:
-                $type = $this->getStoreConfigWrapper(self::PARCEL_SIZE_TYPE_XML_PATH);
                 $height = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH);
                 $length = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH);
                 $width = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH);
@@ -119,7 +118,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function getLowestPrice($priceList, $allRates, $cod = false)
     {
         $lowestPrice = null;
-
+        $stringCode = ($cod ? '_COD' : '');
         $rates = array();
         foreach ($allRates as $rate) {
             $rates[$rate->getCode()] = $rate;
@@ -127,12 +126,12 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
         foreach ($priceList as $carrier) {
             if ($carrier->availabilityStatus == false
-                || !isset($rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')])
+                || !isset($rates['sendit_bliskapaczka_' . $carrier->operatorName . $stringCode])
             ) {
                 continue;
             }
 
-            $price = $this->_getPriceWithCartRules($carrier, $rates, $cod);
+            $price = $this->_getPriceWithCartRules($carrier, $rates, $stringCode);
 
             if ($lowestPrice == null || $lowestPrice > $price) {
                 $lowestPrice = $price;
@@ -154,20 +153,20 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function getPriceForCarrier($priceList, $allRates, $carrierName, $cod = false)
     {
         $rates = array();
-        $cod = ($cod ? '_COD' : '');
+        $sCod = ($cod ? '_COD' : '');
         foreach ($allRates as $rate) {
             $code = $rate->getCode();
             if (is_null($code)) {
-                $code = $rate->getCarrier() .'_'. $rate->getMethod(). $cod;
+                $code = $rate->getCarrier() .'_'. $rate->getMethod(). $sCod;
             }
             $rates[$code] = $rate;
         }
 
         foreach ($priceList as $carrier) {
             if ($carrier->operatorName == $carrierName
-                && $rates['sendit_bliskapaczka_' . $carrierName . $cod]
+                && $rates['sendit_bliskapaczka_' . $carrierName . $sCod]
             ) {
-                return $this->_getPriceWithCartRules($carrier, $rates, $cod);
+                return $this->_getPriceWithCartRules($carrier, $rates, $sCod);
             }
         }
 
@@ -179,13 +178,13 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      *
      * @param sdtClass $carrier
      * @param array $rates
-     * @param boot $cod
+     * @param string $cod
      * @return float
      */
     protected function _getPriceWithCartRules($carrier, $rates, $cod)
     {
         $price = $carrier->price->gross;
-        $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]->getPrice();
+        $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . $cod]->getPrice();
         $price = $priceFromMagento < $price ? $priceFromMagento : $price;
 
         return $price;
@@ -242,18 +241,19 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
         $operators = array();
         $rates = array();
+        $stringCode = ($cod ? '_COD' : '');
         foreach ($allRates as $rate) {
             $rates[$rate->getCode()] = $rate;
         }
 
         foreach ($priceList as $carrier) {
             if ($carrier->availabilityStatus == false
-                || !$rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]
+                || !$rates['sendit_bliskapaczka_' . $carrier->operatorName . $stringCode]
             ) {
                 continue;
             }
 
-            $price = $this->_getPriceWithCartRules($carrier, $rates, $cod);
+            $price = $this->_getPriceWithCartRules($carrier, $rates, $stringCode);
 
             $operators[] = array(
                 "operator" => $carrier->operatorName,

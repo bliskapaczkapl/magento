@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "bliskapaczkapl/bliskapaczka-api-client",
-            "version": "3.5.0",
+            "version": "3.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
-                "reference": "56b7db17f4710a5cd403253f7faea44f6aefc01f"
+                "reference": "841240cdd81effc351f9efa888f5967f426f26c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/56b7db17f4710a5cd403253f7faea44f6aefc01f",
-                "reference": "56b7db17f4710a5cd403253f7faea44f6aefc01f",
+                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/841240cdd81effc351f9efa888f5967f426f26c3",
+                "reference": "841240cdd81effc351f9efa888f5967f426f26c3",
                 "shasum": ""
             },
             "require": {
@@ -45,10 +45,10 @@
             },
             "description": "BliczkaPaczka API Client",
             "support": {
-                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/3.5.0",
+                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/3.5.2",
                 "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
             },
-            "time": "2019-03-25 14:45:37"
+            "time": "2019-05-06 13:29:30"
         },
         {
             "name": "globalcitizen/php-iban",
@@ -129,30 +129,41 @@
     "packages-dev": [
         {
             "name": "block8/php-docblock-checker",
-            "version": "1.8.0",
+            "version": "1.10.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dancryer/php-docblock-checker.git",
-                "reference": "2dd9f82e353c9fc4561e80af378376a7fb36990c"
+                "reference": "687bb03a1cf6dd6d0115c018d97fa68e42203299"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dancryer/php-docblock-checker/zipball/2dd9f82e353c9fc4561e80af378376a7fb36990c",
-                "reference": "2dd9f82e353c9fc4561e80af378376a7fb36990c",
+                "url": "https://api.github.com/repos/dancryer/php-docblock-checker/zipball/687bb03a1cf6dd6d0115c018d97fa68e42203299",
+                "reference": "687bb03a1cf6dd6d0115c018d97fa68e42203299",
                 "shasum": ""
             },
             "require": {
-                "nikic/php-parser": "3.*",
-                "php": ">=5.4",
-                "symfony/console": "3.4.*|4.*"
+                "ext-json": "*",
+                "nikic/php-parser": "3.*|4.*",
+                "php": ">=5.5",
+                "symfony/console": "3.4.*|4.*",
+                "symfony/yaml": "3.4.*|4.*"
             },
             "require-dev": {
-                "jakub-onderka/php-parallel-lint": "0.8.*"
+                "jakub-onderka/php-parallel-lint": "0.8.*",
+                "phperf/xh-tool": "^1.1",
+                "phpstan/phpstan": "^0.11.5",
+                "phpunit/phpunit": "^4.8",
+                "squizlabs/php_codesniffer": "^3.4"
             },
             "bin": [
-                "phpdoccheck"
+                "bin/phpdoccheck"
             ],
             "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpDocBlockChecker\\": "src"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-2-Clause"
@@ -177,7 +188,7 @@
                 "testing"
             ],
             "abandoned": "dancryer/php-docblock-checker",
-            "time": "2019-02-21 15:23:29"
+            "time": "2019-04-26 10:38:36"
         },
         {
             "name": "composer/ca-bundle",
@@ -2024,7 +2035,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v3.4.23",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
@@ -2088,16 +2099,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.4.23",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "71ce77f37af0c5ffb9590e43cc4f70e426945c5e"
+                "reference": "15a9104356436cb26e08adab97706654799d31d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/71ce77f37af0c5ffb9590e43cc4f70e426945c5e",
-                "reference": "71ce77f37af0c5ffb9590e43cc4f70e426945c5e",
+                "url": "https://api.github.com/repos/symfony/console/zipball/15a9104356436cb26e08adab97706654799d31d8",
+                "reference": "15a9104356436cb26e08adab97706654799d31d8",
                 "shasum": ""
             },
             "require": {
@@ -2156,20 +2167,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-23 15:06:07"
+            "time": "2019-04-08 09:29:13"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.23",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "8d8a9e877b3fcdc50ddecf8dcea146059753f782"
+                "reference": "681afbb26488903c5ac15e63734f1d8ac430c9b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/8d8a9e877b3fcdc50ddecf8dcea146059753f782",
-                "reference": "8d8a9e877b3fcdc50ddecf8dcea146059753f782",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/681afbb26488903c5ac15e63734f1d8ac430c9b9",
+                "reference": "681afbb26488903c5ac15e63734f1d8ac430c9b9",
                 "shasum": ""
             },
             "require": {
@@ -2212,20 +2223,20 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-24 15:45:11"
+            "time": "2019-04-11 09:48:14"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v3.4.23",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "c3dd7b7ea8cd8ec12304a5e222d7dc01cac8fa11"
+                "reference": "be0feb3fa202aedfd8d1956f2dafd563fb13acbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/c3dd7b7ea8cd8ec12304a5e222d7dc01cac8fa11",
-                "reference": "c3dd7b7ea8cd8ec12304a5e222d7dc01cac8fa11",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/be0feb3fa202aedfd8d1956f2dafd563fb13acbf",
+                "reference": "be0feb3fa202aedfd8d1956f2dafd563fb13acbf",
                 "shasum": ""
             },
             "require": {
@@ -2283,11 +2294,11 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-23 15:06:07"
+            "time": "2019-04-20 15:32:49"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.4.23",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -2337,16 +2348,16 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v3.4.23",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "fcdde4aa38f48190ce70d782c166f23930084f9b"
+                "reference": "61af5ce0b34b942d414fe8f1b11950d0e9a90e98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/fcdde4aa38f48190ce70d782c166f23930084f9b",
-                "reference": "fcdde4aa38f48190ce70d782c166f23930084f9b",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/61af5ce0b34b942d414fe8f1b11950d0e9a90e98",
+                "reference": "61af5ce0b34b942d414fe8f1b11950d0e9a90e98",
                 "shasum": ""
             },
             "require": {
@@ -2382,7 +2393,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-22 14:44:53"
+            "time": "2019-04-02 19:54:57"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2429,7 +2440,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -2503,16 +2514,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.23",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "57f1ce82c997f5a8701b89ef970e36bb657fd09c"
+                "reference": "212a27b731e5bfb735679d1ffaac82bd6a1dc996"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/57f1ce82c997f5a8701b89ef970e36bb657fd09c",
-                "reference": "57f1ce82c997f5a8701b89ef970e36bb657fd09c",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/212a27b731e5bfb735679d1ffaac82bd6a1dc996",
+                "reference": "212a27b731e5bfb735679d1ffaac82bd6a1dc996",
                 "shasum": ""
             },
             "require": {
@@ -2558,7 +2569,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-23 15:06:07"
+            "time": "2019-03-25 07:48:46"
         },
         {
             "name": "theseer/fdomdocument",

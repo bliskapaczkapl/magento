@@ -311,4 +311,36 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
 
         return $apiClient;
     }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientPricing()
+    {
+        $senditHelper = new Sendit_Bliskapaczka_Helper_Configuration();
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+
+    /**
+     * Get Bliskapaczka API Client
+     *
+     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     */
+    public function getApiClientPricingTodoor()
+    {
+        $senditHelper = new Sendit_Bliskapaczka_Helper_Configuration();
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing\Todoor(
+            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
+            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
 }

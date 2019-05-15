@@ -45,7 +45,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
     const LOG_FILE = 'sendit.log';
 
-    /**
+     /**
      * Wrapper on Mage::getStoreConfig
      * We don't able to mock static method
      *
@@ -54,7 +54,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getStoreConfigWrapper($config)
     {
-        return (new Sendit_Bliskapaczka_Helper_Configuration())->getStoreConfigWrapper($config);
+        return Mage::getStoreConfig($config);
     }
 
     /**
@@ -65,7 +65,30 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getParcelDimensions($type = 'fixed')
     {
-        return (new Sendit_Bliskapaczka_Helper_Configuration())->getParcelDimensions($type);
+        switch ($type) {
+            case 'default':
+                $height = self::PARCEL_DEFAULT_SIZE_X;
+                $length = self::PARCEL_DEFAULT_SIZE_Y;
+                $width = self::PARCEL_DEFAULT_SIZE_Z;
+                $weight = self::PARCEL_DEFAULT_SIZE_WEIGHT;
+                break;
+
+            default:
+                $height = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH);
+                $length = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH);
+                $width = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH);
+                $weight = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_WEIGHT_XML_PATH);
+                break;
+        }
+
+        $dimensions = array(
+            "height" => $height,
+            "length" => $length,
+            "width" => $width,
+            "weight" => $weight
+        );
+
+        return $dimensions;
     }
 
     /**
@@ -75,9 +98,14 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getGoogleMapApiKey()
     {
-        return (new Sendit_Bliskapaczka_Helper_Configuration())->getGoogleMapApiKey();
-    }
+        $googleApiKey = self::DEFAULT_GOOGLE_API_KEY;
 
+        if (Mage::getStoreConfig(self::GOOGLE_MAP_API_KEY_XML_PATH)) {
+            $googleApiKey = Mage::getStoreConfig(self::GOOGLE_MAP_API_KEY_XML_PATH);
+        }
+
+        return $googleApiKey;
+    }
     /**
      * Get lowest price from pricing list
      *
@@ -88,7 +116,28 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getLowestPrice($priceList, $allRates, $cod = false)
     {
-        return (new Sendit_Bliskapaczka_Helper_Price())->getLowestPrice($priceList, $allRates, $cod);
+        $lowestPrice = null;
+        $cod = ($cod ? '_COD' : '');
+        $rates = array();
+        foreach ($allRates as $rate) {
+            $rates[$rate->getCode()] = $rate;
+        }
+
+        foreach ($priceList as $carrier) {
+            if ($carrier->availabilityStatus == false
+                || !isset($rates['sendit_bliskapaczka_' . $carrier->operatorName . $cod])
+            ) {
+                continue;
+            }
+
+            $price = $this->_getPriceWithCartRules($carrier, $rates, $cod);
+
+            if ($lowestPrice == null || $lowestPrice > $price) {
+                $lowestPrice = $price;
+            }
+        }
+
+        return $lowestPrice;
     }
 
     /**
@@ -102,9 +151,39 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getPriceForCarrier($priceList, $allRates, $carrierName, $cod = false)
     {
-        return (new Sendit_Bliskapaczka_Helper_Price())->getPriceForCarrier($priceList, $allRates, $carrierName, $cod);
+        $rates = array();
+        $cod = ($cod ? '_COD' : '');
+        foreach ($allRates as $rate) {
+            $code = $rate->getCode();
+            if (is_null($code)) {
+                $code = $rate->getCarrier() . '_' . $rate->getMethod() . $cod;
+            }
+            $rates[$code] = $rate;
+        }
+        foreach ($priceList as $carrier) {
+            if ($carrier->operatorName == $carrierName && $rates['sendit_bliskapaczka_' . $carrierName . $cod]) {
+                return $this->_getPriceWithCartRules($carrier, $rates, $cod);
+            }
+        }
+        return false;
     }
 
+    /**
+     * Get price with applied cart rules
+     *
+     * @param sdtClass $carrier
+     * @param array $rates
+     * @param string $cod
+     * @return float
+     */
+    protected function _getPriceWithCartRules($carrier, $rates, $cod)
+    {
+        $price = $carrier->price->gross;
+        $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . $cod]->getPrice();
+        $price = $priceFromMagento < $price ? $priceFromMagento : $price;
+
+        return $price;
+    }
 
     /**
      * Get operators and prices from Bliskapaczka API
@@ -169,7 +248,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 continue;
             }
 
-            $price = (new Sendit_Bliskapaczka_Helper_Price())->_getPriceWithCartRules($carrier, $rates, $cod);
+            $price = $this->_getPriceWithCartRules($carrier, $rates, $cod);
 
             $operators[] = array(
                 "operator" => $carrier->operatorName,
@@ -181,13 +260,27 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
+     * Get API mode
+     *
+     * @param string $configValue
+     * @return string
+     */
+    public function getApiMode($configValue = null)
+    {
+
+        return ($configValue == '1') ? 'test' : 'prod';
+    }
+    /**
      * Get Bliskapaczka API Client
      *
      * @return \Bliskapaczka\ApiClient\Bliskapaczka
      */
     public function getApiClientPricing()
     {
-        return (new Sendit_Bliskapaczka_Helper_Api())->getApiClientPricing();
+        return (new Sendit_Bliskapaczka_Helper_Api())->getApiClientPricing(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
     }
 
     /**
@@ -197,7 +290,10 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiClientPricingTodoor()
     {
-        return (new Sendit_Bliskapaczka_Helper_Api())->getApiClientPricingTodoor();
+        return (new Sendit_Bliskapaczka_Helper_Api())->getApiClientPricingTodoor(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
     }
 
     /**
@@ -215,18 +311,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
         
         return $phoneNumber;
-    }
-
-    /**
-     * Get API mode
-     *
-     * @param string $configValue
-     * @return string
-     */
-    public function getApiMode($configValue = null)
-    {
-
-        return (new Sendit_Bliskapaczka_Helper_Configuration())->getApiMode($configValue);
     }
 
     /**
@@ -283,4 +367,5 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
         return $shortMethod;
     }
+
 }

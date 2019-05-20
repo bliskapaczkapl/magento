@@ -155,7 +155,11 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     {
         $rates = array();
         foreach ($allRates as $rate) {
-            $rates[$rate->getCode()] = $rate;
+            $code = $rate->getCode();
+            if (is_null($code)) {
+                $code = $rate->getCarrier() .'_'. $rate->getMethod(). ($cod ? '_COD' : '');
+            }
+            $rates[$code] = $rate;
         }
 
         foreach ($priceList as $carrier) {

@@ -21,7 +21,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const PARCEL_DEFAULT_SIZE_Z = 16;
     const PARCEL_DEFAULT_SIZE_WEIGHT = 1;
     const COD_BANK_ACCOUNT_NUMBER = 'carriers/sendit_bliskapaczka/cod_bank_account_number';
-    
+
     const SENDER_EMAIL = 'carriers/sendit_bliskapaczka/sender_email';
     const SENDER_FIRST_NAME = 'carriers/sendit_bliskapaczka/sender_first_name';
     const SENDER_LAST_NAME = 'carriers/sendit_bliskapaczka/sender_last_name';
@@ -39,13 +39,13 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     const GOOGLE_MAP_API_KEY_XML_PATH = 'carriers/sendit_bliskapaczka/google_map_api_key';
 
     const SLOW_STATUSES = array('READY_TO_SEND', 'POSTED', 'ON_THE_WAY', 'READY_TO_PICKUP', 'OUT_FOR_DELIVERY',
-            'REMINDER_SENT', 'PICKUP_EXPIRED', 'AVIZO', 'RETURNED', 'OTHER', 'MARKED_FOR_CANCELLATION');
+        'REMINDER_SENT', 'PICKUP_EXPIRED', 'AVIZO', 'RETURNED', 'OTHER', 'MARKED_FOR_CANCELLATION');
     const FAST_STATUSES = array('SAVED', 'WAITING_FOR_PAYMENT', 'PAYMENT_CONFIRMED', 'PAYMENT_REJECTED',
-            'PAYMENT_CANCELLATION_ERROR', 'PROCESSING', 'ADVISING', 'ERROR');
+        'PAYMENT_CANCELLATION_ERROR', 'PROCESSING', 'ADVISING', 'ERROR');
 
     const LOG_FILE = 'sendit.log';
 
-     /**
+    /**
      * Wrapper on Mage::getStoreConfig
      * We don't able to mock static method
      *
@@ -74,6 +74,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 break;
 
             default:
+                $type = $this->getStoreConfigWrapper(self::PARCEL_SIZE_TYPE_XML_PATH);
                 $height = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH);
                 $length = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH);
                 $width = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH);
@@ -106,6 +107,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
         return $googleApiKey;
     }
+
     /**
      * Get lowest price from pricing list
      *
@@ -117,7 +119,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function getLowestPrice($priceList, $allRates, $cod = false)
     {
         $lowestPrice = null;
-        $cod = ($cod ? '_COD' : '');
+
         $rates = array();
         foreach ($allRates as $rate) {
             $rates[$rate->getCode()] = $rate;
@@ -125,7 +127,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
         foreach ($priceList as $carrier) {
             if ($carrier->availabilityStatus == false
-                || !isset($rates['sendit_bliskapaczka_' . $carrier->operatorName . $cod])
+                || !isset($rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')])
             ) {
                 continue;
             }
@@ -152,19 +154,18 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function getPriceForCarrier($priceList, $allRates, $carrierName, $cod = false)
     {
         $rates = array();
-        $cod = ($cod ? '_COD' : '');
         foreach ($allRates as $rate) {
-            $code = $rate->getCode();
-            if (is_null($code)) {
-                $code = $rate->getCarrier() . '_' . $rate->getMethod() . $cod;
-            }
-            $rates[$code] = $rate;
+            $rates[$rate->getCode()] = $rate;
         }
+
         foreach ($priceList as $carrier) {
-            if ($carrier->operatorName == $carrierName && $rates['sendit_bliskapaczka_' . $carrierName . $cod]) {
+            if ($carrier->operatorName == $carrierName
+                && $rates['sendit_bliskapaczka_' . $carrierName . ($cod ? '_COD' : '')]
+            ) {
                 return $this->_getPriceWithCartRules($carrier, $rates, $cod);
             }
         }
+
         return false;
     }
 
@@ -173,13 +174,13 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      *
      * @param sdtClass $carrier
      * @param array $rates
-     * @param string $cod
+     * @param boot $cod
      * @return float
      */
     protected function _getPriceWithCartRules($carrier, $rates, $cod)
     {
         $price = $carrier->price->gross;
-        $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . $cod]->getPrice();
+        $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]->getPrice();
         $price = $priceFromMagento < $price ? $priceFromMagento : $price;
 
         return $price;
@@ -236,14 +237,13 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
         $operators = array();
         $rates = array();
-        $cod = ($cod ? '_COD' : '');
         foreach ($allRates as $rate) {
             $rates[$rate->getCode()] = $rate;
         }
 
         foreach ($priceList as $carrier) {
             if ($carrier->availabilityStatus == false
-                || !$rates['sendit_bliskapaczka_' . $carrier->operatorName . $cod]
+                || !$rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]
             ) {
                 continue;
             }
@@ -260,27 +260,13 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
-     * Get API mode
-     *
-     * @param string $configValue
-     * @return string
-     */
-    public function getApiMode($configValue = null)
-    {
-
-        return ($configValue == '1') ? 'test' : 'prod';
-    }
-    /**
      * Get Bliskapaczka API Client
      *
      * @return \Bliskapaczka\ApiClient\Bliskapaczka
      */
     public function getApiClientPricing()
     {
-        return (new Sendit_Bliskapaczka_Helper_Api())->getApiClientPricing(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
+        return (new Sendit_Bliskapaczka_Helper_Api())->getApiClientPricing($this);
     }
 
     /**
@@ -309,8 +295,31 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         if (strlen($phoneNumber) > 9) {
             $phoneNumber = preg_replace("/^48/", "", $phoneNumber);
         }
-        
+
         return $phoneNumber;
+    }
+
+    /**
+     * Get API mode
+     *
+     * @param string $configValue
+     * @return string
+     */
+    public function getApiMode($configValue = null)
+    {
+        $mode = '';
+
+        switch ($configValue) {
+            case '1':
+                $mode = 'test';
+                break;
+
+            default:
+                $mode = 'prod';
+                break;
+        }
+
+        return $mode;
     }
 
     /**
@@ -321,7 +330,13 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function isCourier($method)
     {
-        return ($this->_getShortMethodName($method) === 'courier') ? true : false;
+        $shortMethodName = $this->_getShortMethodName($method);
+
+        if ($shortMethodName == 'courier') {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -332,7 +347,13 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function isPoint($method)
     {
-        return ($this->_getShortMethodName($method) === 'point') ? true : false;
+        $shortMethodName = $this->_getShortMethodName($method);
+
+        if ($shortMethodName == 'point') {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -361,11 +382,16 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     protected function _getShortMethodName($method)
     {
-        $shortMethod = 'courier';
-        if ($method === 'bliskapaczka_sendit_bliskapaczka' || $method === 'bliskapaczka_sendit_bliskapaczka_COD') {
-            $shortMethod = 'point';
+        switch ($method) {
+            case 'bliskapaczka_sendit_bliskapaczka':
+            case 'bliskapaczka_sendit_bliskapaczka_COD':
+                $shortMethod = 'point';
+                break;
+
+            default:
+                $shortMethod = 'courier';
         }
+
         return $shortMethod;
     }
-
 }

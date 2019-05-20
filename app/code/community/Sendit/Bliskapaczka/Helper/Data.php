@@ -199,7 +199,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getPriceList($cod = null, $parcelDimensionsType = 'fixed')
     {
-        $apiClient = $this->getApiClientPricing();
+        $apiHelper = new Sendit_Bliskapaczka_Helper_Api();
+        $apiClient = $apiHelper->getApiClientPricing($this);
 
         $data = array("parcel" => array('dimensions' => $this->getParcelDimensions($parcelDimensionsType)));
         if ($cod) {
@@ -261,26 +262,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
 
         return json_encode($operators);
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientPricing()
-    {
-        return (new Sendit_Bliskapaczka_Helper_Api())->getApiClientPricing($this);
-    }
-
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
-     */
-    public function getApiClientPricingTodoor()
-    {
-        return (new Sendit_Bliskapaczka_Helper_Api())->getApiClientPricingTodoor($this);
     }
 
     /**

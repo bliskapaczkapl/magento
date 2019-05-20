@@ -31,8 +31,9 @@ implements Mage_Shipping_Model_Carrier_Interface
     {
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+        $apiHelper = new Sendit_Bliskapaczka_Helper_Api();
         /* @var $apiClient \Bliskapaczka\ApiClient\Bliskapaczka */
-        $apiClient = $senditHelper->getApiClientPricing();
+        $apiClient = $apiHelper->getApiClientPricing($senditHelper);
 
         $D2DData = array(
             "parcel" => array('dimensions' => $senditHelper->getParcelDimensions($type)),

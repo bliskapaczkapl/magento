@@ -315,7 +315,9 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
     /**
      * Get Bliskapaczka API Client
      *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     * @param $senditHelper
+     * @return ApiClient\Bliskapaczka\Pricing
+     * @throws ApiClient\Exception
      */
     public function getApiClientPricing($senditHelper)
     {
@@ -330,7 +332,9 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
     /**
      * Get Bliskapaczka API Client
      *
-     * @return \Bliskapaczka\ApiClient\Bliskapaczka
+     * @param $senditHelper
+     * @return ApiClient\Bliskapaczka\Pricing\Todoor
+     * @throws ApiClient\Exception
      */
     public function getApiClientPricingTodoor($senditHelper)
     {

@@ -316,7 +316,6 @@ class DataTest extends TestCase
             ->setMethods(
                 array(
                     '_getPricing',
-                    'getApiClientPricing',
                     'getParcelDimensions'
                 )
             )
@@ -326,7 +325,6 @@ class DataTest extends TestCase
 
         $apiClientOrder = $this->getApiClientPricing();
         $apiClientOrder->method('get')->will($this->returnValue($pricing));
-        $helper->method('getApiClientPricing')->willReturn($apiClientOrder);
 
         $helper->expects($this->once())
              ->method('getParcelDimensions')

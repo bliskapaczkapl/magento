@@ -280,10 +280,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiClientPricingTodoor()
     {
-        return (new Sendit_Bliskapaczka_Helper_Api())->getApiClientPricingTodoor(
-            Mage::getStoreConfig(self::API_KEY_XML_PATH),
-            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
-        );
+        return (new Sendit_Bliskapaczka_Helper_Api())->getApiClientPricingTodoor($this);
     }
 
     /**
@@ -311,8 +308,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiMode($configValue = null)
     {
-        $mode = '';
-
         switch ($configValue) {
             case '1':
                 $mode = 'test';

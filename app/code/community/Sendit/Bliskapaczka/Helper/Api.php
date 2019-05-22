@@ -329,20 +329,4 @@ class Sendit_Bliskapaczka_Helper_Api extends Mage_Core_Helper_Data
         return $apiClient;
     }
 
-    /**
-     * Get Bliskapaczka API Client
-     *
-     * @param $senditHelper
-     * @return ApiClient\Bliskapaczka\Pricing\Todoor
-     * @throws ApiClient\Exception
-     */
-    public function getApiClientPricingTodoor($senditHelper)
-    {
-        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Pricing\Todoor(
-            Mage::getStoreConfig($senditHelper::API_KEY_XML_PATH),
-            $senditHelper->getApiMode(Mage::getStoreConfig($senditHelper::API_TEST_MODE_XML_PATH))
-        );
-
-        return $apiClient;
-    }
 }

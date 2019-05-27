@@ -199,8 +199,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getPriceList($cod = null, $parcelDimensionsType = 'fixed')
     {
-        $apiHelper = new Sendit_Bliskapaczka_Helper_Api();
-        $apiClient = $apiHelper->getApiClientPricing($this);
+        $apiClient = $this->getApiClientPricing();
 
         $data = array("parcel" => array('dimensions' => $this->getParcelDimensions($parcelDimensionsType)));
         if ($cod) {

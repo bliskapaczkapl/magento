@@ -237,6 +237,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
         $operators = array();
         $rates = array();
+
         foreach ($allRates as $rate) {
             $rates[$rate->getCode()] = $rate;
         }

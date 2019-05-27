@@ -1,3 +1,7 @@
+## [3.6.0] - 2019-05-27
+### Changed
+- Added logger and logging all requests and responses
+
 ## [3.5.2] - 2019-05-06
 ### Changed
 - Autoupdate for packagist.org for new tag

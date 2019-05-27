@@ -27,6 +27,8 @@
 
 <?php
 $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
+$bliskapaczkaCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE;
+$bliskapaczkaCodCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD;
 ?>
 
 <?php /** @var $this Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method_Form */ ?>
@@ -78,7 +80,7 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
                             <?php if ($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE) { ?>
                                 <a
                                     onclick='Bliskapaczka.showMap(
-                                        <?php echo $senditHelper->getOperatorsForWidget(null, $_rate->getPrice()); ?>,
+                                        <?php echo $senditHelper->getOperatorsForWidget($_rates, null, ($_rate->getCode() == $bliskapaczkaCodCode) ? true : false) ?>,
                                         "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
                                         <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>,
                                         "<?php echo $_rate->getCode() ?>",
@@ -92,7 +94,7 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
                             <?php } elseif($_rate->getCode() == Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD) { ?>
                                <a
                                        onclick='Bliskapaczka.showMap(
-                                                <?php echo $senditHelper->getOperatorsForWidget(null, $_rate->getPrice()); ?>,
+                                                <?php echo $senditHelper->getOperatorsForWidget($_rates, null, ($_rate->getCode() == $bliskapaczkaCodCode) ? true : false) ?>,
                                                "<?php echo $senditHelper->getGoogleMapApiKey(); ?>",
                                                 <?php echo (Mage::getStoreConfig(Sendit_Bliskapaczka_Helper_Data::API_TEST_MODE_XML_PATH)) ? 'true' : 'false'; ?>,
                                                "<?php echo $_rate->getCode() ?>",
@@ -140,8 +142,7 @@ $senditHelper = new Sendit_Bliskapaczka_Helper_Data();
             </strong>
 
             <input name="bliskapaczka[posCode]" type="hidden" id="s_method_bliskapaczka_posCode" value="<?php echo $this->getQuote()->getShippingAddress()->getPosCode(); ?>" />
-            <input name="bliskapaczka[posOperator]" type="hidden" id="s_method_bliskapaczka_posOperator" value="<?php echo $this->getQuote()->getShippingAddress()->getPosOperator(); ?> />
-            <!--input type="text" class="input-text" style="width:70px"/-->
+            <input name="bliskapaczka[posOperator]" type="hidden" id="s_method_bliskapaczka_posOperator" value="<?php echo $this->getQuote()->getShippingAddress()->getPosOperator(); ?>" />
             <br/>
             <a href="#" onclick="$('order-shipping-method-info').hide();$('order-shipping-method-choose').show();return false">
                 <?php echo Mage::helper('sales')->__('Click to change shipping method') ?>

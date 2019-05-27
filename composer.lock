@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "af755fea109483000006f77b74ad13a4",
-    "content-hash": "335378b75be8876875b52e6c83c406a4",
+    "hash": "d66e020a1355f6b82a24b7f08a65dd75",
+    "content-hash": "3e72154ff0c1dfd4c42eeb4e6fde584e",
     "packages": [
         {
             "name": "bliskapaczkapl/bliskapaczka-api-client",
-            "version": "3.5.2",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bliskapaczkapl/bliskapaczka-api-client.git",
-                "reference": "841240cdd81effc351f9efa888f5967f426f26c3"
+                "reference": "6e01d5df75ca4591b0338a09216f51e424375cd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/841240cdd81effc351f9efa888f5967f426f26c3",
-                "reference": "841240cdd81effc351f9efa888f5967f426f26c3",
+                "url": "https://api.github.com/repos/bliskapaczkapl/bliskapaczka-api-client/zipball/6e01d5df75ca4591b0338a09216f51e424375cd9",
+                "reference": "6e01d5df75ca4591b0338a09216f51e424375cd9",
                 "shasum": ""
             },
             "require": {
@@ -27,6 +27,7 @@
             },
             "require-dev": {
                 "block8/php-docblock-checker": "^1.1",
+                "monolog/monolog": "^1.24",
                 "phploc/phploc": "^3.0",
                 "phpmd/phpmd": "^2.4",
                 "phpunit/phpunit": "^5.7",
@@ -45,10 +46,10 @@
             },
             "description": "BliczkaPaczka API Client",
             "support": {
-                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/3.5.2",
+                "source": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/tree/3.6.0",
                 "issues": "https://github.com/bliskapaczkapl/bliskapaczka-api-client/issues"
             },
-            "time": "2019-05-06 13:29:30"
+            "time": "2019-05-27 07:27:52"
         },
         {
             "name": "globalcitizen/php-iban",

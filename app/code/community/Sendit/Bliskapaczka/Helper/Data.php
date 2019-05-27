@@ -120,13 +120,14 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         $lowestPrice = null;
 
         $rates = array();
+        $convertedCODValueToString = ($cod ? '_COD' : '');
         foreach ($allRates as $rate) {
             $rates[$rate->getCode()] = $rate;
         }
 
         foreach ($priceList as $carrier) {
             if ($carrier->availabilityStatus == false
-                || !isset($rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')])
+                || !isset($rates['sendit_bliskapaczka_' . $carrier->operatorName . $convertedCODValueToString])
             ) {
                 continue;
             }
@@ -153,17 +154,18 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function getPriceForCarrier($priceList, $allRates, $carrierName, $cod = false)
     {
         $rates = array();
+        $convertedCODValueToString = ($cod ? '_COD' : '');
         foreach ($allRates as $rate) {
             $code = $rate->getCode();
             if (is_null($code)) {
-                $code = $rate->getCarrier() .'_'. $rate->getMethod(). ($cod ? '_COD' : '');
+                $code = $rate->getCarrier() .'_'. $rate->getMethod(). $convertedCODValueToString;
             }
             $rates[$code] = $rate;
         }
 
         foreach ($priceList as $carrier) {
             if ($carrier->operatorName == $carrierName
-                && $rates['sendit_bliskapaczka_' . $carrierName . ($cod ? '_COD' : '')]
+                && $rates['sendit_bliskapaczka_' . $carrierName . $convertedCODValueToString]
             ) {
                 return $this->_getPriceWithCartRules($carrier, $rates, $cod);
             }
@@ -183,7 +185,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     protected function _getPriceWithCartRules($carrier, $rates, $cod)
     {
         $price = $carrier->price->gross;
-        $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]->getPrice();
+        $convertedCODValueToString = ($cod ? '_COD' : '');
+        $priceFromMagento = $rates['sendit_bliskapaczka_' . $carrier->operatorName . $convertedCODValueToString]->getPrice();
         $price = $priceFromMagento < $price ? $priceFromMagento : $price;
 
         return $price;
@@ -234,6 +237,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getOperatorsForWidget($allRates, $priceList = null, $cod = null)
     {
+
+        $convertedCODValueToString = ($cod ? '_COD' : '');
         if ($priceList == null) {
             $priceList = $this->getPriceList($cod);
         }
@@ -246,7 +251,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
         foreach ($priceList as $carrier) {
             if ($carrier->availabilityStatus == false
-                || !$rates['sendit_bliskapaczka_' . $carrier->operatorName . ($cod ? '_COD' : '')]
+                || !$rates['sendit_bliskapaczka_' . $carrier->operatorName . $convertedCODValueToString]
             ) {
                 continue;
             }

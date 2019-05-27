@@ -106,6 +106,61 @@
                     <to_order_address>*</to_order_address>
                 </pos_code_description>
             </sales_convert_quote_address>
+            <sales_copy_order_billing_address>
+                <pos_code>
+                    <to_order>*</to_order>
+                </pos_code>
+                <pos_operator>
+                    <to_order>*</to_order>
+                </pos_operator>
+                <pos_code_description>
+                    <to_order>*</to_order>
+                </pos_code_description>
+            </sales_copy_order_billing_address>
+            <sales_copy_order_shipping_address>
+                <pos_code>
+                    <to_order>*</to_order>
+                </pos_code>
+                <pos_operator>
+                    <to_order>*</to_order>
+                </pos_operator>
+                <pos_code_description>
+                    <to_order>*</to_order>
+                </pos_code_description>
+            </sales_copy_order_shipping_address>
+            <sales_convert_order_address>
+                <pos_code>
+                    <to_quote_address>*</to_quote_address>
+                </pos_code>
+                <pos_operator>
+                    <to_quote_address>*</to_quote_address>
+                </pos_operator>
+                <pos_code_description>
+                    <to_quote_address>*</to_quote_address>
+                </pos_code_description>
+            </sales_convert_order_address>
+            <customer_address>
+                <pos_code>
+                    <to_quote_address>*</to_quote_address>
+                </pos_code>
+                <pos_operator>
+                    <to_quote_address>*</to_quote_address>
+                </pos_operator>
+                <pos_code_description>
+                    <to_quote_address>*</to_quote_address>
+                </pos_code_description>
+            </customer_address>
+            <checkout_onepage_billing>
+                <pos_code>
+                    <to_customer>*</to_customer>
+                </pos_code>
+                <pos_operator>
+                    <to_customer>*</to_customer>
+                </pos_operator>
+                <pos_code_description>
+                    <to_customer>*</to_customer>
+                </pos_code_description>
+            </checkout_onepage_billing>
         </fieldsets>
     </global>
     <frontend>

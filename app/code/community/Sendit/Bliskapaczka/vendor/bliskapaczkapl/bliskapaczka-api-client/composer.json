@@ -12,7 +12,8 @@
         "sebastian/phpcpd":"^2.0",
         "block8/php-docblock-checker":"^1.1",
         "phploc/phploc":"^3.0",
-        "sensiolabs/security-checker": "4.*"
+        "sensiolabs/security-checker": "4.*",
+        "monolog/monolog": "^1.24"
     },
     "type": "api-client",
     "autoload": {

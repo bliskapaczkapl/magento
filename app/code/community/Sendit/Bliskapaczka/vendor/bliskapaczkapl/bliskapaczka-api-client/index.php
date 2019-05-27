@@ -2,8 +2,15 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+use Monolog\Logger as MonologLogger;
+use Monolog\Handler\StreamHandler;
+
+// create a log channel
+$logger = new MonologLogger('sendit');
+$logger->pushHandler(new StreamHandler('/tmp/sendit.log'));
+
 $apiKey = '999eac37-ba4d-4a00-b64c-14749dc835fa';
-$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Order($apiKey, 'test');
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Order($apiKey, 'test', $logger);
 
 $orderData = [
     "senderFirstName" => "string",
@@ -71,7 +78,7 @@ $orderData = [
 ];
 var_dump($apiClient->create($orderData));
 
-$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey, 'test');
+$apiClient = new Bliskapaczka\ApiClient\Bliskapaczka\Pricing($apiKey, 'test', $logger);
 
 $pricingData = [
     "parcel" => [

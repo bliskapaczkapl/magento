@@ -299,14 +299,12 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiMode($configValue = null)
     {
+        $mode = 'prod';
         switch ($configValue) {
             case '1':
                 $mode = 'test';
                 break;
 
-            default:
-                $mode = 'prod';
-                break;
         }
 
         return $mode;

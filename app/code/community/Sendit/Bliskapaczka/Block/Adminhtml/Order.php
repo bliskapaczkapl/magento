@@ -18,7 +18,7 @@ class Sendit_Bliskapaczka_Block_Adminhtml_Order extends Mage_Adminhtml_Block_Wid
         $this->_removeButton('add');
 
         $this->_addButton("Confirm", array(
-            "label" => Mage::helper("core")->__("Confirm"),
+            "label" => Mage::helper("core")->__("Close Poczta Polska buffer"),
             "onclick" => "location.href = '" . $this->getConfirmUrl() . "';",
             "class" => "btn btn-danger",
         ));

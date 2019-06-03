@@ -102,4 +102,20 @@ abstract class Sendit_Bliskapaczka_Model_Mapper_Abstract
 
         return $data;
     }
+
+    /**
+     * Get reciver email
+     *
+     * @param Mage_Customer_Model_Address_Abstract $shippingAddress
+     * @return string
+     */
+    protected function _getReciverEmailAddress(Mage_Customer_Model_Address_Abstract $shippingAddress)
+    {
+        $receiverEmail = $shippingAddress->getEmail();
+        if ($receiverEmail == null) {
+            $receiverEmail = $shippingAddress->getOrder()->getCustomerEmail();
+        }
+
+        return $receiverEmail;
+    }
 }

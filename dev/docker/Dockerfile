@@ -7,6 +7,7 @@ COPY dev ${magento_path}/dev
 COPY js ${magento_path}/js
 COPY lib ${magento_path}/lib
 COPY skin ${magento_path}/skin
+COPY baselinker.php ${magento_path}/baselinker.php
 
 # Install Bliskapaczka
 COPY composer.json ${magento_path}/composer.json

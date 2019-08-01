@@ -87,6 +87,7 @@ class Sendit_Bliskapaczka_Model_Observer
      */
     public function validateByBliskapaczkaApiClinet(Varien_Event_Observer $observer)
     {
+
         $allData = $observer->getEvent()->getRequest()->getParam('bliskapaczka');
 
         $quote = $observer->getEvent()->getQuote();
@@ -122,7 +123,7 @@ class Sendit_Bliskapaczka_Model_Observer
         } catch (Exception $e) {
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             Mage::getSingleton('checkout/session')->addError($senditHelper->__($e->getMessage()));
-            $this->_redirect('checkout/cart');
+            Mage::app()->getResponse()->setRedirect(Mage::getUrl("checkout/cart"));
         }
     }
 

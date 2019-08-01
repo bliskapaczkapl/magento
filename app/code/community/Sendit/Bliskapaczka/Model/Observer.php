@@ -87,7 +87,6 @@ class Sendit_Bliskapaczka_Model_Observer
      */
     public function validateByBliskapaczkaApiClinet(Varien_Event_Observer $observer)
     {
-
         $allData = $observer->getEvent()->getRequest()->getParam('bliskapaczka');
 
         $quote = $observer->getEvent()->getQuote();

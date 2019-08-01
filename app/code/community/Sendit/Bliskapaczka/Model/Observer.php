@@ -121,8 +121,10 @@ class Sendit_Bliskapaczka_Model_Observer
             $apiClient->validate($data);
         } catch (Exception $e) {
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
-            Mage::getSingleton('checkout/session')->addError($senditHelper->__($e->getMessage()));
-            $this->_redirect('checkout/cart');
+            Mage::getSingleton('core/session')->addError($senditHelper->__($e->getMessage()));
+            Mage::getSingleton('checkout/session')->setNoCartRedirect(true);
+            $response = $observer->getResponse();
+            $response->setRedirect(Mage::getUrl('checkout/cart'));
         }
     }
 

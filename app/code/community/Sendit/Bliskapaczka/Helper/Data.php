@@ -369,9 +369,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function isCourier($method)
     {
-        $shortMethodName = $this->_getShortMethodName($method);
-
-        if ($shortMethodName == 'courier') {
+        if ($this->_getShortMethodName($method) == 'courier') {
             return true;
         }
 
@@ -386,9 +384,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function isPoint($method)
     {
-        $shortMethodName = $this->_getShortMethodName($method);
-
-        if ($shortMethodName == 'point') {
+        if ($this->_getShortMethodName($method) == 'point') {
             return true;
         }
 

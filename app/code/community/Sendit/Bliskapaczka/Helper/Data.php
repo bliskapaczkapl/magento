@@ -227,11 +227,9 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                     $this->getParcelDimensions($parcelType),
                     "insuranceValue" => $insurance
                 ),
-            "deliveryType" => $type
+            "deliveryType" => $type,
+            "codValue" => $cod
         );
-        if (!is_null($cod)) {
-            $data['codValue'] = floatval($cod);
-        }
         try {
             $priceList = json_decode($apiClient->get($data));
             $priceListCleared = array_filter($priceList, function ($carrier){

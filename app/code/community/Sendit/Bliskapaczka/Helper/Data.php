@@ -235,20 +235,15 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         }
         try {
             $priceList = json_decode($apiClient->get($data));
-            $priceListCleared = array();
-            foreach ($priceList as $carrier) {
-                if ($carrier->availabilityStatus == false) {
-                    continue;
-                }
-
-                $priceListCleared[] = $carrier;
-            }
+            $priceListCleared = array_filter($priceList, function ($carrier){
+                return $carrier->availabilityStatus == true;
+            });
         } catch (Exception $e) {
             $priceListCleared = array();
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
         }
 
-        return $priceListCleared;
+        return (array)$priceListCleared;
     }
     /**
      * Get widget configuration

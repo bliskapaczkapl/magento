@@ -195,13 +195,37 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getPriceList($cod = null, $parcelDimensionsType = 'fixed')
     {
+        if (!is_null($cod)) {
+            $cod = 1;
+        }
+        return array_merge(
+            $this->_getPriceListByMethodAndInsuranceAndCOD('P2P', $cod),
+            $this->_getPriceListByMethodAndInsuranceAndCOD('D2P', $cod)
+        );
+    }
+
+    /**
+     * @param string $type
+     * @param null|float $cod
+     * @param null|float $insurance
+     *
+     * @return array
+     */
+    protected function _getPriceListByMethodAndInsuranceAndCOD($type = 'P2P',  $cod = null,  $insurance = null)
+    {
         $apiClient = $this->getApiClientPricing();
 
-        $data = array("parcel" => array('dimensions' => $this->getParcelDimensions($parcelDimensionsType)));
-        if ($cod) {
-            $data['codValue'] = 1;
+        $data = array(
+            "parcel" =>
+                array('dimensions' =>
+                    $this->getParcelDimensions('fixed'),
+                    "insuranceValue" => $insurance
+                ),
+            "deliveryType" => $type
+        );
+        if (!is_null($cod)) {
+            $data['codValue'] = floatval($cod);
         }
-
         try {
             $priceList = json_decode($apiClient->get($data));
             $priceListCleared = array();
@@ -219,7 +243,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
 
         return $priceListCleared;
     }
-
     /**
      * Get widget configuration
      *
@@ -231,6 +254,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getOperatorsForWidget($allRates, $priceList = null, $cod = null)
     {
+
+        $config = null;
         if ($priceList == null) {
             $priceList = $this->getPriceList($cod);
         }
@@ -261,6 +286,20 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
+     * @return array|mixed
+     * @throws ApiClient\Exception
+     */
+    public function getConfig()
+    {
+        $apiClient = $this->getApiClientConfig();
+        $config = $apiClient->get();
+        if (json_decode($config) === null) {
+            return array();
+        }
+        return json_decode($config);
+    }
+
+    /**
      * Get Bliskapaczka API Client
      *
      * @return \Bliskapaczka\ApiClient\Bliskapaczka
@@ -275,6 +314,20 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
         return $apiClient;
     }
 
+    /**
+     * Ge Bliskapaczka API Config
+     * @return ApiClient\Bliskapaczka\Config
+     * @throws ApiClient\Exception
+     */
+    public function getApiClientConfig()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Config(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
     /**
      * Get Bliskapaczka API Client
      *

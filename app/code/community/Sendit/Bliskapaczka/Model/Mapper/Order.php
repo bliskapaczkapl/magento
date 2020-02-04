@@ -26,6 +26,9 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
 
         $operatorName = str_replace('_COD', '', $shippingAddress->getPosOperator());
         $data['operatorName'] = $operatorName;
+        if ($operatorName === 'FEDEX') {
+            $data['deliveryType'] = 'D2P';
+        }
 
         $data['destinationCode'] = $shippingAddress->getPosCode();
 
@@ -40,25 +43,6 @@ class Sendit_Bliskapaczka_Model_Mapper_Order extends Sendit_Bliskapaczka_Model_M
 
         $data = $this->_prepareSenderData($data, $helper);
         $data = $this->_prepareCodData($data, $order, $helper);
-
-        return $data;
-    }
-
-    /**
-     * Prepare reciver mapped data for Bliskapaczka API
-     *
-     * @param Mage_Customer_Model_Address_Abstract $shippingAddress
-     * @param Sendit_Bliskapaczka_Helper_Data $helper
-     * @return array
-     */
-    public function getShippingAddressData(
-        Mage_Customer_Model_Address_Abstract $shippingAddress,
-        Sendit_Bliskapaczka_Helper_Data $helper
-    ) {
-        $data['receiverFirstName'] = $shippingAddress->getFirstname();
-        $data['receiverLastName'] = $shippingAddress->getLastname();
-        $data['receiverPhoneNumber'] = $helper->telephoneNumberCleaning($shippingAddress->getTelephone());
-        $data['receiverEmail'] = $this->_getReciverEmailAddress($shippingAddress);
 
         return $data;
     }

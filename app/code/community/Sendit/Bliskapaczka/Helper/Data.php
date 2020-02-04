@@ -74,7 +74,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 break;
 
             default:
-                $type = $this->getStoreConfigWrapper(self::PARCEL_SIZE_TYPE_XML_PATH);
                 $height = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH);
                 $length = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH);
                 $width = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH);

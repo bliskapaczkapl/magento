@@ -74,7 +74,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                 break;
 
             default:
-                $type = $this->getStoreConfigWrapper(self::PARCEL_SIZE_TYPE_XML_PATH);
                 $height = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_X_XML_PATH);
                 $length = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Y_XML_PATH);
                 $width = $this->getStoreConfigWrapper(self::PARCEL_TYPE_FIXED_SIZE_Z_XML_PATH);
@@ -195,31 +194,54 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getPriceList($cod = null, $parcelDimensionsType = 'fixed')
     {
+        if (!is_null($cod)) {
+            $cod = 1;
+        }
+        return array_merge(
+            $this->_getPriceListByMethodAndInsuranceAndCODAndParcelType('P2P', $cod, $parcelDimensionsType),
+            $this->_getPriceListByMethodAndInsuranceAndCODAndParcelType('D2P', $cod, $parcelDimensionsType)
+        );
+    }
+
+    /**
+     * @param string $type
+     * @param null|float $cod
+     * @param null|float $insurance
+     *
+     * @param string $parcelType
+     *
+     * @return array
+     */
+    protected function _getPriceListByMethodAndInsuranceAndCODAndParcelType(
+        $type = 'P2P',
+        $cod = null,
+        $insurance = null,
+        $parcelType = 'fixed'
+    )
+    {
         $apiClient = $this->getApiClientPricing();
 
-        $data = array("parcel" => array('dimensions' => $this->getParcelDimensions($parcelDimensionsType)));
-        if ($cod) {
-            $data['codValue'] = 1;
-        }
-
+        $data = array(
+            "parcel" =>
+                array('dimensions' =>
+                    $this->getParcelDimensions($parcelType),
+                    "insuranceValue" => $insurance
+                ),
+            "deliveryType" => $type,
+            "codValue" => $cod
+        );
         try {
             $priceList = json_decode($apiClient->get($data));
-            $priceListCleared = array();
-            foreach ($priceList as $carrier) {
-                if ($carrier->availabilityStatus == false) {
-                    continue;
-                }
-
-                $priceListCleared[] = $carrier;
-            }
+            $priceListCleared = array_filter($priceList, function ($carrier){
+                return $carrier->availabilityStatus == true;
+            });
         } catch (Exception $e) {
             $priceListCleared = array();
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
         }
 
-        return $priceListCleared;
+        return (array)$priceListCleared;
     }
-
     /**
      * Get widget configuration
      *
@@ -231,6 +253,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getOperatorsForWidget($allRates, $priceList = null, $cod = null)
     {
+
         if ($priceList == null) {
             $priceList = $this->getPriceList($cod);
         }
@@ -276,6 +299,20 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
+     * Ge Bliskapaczka API Config
+     * @return ApiClient\Bliskapaczka\Config
+     * @throws ApiClient\Exception
+     */
+    public function getApiClientConfig()
+    {
+        $apiClient = new \Bliskapaczka\ApiClient\Bliskapaczka\Config(
+            Mage::getStoreConfig(self::API_KEY_XML_PATH),
+            $this->getApiMode(Mage::getStoreConfig(self::API_TEST_MODE_XML_PATH))
+        );
+
+        return $apiClient;
+    }
+    /**
      * Get Bliskapaczka API Client
      *
      * @return \Bliskapaczka\ApiClient\Bliskapaczka
@@ -315,19 +352,11 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getApiMode($configValue = null)
     {
-        $mode = '';
-
-        switch ($configValue) {
-            case '1':
-                $mode = 'test';
-                break;
-
-            default:
-                $mode = 'prod';
-                break;
+        if ($configValue == '1') {
+            return 'test';
         }
+        return 'prod';
 
-        return $mode;
     }
 
     /**
@@ -338,9 +367,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function isCourier($method)
     {
-        $shortMethodName = $this->_getShortMethodName($method);
-
-        if ($shortMethodName == 'courier') {
+        if ($this->_getShortMethodName($method) == 'courier') {
             return true;
         }
 
@@ -355,9 +382,7 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function isPoint($method)
     {
-        $shortMethodName = $this->_getShortMethodName($method);
-
-        if ($shortMethodName == 'point') {
+        if ($this->_getShortMethodName($method) == 'point') {
             return true;
         }
 

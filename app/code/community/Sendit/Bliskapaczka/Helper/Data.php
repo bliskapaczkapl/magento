@@ -199,8 +199,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
             $cod = 1;
         }
         return array_merge(
-            $this->_getPriceListByMethodAndInsuranceAndCOD('P2P', $cod),
-            $this->_getPriceListByMethodAndInsuranceAndCOD('D2P', $cod)
+            $this->_getPriceListByMethodAndInsuranceAndCOD('P2P', $cod, $parcelDimensionsType),
+            $this->_getPriceListByMethodAndInsuranceAndCOD('D2P', $cod, $parcelDimensionsType)
         );
     }
 
@@ -209,16 +209,23 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      * @param null|float $cod
      * @param null|float $insurance
      *
+     * @param string $parcelType
+     *
      * @return array
      */
-    protected function _getPriceListByMethodAndInsuranceAndCOD($type = 'P2P',  $cod = null,  $insurance = null)
+    protected function _getPriceListByMethodAndInsuranceAndCODAndParcelType(
+        $type = 'P2P',
+        $cod = null,
+        $insurance = null,
+        $parcelType = 'fixed'
+    )
     {
         $apiClient = $this->getApiClientPricing();
 
         $data = array(
             "parcel" =>
                 array('dimensions' =>
-                    $this->getParcelDimensions('fixed'),
+                    $this->getParcelDimensions($parcelType),
                     "insuranceValue" => $insurance
                 ),
             "deliveryType" => $type

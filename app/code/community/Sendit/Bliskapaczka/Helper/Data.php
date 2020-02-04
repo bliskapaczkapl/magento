@@ -256,7 +256,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     public function getOperatorsForWidget($allRates, $priceList = null, $cod = null)
     {
 
-        $config = null;
         if ($priceList == null) {
             $priceList = $this->getPriceList($cod);
         }

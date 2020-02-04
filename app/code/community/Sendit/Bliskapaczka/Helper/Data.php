@@ -293,20 +293,6 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
     }
 
     /**
-     * @return array|mixed
-     * @throws ApiClient\Exception
-     */
-    public function getConfig()
-    {
-        $apiClient = $this->getApiClientConfig();
-        $config = $apiClient->get();
-        if (json_decode($config) === null) {
-            return array();
-        }
-        return json_decode($config);
-    }
-
-    /**
      * Get Bliskapaczka API Client
      *
      * @return \Bliskapaczka\ApiClient\Bliskapaczka

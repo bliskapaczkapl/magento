@@ -328,7 +328,7 @@ class DataTest extends TestCase
         $apiClientOrder->method('get')->will($this->returnValue($pricing));
         $helper->method('getApiClientPricing')->willReturn($apiClientOrder);
 
-        $helper->expects($this->once())
+        $helper->expects($this->exactly(2))
              ->method('getParcelDimensions')
              ->with($type)
              ->will($this->returnValue($dimensions));
@@ -418,7 +418,7 @@ class DataTest extends TestCase
             ],
             [
                 '[{"availabilityStatus":true, "operatorName":"DPD", "price":{"net":4.87,"vat":1.12,"gross":5.99}}]',
-                'default',
+                'fixed',
                 $defaultDimensions,
                 [$dpd]
             ]

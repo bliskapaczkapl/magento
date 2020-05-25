@@ -303,7 +303,10 @@ class Sendit_Bliskapaczka_Model_Observer
         }
 
         if ($senditCourierConfigData['fields']['active']['value'] == '1') {
-            if ($senditCourierConfigData['fields']['auto_advice']['value'] == '1') {
+            if (
+                isset($senditCourierConfigData['fields']['auto_advice']) &&
+                $senditCourierConfigData['fields']['auto_advice']['value'] == '1')
+            {
                 $sender = new \Bliskapaczka\ApiClient\Validator\Order\Advice\Sender();
             } else {
                 $sender = new \Bliskapaczka\ApiClient\Validator\Order\Sender();

@@ -198,8 +198,8 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
             $cod = 1;
         }
         return array_merge(
-            $this->_getPriceListByMethodAndInsuranceAndCODAndParcelType('P2P', $cod, $parcelDimensionsType),
-            $this->_getPriceListByMethodAndInsuranceAndCODAndParcelType('D2P', $cod, $parcelDimensionsType)
+            $this->_getPriceListByMethodAndInsuranceAndCODAndParcelType('P2P', $cod, null, $parcelDimensionsType),
+            $this->_getPriceListByMethodAndInsuranceAndCODAndParcelType('D2P', $cod, null, $parcelDimensionsType)
         );
     }
 

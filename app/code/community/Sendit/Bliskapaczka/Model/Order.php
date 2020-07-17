@@ -285,11 +285,18 @@ class Sendit_Bliskapaczka_Model_Order extends Mage_Core_Model_Abstract
                 $apiClient->setPointCode($decodedResponse->destinationCode);
                 $apiClient->setOperator($decodedResponse->operatorName);
                 $posInfo = json_decode($apiClient->get());
+                $destination = '';
 
-                $destination = $posInfo->operator . '</br>' .
-                    (($posInfo->description) ? $posInfo->description . '</br>': '') .
-                    $posInfo->street . '</br>' .
-                    (($posInfo->postalCode) ? $posInfo->postalCode . ' ': '') . $posInfo->city;
+                if (true === is_object($posInfo)) {
+                    $destination = sprintf(
+                        "%s<br />%s<br />%s<br />%s<br />%s",
+                        $posInfo->operator,
+                        $posInfo->description ? $posInfo->description : '',
+                        $posInfo->street,
+                        $posInfo->postalCode ? $posInfo->postalCode : '',
+                        $posInfo->city
+                    );
+                }
 
                 $bliskaOrder->setPosCodeDescription($destination);
             }

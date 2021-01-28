@@ -194,9 +194,10 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getPriceList($cod = null, $parcelDimensionsType = 'fixed')
     {
-        if (!is_null($cod)) {
+        if (!is_null($cod) && $cod !== false) {
             $cod = 1;
         }
+
         return array_merge(
             $this->_getPriceListByMethodAndInsuranceAndCODAndParcelType('P2P', $cod, null, $parcelDimensionsType),
             $this->_getPriceListByMethodAndInsuranceAndCODAndParcelType('D2P', $cod, null, $parcelDimensionsType)
@@ -227,9 +228,13 @@ class Sendit_Bliskapaczka_Helper_Data extends Mage_Core_Helper_Data
                     $this->getParcelDimensions($parcelType),
                     "insuranceValue" => $insurance
                 ),
-            "deliveryType" => $type,
-            "codValue" => $cod
+            "deliveryType" => $type
         );
+
+        if ($cod > 0) {
+            $data['codValue'] = $cod;
+        }
+
         try {
             $priceList = json_decode($apiClient->get($data));
             $priceListCleared = array_filter($priceList, function ($carrier){

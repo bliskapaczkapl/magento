@@ -100,9 +100,10 @@ class Sendit_Bliskapaczka_Model_Observer
         /* @var $senditHelper Sendit_Bliskapaczka_Helper_Data */
         $senditHelper = Mage::helper('sendit_bliskapaczka');
 
-        if ($shippingMethod == 'bliskapaczka_sendit_bliskapaczka'
-            || $shippingMethod == 'bliskapaczka_sendit_bliskapaczka_' .
-            Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
+        $bsShippingMethodCode = Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE . '_' .  Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::SHIPPING_CODE;
+
+        if ($shippingMethod == $bsShippingMethodCode
+            || $shippingMethod == $bsShippingMethodCode . '_' . Sendit_Bliskapaczka_Model_Carrier_Bliskapaczka::COD
         ) {
             /* @var Sendit_Bliskapaczka_Helper_Data $mapper */
             $mapper = Mage::getModel('sendit_bliskapaczka/mapper_order');
@@ -123,8 +124,10 @@ class Sendit_Bliskapaczka_Model_Observer
             Mage::log($e->getMessage(), null, Sendit_Bliskapaczka_Helper_Data::LOG_FILE);
             Mage::getSingleton('core/session')->addError($senditHelper->__($e->getMessage()));
             Mage::getSingleton('checkout/session')->setNoCartRedirect(true);
-            $response = $observer->getResponse();
+            $response = Mage::app()->getResponse();
             $response->setRedirect(Mage::getUrl('checkout/cart'));
+            $response->sendResponse();
+            exit;
         }
     }
 

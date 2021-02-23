@@ -130,15 +130,23 @@ abstract class Sendit_Bliskapaczka_Model_Mapper_Abstract
         Mage_Customer_Model_Address_Abstract $shippingAddress,
         Sendit_Bliskapaczka_Helper_Data $helper
     ) {
-        $fullStreet = $shippingAddress->getStreet()[0];
-        $street = preg_split("/\s+(?=\S*+$)/", $fullStreet);
+        $streetFirstLine = isset($shippingAddress->getStreet()[0]) ? $shippingAddress->getStreet()[0] : '';
+        $streetSecondLine = isset($shippingAddress->getStreet()[1]) ? $shippingAddress->getStreet()[1] : '';
+
+        if (true === empty($streetSecondLine)) {
+            $fullStreet = $shippingAddress->getStreet()[0];
+            $street = preg_split("/\s+(?=\S*+$)/", $fullStreet);
+
+            $streetFirstLine = $street[0];
+            $streetSecondLine = isset($street[1]) ? $street[1] : '';
+        }
 
         $data['receiverFirstName'] = $shippingAddress->getFirstname();
         $data['receiverLastName'] = $shippingAddress->getLastname();
         $data['receiverPhoneNumber'] = $helper->telephoneNumberCleaning($shippingAddress->getTelephone());
         $data['receiverEmail'] = $this->_getReciverEmailAddress($shippingAddress);
-        $data['receiverStreet'] = $street[0];
-        $data['receiverBuildingNumber'] = isset($street[1]) ? $street[1] : '';
+        $data['receiverStreet'] = $streetFirstLine;
+        $data['receiverBuildingNumber'] = $streetSecondLine;
         $data['receiverFlatNumber'] = '';
         $data['receiverPostCode'] = $shippingAddress->getPostcode();
         $data['receiverCity'] = $shippingAddress->getCity();
